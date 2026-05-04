@@ -13,33 +13,17 @@ function ResultPage() {
     const playerRank = location.state?.playerRank;
     const rankList = location.state?.rankList;
     const isHost = location.state?.isHost;
+    const joinInfoSaved = location.state?.joinInfoSaved;
     const playerIndex = location.state?.playerIndex;
     const socketRef = useRef<Socket | null>(null);
     //@ts-ignore
     const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_SERVER_URL as string;
     //@ts-ignore
-    const UTILS_API_URL = process.env.VITE_UTILS_API_URL as string;
-    //@ts-ignore
-    const ROOM_API_URL = process.env.VITE_ROOM_MANAGEMENT_API_URL as string;
 
-
-    const getSessionID = async () => {
-        const getSessionInfoRepsonse = await fetch(`${UTILS_API_URL}/SessionInfo`, {
-            method: "GET",
-            credentials: "include"
-        })
-        const session_info_body = await getSessionInfoRepsonse.json();
-        return session_info_body.sessionID;
-    }
 
     // Need to add a function here that checks whether the current user is logged in or not
     // If is login user -> Place an record in the database using the request we received from the socker server
     // After that request remove everything about the room from the host
-
-
-    const handleSetPlayerHistory = async () => {
-        
-    }
 
 
     useEffect(() => {
@@ -52,18 +36,12 @@ function ResultPage() {
             if (!mounted) return;
 
             socket.connect(); 
-            socket.on("receive-player-answer-history", ({answerHistory}) => {
-                console.log("Received answer history", answerHistory);
-            });
+
 
             socket.on("connect", async () => {
-                const sessionId = await getSessionID();
-                if (userId !== '0') {
-                    socket.emit("request-player-answer-history", { sessionId: sessionId, roomCode: roomId });
-                }
-                if (isHost) {
-                    socket.emit("request-clean-room-info", { roomCode: roomId });
-                }
+                // if (isHost) {
+                //     socket.emit("request-clean-room-info", { roomCode: roomId });
+                // }
             });
         }) ()
         return () => {
@@ -97,6 +75,12 @@ function ResultPage() {
                 )}
             </h1>
             <RankPage players={rankList.players} isHost={false} clientPlayerIndex={playerIndex}/>
+            {
+                joinInfoSaved == 1 &&
+                <span className="SaveSuccessMessage">
+                    {"This Activity has been Saved into Your History!!"}
+                </span>
+            }
             <div className="BackToHomeButtonContainer">
                 <button className="BackToHomeButton" onClick={handleBackHome}>Back To Home</button>
             </div>

@@ -11,6 +11,29 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 module.exports = function(io, redisClient) {
 
+
+    const clearRoomInfo = async (roomCode) => {
+        activeRoomProblems.delete(roomCode);
+        problemStartTime.delete(roomCode);
+        await Promise.all([
+            redisClient.del(`${roomCode}-List`),
+            redisClient.del(roomCode),
+            redisClient.del(`${roomCode}-Player-Session`),
+            redisClient.del(`${roomCode}-Session-Socket`),
+            redisClient.del(`${roomCode}-Session-Score`),
+            redisClient.del(`${roomCode}-Joined-Barrier`),
+            redisClient.del(`${roomCode}-Session-Last-Problem-Answered`),
+            redisClient.del(`${roomCode}-UserId`),
+            redisClient.del(`${roomCode}-Session-UserId`),
+        ]);
+        const allSession = await redisClient.hGetAll(`${roomCode}-Session-Player`);
+        for (const sessionId in allSession) {
+            await redisClient.del(`${sessionId}-${roomCode}-Answer-History`);
+        }
+        await redisClient.del(`${roomCode}-Session-Player`);
+    }
+
+
     async function streamProblems(problemSetId, roomCode) {
         const roomSocketId = await redisClient.hGet(roomCode, "SocketId");
         const fetch_problem_list_response = await fetch(`${PROBLEM_SET_API_URL}/getProblems`, {
@@ -80,6 +103,35 @@ module.exports = function(io, redisClient) {
                 io.to(roomSocketId).emit("receive-rank-list", { rankList: rankingList });
                 await sleep(5000); 
             } else {
+
+                try {
+                    const updateScoreAnswerHistory = await fetch(`${ROOM_API_URL}/insertAnswerHistoryScore`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        credentials: "include",
+                        body: JSON.stringify({roomCode: roomCode})
+                    })
+                    const responseJSON = await updateScoreAnswerHistory.json();
+                    const successSessions = responseJSON.result.success;
+                    const failedSessions = responseJSON.result.failed;
+                    const emissions = [
+                        ...successSessions.map(session => ({ session, status: 1 })),
+                        ...failedSessions.map(session => ({ session, status: 0 }))
+                    ];
+                    for (const { session, status } of emissions) {
+                        const socketId = await redisClient.hGet(`${roomCode}-Session-Socket`, session);
+                        if (socketId) {
+                            io.to(socketId).emit('send-save-status', { responseCode: status });
+                        } else {
+                            console.warn(`Could not find socket for session: ${session}`);
+                        }
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+
                 const finalRankList = await constructPlayerOrder(roomCode);
                 const rankingList = await constructRankingList(roomCode);
                 let prev = null, rank = 1;
@@ -95,35 +147,14 @@ module.exports = function(io, redisClient) {
                         io.to(playerSocketId).emit("redirect-player-result-page", { playerRank: rank, rankingList: rankingList });
                     }
                 }
-
                 const roomHostSession = await redisClient.hGet(roomCode, "Host");
                 const roomHostSocket = await redisClient.hGet(`${roomCode}-Session-Socket`, roomHostSession);
                 if (roomHostSocket) {
                     io.to(roomHostSocket).emit("redirect-player-result-page", { playerRank: -1, rankingList: rankingList });
                 }
-            }                   
+                await clearRoomInfo(roomCode);
+            }                
         }
-    }
-
-
-    const clearRoomInfo = async (roomCode) => {
-        activeRoomProblems.delete(roomCode);
-        problemStartTime.delete(roomCode);
-        await Promise.all([
-            redisClient.del(`${roomCode}-List`),
-            redisClient.del(roomCode),
-            redisClient.del(`${roomCode}-Player-Session`),
-            redisClient.del(`${roomCode}-Session-Socket`),
-            redisClient.del(`${roomCode}-Session-Score`),
-            redisClient.del(`${roomCode}-Joined-Barrier`),
-            redisClient.del(`${roomCode}-Session-Last-Problem-Answered`),
-            redisClient.del(`${roomCode}-UserId`),
-        ]);
-        const allSession = await redisClient.hGetAll(`${roomCode}-Session-Player`);
-        for (const sessionId in allSession) {
-            await redisClient.del(`${sessionId}-${roomCode}-Answer-History`);
-        }
-        await redisClient.del(`${roomCode}-Session-Player`);
     }
 
 
@@ -148,6 +179,8 @@ module.exports = function(io, redisClient) {
 
 
     return {
+
+        clearRoomInfo,
 
         handleJoinRoom: async (data, ack, socket) => {
             const { socketId, roomCode, sessionId, playerName, userId, isLocked, checkStream, problemSetId } = data;
@@ -251,11 +284,5 @@ module.exports = function(io, redisClient) {
             await redisClient.expire(`${roomCode}-UserId`, ROOM_SHADOW_KEYS_EXPIRAION_TIME);
             io.to(roomSocketId).emit("redirect-room-members");
         },
-
-
-        handleCleanRoomInfo: async (data) => {
-            const {roomCode} = data;
-            await clearRoomInfo(roomCode);
-        }
     }
 }

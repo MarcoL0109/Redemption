@@ -1,4 +1,4 @@
-const { redisClient } = require("../utils/redis"); // Adjust the path to match your folder structure
+const {redisClient, subscriber} = require("../utils/redis");
 
 
 async function constructPlayerList(roomCode) {

@@ -18,5 +18,10 @@
 }
 
 .BackToHomeButtonContainer {
-    margin-top: 50px;;
+    margin-top: 20px;;
+}
+
+.SaveSuccessMessage {
+    padding-top: 15px;
+    color: rgb(62, 220, 62)
 }

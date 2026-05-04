@@ -100,13 +100,41 @@ router.post("/insertJoinHistoryInfo", async (req, res) => {
     }
 })
 
-// Only need insert score and answer history
-// Use meta data to identify the rows, problemSet ID + game start time
-router.post("/insertAnswerHistoryScore", async (req, res) => {
-    const {roomCode, sessionId} = req.body;
-    
 
+router.post("/insertAnswerHistoryScore", async (req, res) => {
+    const {roomCode} = req.body;
+    const allSessionsWithUserId = await redisClient.hGetAll(`${roomCode}-Session-UserId`);
+    const gameStartTimeFromRedis = await redisClient.hGet(roomCode, "GameStartTime");
+    const formatGameStartTime = new Date(Number(gameStartTimeFromRedis)).toISOString().slice(0, 19).replace('T', ' ');
+    const hostSessionId = await redisClient.hGet(roomCode, "Host");
+    const problemSetId = await redisClient.hGet(roomCode, "ProblemSetId");
+    let successSessionIds = [], failedSessionIds = [];
+    for (const [sessionId, userId] of Object.entries(allSessionsWithUserId)) {
+        if (sessionId !== hostSessionId) {
+            const sessionAnswerHistory = await redisClient.hGetAll(`${sessionId}-${roomCode}-Answer-History`);
+            const sessionScore = await redisClient.hGet(`${roomCode}-Session-Score`, sessionId);
+            const updateQuery = `UPDATE join_history SET join_history_score = ?, join_room_answer_history = ?
+                                WHERE join_room_game_start_datetime = ? AND join_room_problems_set = ? AND user_id = ?`;
+            try {
+                await db.query(updateQuery, [sessionScore, JSON.stringify(sessionAnswerHistory), formatGameStartTime, Number(problemSetId), Number(userId)]);
+                successSessionIds.push(sessionId);
+            } catch (error) {
+                console.error(`SYNC_FAILURE: User ${userId} | Session ${sessionId}`, error);
+                failedSessionIds.push({
+                    userId: userId,
+                    sessionId: sessionId,
+                    error: error.message
+                });
+            }
+        }
+    };
+    res.status(200).json({summary: {total: successSessionIds.length + failedSessionIds.length,
+        successCount: successSessionIds.length, failedCount: failedSessionIds.length,
+    }, result: {success: successSessionIds, failed: failedSessionIds}})
 })
+
+
+// TODO: Make the api calls to update the room status if the user got kicked / room is terminated by the host
 
 
 module.exports = router

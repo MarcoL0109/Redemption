@@ -13,6 +13,7 @@ import Overlays from "../Overlays/Overlay";
 function GamePage() {
 
     const socketRef = useRef<Socket | null>(null);
+    const savedStatusRef = useRef(-1);
     //@ts-ignore
     const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_SERVER_URL as string;
     //@ts-ignore
@@ -201,8 +202,14 @@ function GamePage() {
                 })
 
                 socket.on("redirect-player-result-page", async ({playerRank, rankingList}) => {
-                    navigate(`/ResultPage/${userId}/${username}/${roomId}`, { state: {rankList: rankingList, playerRank: playerRank, isHost: isHostRef.current, playerIndex: playerIndexRef.current} });
+                    navigate(`/ResultPage/${userId}/${username}/${roomId}`, { state: {rankList: rankingList, playerRank: playerRank, 
+                        isHost: isHostRef.current, playerIndex: playerIndexRef.current, joinInfoSaved: savedStatusRef.current} });
                 })
+
+                socket.on('send-save-status', ({responseCode}) => {
+                    console.log(`Received Response code: ${responseCode}`);
+                    savedStatusRef.current = responseCode;
+                });
 
                 socket.on('connect', async () => {
                     await handleStoreRoomCodeRedis(socket.id, session);

@@ -25,19 +25,7 @@ subscriber.subscribe(expirationChannel, async (message) => {
             reason: "Inactivity", 
             message: "Room expired due to 2 hours of inactivity." 
         });
-        await Promise.all([
-            redisClient.del(`${roomCode}-Player-Session`),
-            redisClient.del(`${roomCode}-Session-Socket`),
-            redisClient.del(`${roomCode}`),
-            redisClient.del(`${roomCode}-Session-Score`),
-            redisClient.del(`${roomCode}-Joined-Barrier`),
-            redisClient.del(`${roomCode}-Last-Problem-Answered`),
-        ]);
-        const allSession = await redisClient.hGetAll(`${roomCode}-Session-Player`);
-        for (const sessionId in allSession) {
-            await redisClient.del(`${sessionId}-${roomCode}-Answer-History`);
-        }
-        await redisClient.del(`${roomCode}-Session-Player`);
+        roomHandlerSocket.clearRoomInfo(roomCode);
     }
 });
 
@@ -52,7 +40,6 @@ io.on("connection", socket => {
     socket.on("kick-player", async (data) => {gameHandlerSocket.handleKickPlayer(data)});
     socket.on("submit-client-answer", async (data, socket_id) => {gameHandlerSocket.handleSubmitClientAnswer(data, socket.id)});
     socket.on("init-game-info", async (data, socket_id) => {gameHandlerSocket.handleInitGameInfo(data, socket.id)});
-    socket.on("request-clean-room-info", async (data) => {roomHandlerSocket.handleCleanRoomInfo(data)});
 
 
     socket.on("request-player-answer-history", async (data) => {
