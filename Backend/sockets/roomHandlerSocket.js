@@ -197,7 +197,6 @@ module.exports = function(io, redisClient) {
             await redisClient.hSet(`${roomCode}-Session-Socket`, sessionId, socket.id);
             await redisClient.hSet(`${roomCode}-Session-Score`, sessionId, 0);
             await redisClient.hSet(`${roomCode}-Session-Last-Problem-Answered`, sessionId, -1);
-            await redisClient.hSet(roomCode, "Status", "Pending");
             if (!is_lock_state_here) {
                 await redisClient.hSet(roomCode, "IsLocked", isLocked);
                 await redisClient.hSet(roomCode, "ProblemSetId", problemSetId);
@@ -224,8 +223,8 @@ module.exports = function(io, redisClient) {
             const currentJoined = await redisClient.incr(`${roomCode}-Joined-Barrier`);
             const totalExpected = await redisClient.hLen(`${roomCode}-Session-Score`);
             if (currentJoined === totalExpected) {
-                const started = await redisClient.hGet(roomCode, "Status");
-                if (started === "Pending") {
+                const isStarted = await redisClient.hExists(roomCode, "Status");
+                if (isStarted === 0) {
                     await redisClient.hSet(roomCode, "Status", "Started")
                     await redisClient.hSet(roomCode, "GameStartTime", Date.now());
                     await storeUserJoinData(roomCode);
@@ -260,6 +259,22 @@ module.exports = function(io, redisClient) {
                     message: "Room is closed by the host"
                 });
                 io.in(roomSocketId).socketsLeave(roomSocketId);
+                try {
+                    const problemSetId = await redisClient.hGet(roomCode, "ProblemSetId");
+                    const updateKickStatus = await fetch(`${ROOM_API_URL}/updateCompletness`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        credentials: "include",
+                        body: JSON.stringify({roomCode: roomCode, completness: 3, userId: null, problemSetId: problemSetId})
+                    })
+                } catch (error) {
+                    console.error(error);
+                    const responseJSON = await updateKickStatus.json();
+                    const responseSummary = responseJSON.result;
+                    console.log(responseSummary);
+                }
                 await clearRoomInfo(roomCode);
             }
         },

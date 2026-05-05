@@ -1,14 +1,18 @@
 const {constructPlayerList, constructRankingList, constructPlayerOrder} = require("../utils/gameUtils");
 const {activeRoomProblems, problemStartTime} = require("../utils/gameStates")
+const ROOM_API_URL = process.env.VITE_ROOM_MANAGEMENT_API_URL;
+
 
 module.exports = function(io, redisClient) {
     return {
         handleKickPlayer: async (data) => {
             const { roomCode, playerIndex } = data;
             const playerSession = await redisClient.hGet(`${roomCode}-Player-Session`, playerIndex);
+            const playerUserId = await redisClient.hGet(`${roomCode}-Session-UserId`, playerSession);
             const targetSocketId = await redisClient.hGet(`${roomCode}-Session-Socket`, playerSession);
             const roomSocketId = await redisClient.hGet(roomCode, "SocketId");
             const username = await redisClient.hGet(`${roomCode}-List`, playerSession);
+            const problemSetId = await redisClient.hGet(roomCode, "ProblemSetId");
             const fetchSocket = await io.in(targetSocketId).fetchSockets();
             const targetSocket = fetchSocket[0];
 
@@ -26,6 +30,22 @@ module.exports = function(io, redisClient) {
             const player_list_names = await constructPlayerList(roomCode, roomSocketId);
             io.to(roomSocketId).emit("returned-player-list", player_list_names);
             targetSocket.leave(roomSocketId);
+            try {
+                const updateKickStatus = await fetch(`${ROOM_API_URL}/updateCompletness`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({roomCode: roomCode, completness: 2, userId: playerUserId, problemSetId: problemSetId})
+                })
+                const repson = await updateKickStatus.json();
+            } catch (error) {
+                console.error(error);
+                const responseJSON = await updateKickStatus.json();
+                const responseSummary = responseJSON.result;
+                console.log(responseSummary);
+            }
         },
 
 
