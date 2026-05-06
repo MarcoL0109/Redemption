@@ -22,10 +22,20 @@ function HistoryPage() {
 
 
     const mapApiRecordToInterface = (apiData: any): HistoryCardProp => {
+        const dateObj = apiData.join_room_game_start_datetime instanceof Date 
+        ? apiData.join_room_game_start_datetime 
+        : new Date(apiData.join_room_game_start_datetime);
+
+        const dd = String(dateObj.getDate()).padStart(2, '0');
+        const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const yyyy = dateObj.getFullYear();
+        const hh = String(dateObj.getHours()).padStart(2, '0');
+        const min = String(dateObj.getMinutes()).padStart(2, '0');
+        const ss = String(dateObj.getSeconds()).padStart(2, '0');
         return {
             recordId: apiData.join_history_id,
-            recordDate: new Date(apiData.join_history_date).toLocaleString(),
-            gameStartDatetime: new Date(apiData.join_room_game_start_datetime).toLocaleString(),
+            recordDate: new Date(apiData.join_history_date).toISOString().replace('T', ' ').slice(0, 19),
+            gameStartDatetime: `${dd}-${mm}-${yyyy} ${hh}:${min}:${ss}`,
             hostedName: apiData.Host || "Unknown Host",
             completness: apiData.join_history_completness,
             problemSetName: apiData.ProblemSet
