@@ -18,8 +18,10 @@ interface UserAccountBoxProps {
 const UserAccountBox: React.FC<UserAccountBoxProps> = ({ onClose, user_data }) => {
     const ref = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState<boolean>(false);
+    // @ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
     const nevigate = useNavigate();
+
 
     const handleLogOut = async () => {
         const logout_response = await fetch(`${USER_API_URL}/logout`, {
@@ -33,6 +35,12 @@ const UserAccountBox: React.FC<UserAccountBoxProps> = ({ onClose, user_data }) =
             nevigate("/SignIn")
         }
     }
+
+
+    const handleDirectHistoryPage = () => {
+        nevigate(`/HistoryPage/${user_data.user_id}`);
+    }
+
 
     useEffect(() => {
         const id = requestAnimationFrame(() => {
@@ -50,6 +58,7 @@ const UserAccountBox: React.FC<UserAccountBoxProps> = ({ onClose, user_data }) =
         };
     }, [onClose]);
 
+    
     return (
         <div className={`AccountInfoBox ${isVisible ? "show": ""}`} ref={ref}>
             <div className="UserNameIconContainer">
@@ -85,7 +94,7 @@ const UserAccountBox: React.FC<UserAccountBoxProps> = ({ onClose, user_data }) =
                     
                 </div>
 
-                <div className="ActionButton">
+                <div className="ActionButton" onClick={handleDirectHistoryPage}>
                     <div className="IconContainers">
                         <img className="historyImage" src={HistoryIcon} alt="History Icon"/>
                         <strong>History</strong>

@@ -114,10 +114,10 @@ router.post("/insertAnswerHistoryScore", async (req, res) => {
         if (sessionId !== hostSessionId) {
             const sessionAnswerHistory = await redisClient.hGetAll(`${sessionId}-${roomCode}-Answer-History`);
             const sessionScore = await redisClient.hGet(`${roomCode}-Session-Score`, sessionId);
-            const updateQuery = `UPDATE join_history SET join_history_score = ?, join_room_answer_history = ?
+            const updateQuery = `UPDATE join_history SET join_history_score = ?, join_room_answer_history = ?, join_history_completness = ?
                                 WHERE join_room_game_start_datetime = ? AND join_room_problems_set = ? AND user_id = ?`;
             try {
-                await db.query(updateQuery, [sessionScore, JSON.stringify(sessionAnswerHistory), formattedStartTime, Number(problemSetId), Number(userId)]);
+                await db.query(updateQuery, [sessionScore, JSON.stringify(sessionAnswerHistory), "Completed", formattedStartTime, Number(problemSetId), Number(userId)]);
                 successSessionIds.push(sessionId);
             } catch (error) {
                 console.error(`SYNC_FAILURE: User ${userId} | Session ${sessionId}`, error);
@@ -136,20 +136,17 @@ router.post("/insertAnswerHistoryScore", async (req, res) => {
 
 
 router.post("/updateCompletness", async (req, res) => {
-    // Completness should represented by integers: 1 -> Completed, 2 -> Kicked, 3 -> Terminated by Host
-    // If the host terminated the room, then we need to update the staus for all players in the room
-    // If the state is 2 -> we need userId, Otherwise we don't really need the userId
     const {roomCode, completness, userId = null, problemSetId} = req.body;
-    const completnessMap = {1: "Completed", 2: "Kicked", 3: "Terminated By Host"};
+    const completnessMap = {2: "Kicked", 3: "Terminated By Host"};
     const gameStartTimeFromRedis = await redisClient.hGet(roomCode, "GameStartTime");
     const allSessionsWithUserId = await redisClient.hGetAll(`${roomCode}-Session-UserId`);
     const hostSessionId = await redisClient.hGet(roomCode, "Host");
     const formatGameStartTime = new Date(Number(gameStartTimeFromRedis)).toISOString().replace('T', ' ').slice(0, 19);
     
     const isRoomStarted = await redisClient.hExists(roomCode, "Status");
-    if (completness === 2 && userId !== null && isRoomStarted !== 0) {
-        const updateQuery = `UPDATE join_history SET join_history_completness = ?
+    const updateQuery = `UPDATE join_history SET join_history_completness = ?
                                 WHERE user_id = ? AND join_room_game_start_datetime = ? AND join_room_problems_set = ?`;
+    if (completness === 2 && userId !== null && isRoomStarted !== 0) {
         try {
             await db.query(updateQuery, [completnessMap[completness], Number(userId), formatGameStartTime, Number(problemSetId)]);
             console.log("Update successful");
@@ -158,7 +155,7 @@ router.post("/updateCompletness", async (req, res) => {
             console.error(error);
             res.status(500).json({message: "Interal Server Error"});
         }
-    } else if ((completness === 3 || completness == 1) && isRoomStarted !== 0) {
+    } else if (isRoomStarted !== 0) {
         let successSessionIds = [], failedSessionIds = [];
         for (const [sessionId, userId] of Object.entries(allSessionsWithUserId)) {
             if (sessionId !== hostSessionId) {
@@ -179,8 +176,23 @@ router.post("/updateCompletness", async (req, res) => {
             successCount: successSessionIds.length, failedCount: failedSessionIds.length,
         }, result: {success: successSessionIds, failed: failedSessionIds}})
     }
+})
 
-
+router.post("/getHistoryRecord", async (req, res) => {
+    const {userId} = req.body;
+    const selectQuery = `SELECT join_history_id, join_history_date, join_room_game_start_datetime, 
+                            host.username as Host, join_history_completness, s.problem_set_title as ProblemSet
+                            FROM join_history j 
+                            JOIN problem_sets s ON j.join_room_problems_set = s.problem_set_id
+                            JOIN user_info host ON host.user_id = j.join_room_hosted_by
+                            WHERE j.user_id = ?`;
+    try {
+        const historyRecords = await db.query(selectQuery, [userId]);
+        res.status(200).json({historyRecords: historyRecords[0]});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: "Internal Server Error"});
+    }
 })
 
 

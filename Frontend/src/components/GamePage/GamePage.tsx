@@ -180,7 +180,6 @@ function GamePage() {
                 })
 
                 socket.on("kick-player-message", (message) => {
-                    console.log(message);
                     navigate("/", { state: {kickMessage: true} });
                 })
 
@@ -196,7 +195,6 @@ function GamePage() {
                 })
 
                 socket.on("display-correct-answer", async () => {
-                    // If the user did not submit anything, we still need to set the answer as null or whatever. So a socket emit is needed in here maybe
                     setPendingResultScreen(false);
                     setDisplayCorrectAnswer(true);
                 })
