@@ -275,7 +275,7 @@ function PendingStartRoom() {
                                         isHost && 
                                         <td className="KickPlayerButtonColumn"> 
                                             {   index !== 0 ?  
-                                                <button className="KickPlayerButton" onClick={() => handleKickPlayer((index + 1).toString())}>Kick Player</button>:
+                                                <button className="btn btn-danger" onClick={() => handleKickPlayer((index + 1).toString())}>Kick Player</button>:
                                                 null
                                             }
                                         </td>
@@ -289,12 +289,12 @@ function PendingStartRoom() {
             {
                 isHost ?
                 <div className="roomOperationButtonContainer">
-                    <button className="startRoomButton" onClick={handleStartRoom}>Start</button>
-                    <button className={toggleLock ? "unlockRoomButton": "lockRoomButton"} onClick={handleLockRoom}>{toggleLock ? "Unlock": "Lock"}</button>
-                    <button className="terminateRoomButton" onClick={triggerTerminateOverlay}>Terminate</button>
+                    <button className="btn btn-start button-outside-table" onClick={handleStartRoom}>Start</button>
+                    <button className={toggleLock ? "btn btn-neutral button-outside-table": "btn btn-primary button-outside-table"} onClick={handleLockRoom}>{toggleLock ? "Unlock": "Lock"}</button>
+                    <button className="btn btn-danger button-outside-table" onClick={triggerTerminateOverlay}>Terminate</button>
                 </div> :
                 <div className="roomOperationButtonContainer">
-                    <button className="leaveRoomButton" onClick={triggerLeaveOverlay}>Leave</button>
+                    <button className="btn btn-danger button-outside-table" onClick={triggerLeaveOverlay}>Leave</button>
                 </div>
             }
             <Overlays isOpen={isOverlayOpen}>

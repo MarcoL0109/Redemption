@@ -235,7 +235,7 @@ module.exports = function(io, redisClient) {
         },
 
 
-        handleLeaveRoom: async (data) => {
+        handleLeaveRoom: async (data, socket) => {
             const { roomCode, isHost, clientSessionId } = data;
             const roomSocketId = await redisClient.hGet(roomCode, "SocketId");
             const userName = await redisClient.hGet(`${roomCode}-List`, clientSessionId);

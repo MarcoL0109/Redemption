@@ -34,7 +34,7 @@ io.on("connection", socket => {
 
     // Sokcet listeners
     socket.on("join-room", async (data, ack) => {roomHandlerSocket.handleJoinRoom(data, ack, socket)});
-    socket.on("leave-room", async (data) => {roomHandlerSocket.handleLeaveRoom(data)});
+    socket.on("leave-room", async (data) => {roomHandlerSocket.handleLeaveRoom(data, socket)});
     socket.on("set-lock-state", async (data) => {roomHandlerSocket.handleSetLockState(data)});
     socket.on("initialize-room-start", async (data) => {roomHandlerSocket.handleInitRoomStart(data)});
     socket.on("kick-player", async (data) => {gameHandlerSocket.handleKickPlayer(data)});

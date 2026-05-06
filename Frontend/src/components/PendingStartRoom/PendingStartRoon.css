@@ -1,139 +1,83 @@
-.RoomCodeContainer {
-    display: flex;
-    justify-content: center;
-    font-family: 'Courier New', Courier, monospace;
-}
+/* --- Base Reset & Global Styles --- */
+* { box-sizing: border-box; }
 
+/* --- Layout Containers --- */
 .PendingRoomContainer {
     min-height: 100vh;
     background-color: #38343B;
     display: flex;
+    flex-direction: column;
+    align-items: center; /* Ensures content centers horizontally */
+    padding: 20px;
+}
+
+.RoomCodeContainer {
+    display: flex;
     justify-content: center;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 20px;
 }
 
 .JoinerListContainer {
+    width: 100%;
     display: flex;
     justify-content: center;
 }
 
+/* --- Table Styling (The Fix for Centering) --- */
 .JoinerList {
     background-color: whitesmoke;
-    width: 80%; 
+    width: 80%;
     border-radius: 15px;
     border: 1px solid black;
     color: black;
     font-family: 'Roboto', sans-serif;
+    border-collapse: collapse;
+    margin: 0 auto;
 }
-
 
 table, th, td {
-  text-align: center;
-  font-size: 25px;
+    padding: 12px;
+    text-align: center;
+    font-size: 25px;
+}
+
+.btn {
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin: 5px;
+    width: 170px;
 }
 
 
+.button-outside-table {
+    font-size: 25px;
+}
+
+.btn-start { background-color: #E3AB13; }
+.btn-start:hover { background-color: #ffbc05; }
+
+.btn-danger { background-color: #ea280f; color: white; }
+.btn-danger:hover { background-color: #f46350; }
+
+.btn-primary { background-color: rgb(53, 116, 234); color: white; }
+.btn-primary:hover { background-color: rgb(92, 140, 229); }
+
+.btn-neutral { background-color: rgb(90, 88, 88); color: white; }
+.btn-neutral:hover { background-color: rgb(133, 130, 130); }
+
+/* Kick button specifically smaller */
+.KickPlayerButton { font-size: 15px; }
+
+/* --- Container for Operations --- */
 .roomOperationButtonContainer {
     margin-top: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-
-.startRoomButton {
-    background-color: #E3AB13;
-    font-size: 25px;
-    width: 200px;
-    font-family: 'Roboto', sans-serif;
-    border: none;
-}
-
-
-.startRoomButton:hover {
-    background-color: #ffbc05;
-}
-
-
-.terminateRoomButton {
-    background-color: #ea280f;
-    font-size: 25px;
-    width: 200px;
-    border: none;
-    font-family: 'Roboto', sans-serif;
-}
-
-
-.terminateRoomButton:hover {
-    background-color: #f46350;
-}
-
-
-.leaveRoomButton {
-    background-color: #ea280f;
-    font-size: 25px;
-    width: 200px;
-    border: none;
-}
-
-
-.leaveRoomButton:hover {
-    background-color: #f46350;
-}
-
-
-.KickPlayerButton {
-    background-color: #ea280f;
-    font-family: 'Roboto', sans-serif;
-    font-size: 15px;
-    border: none;
-}
-
-
-.KickPlayerButton:hover {
-    background-color: #f46350;
-}
-
-
-.PlayerListRow {
-    column-width: 200px;
-}
-
-
-.KickPlayerButtonColumn {
-    display: flex;
-    justify-content: center;
-}
-
-
-.lockRoomButton {
-    background-color: rgb(53, 116, 234);
-    font-family: 'Roboto', sans-serif;
-    font-size: 25px;
-    width: 200px;
-    margin-left: 25px;
-    margin-right: 25px;
-    border: none;
-}
-
-
-.lockRoomButton:hover {
-    background-color: rgb(92, 140, 229);
-    border: none;
-}
-
-
-.unlockRoomButton {
-    background-color: rgb(90, 88, 88);
-    font-family: 'Roboto', sans-serif;
-    font-size: 25px;
-    width: 200px;
-    margin-left: 25px;
-    margin-right: 25px;
-    border: none;
-}
-
-
-.unlockRoomButton:hover {
-    background-color: rgb(133, 130, 130);
-    border: none;
+    flex-wrap: wrap; /* Allows buttons to wrap on tiny screens */
 }
