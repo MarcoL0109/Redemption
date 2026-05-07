@@ -425,7 +425,7 @@ function GamePage() {
                                                 <input className="BlankAnswerInput" 
                                                     type="text"
                                                     placeholder="Type Your Answer"
-                                                    readOnly={submittedAnswer || openSubmit}
+                                                    readOnly={submittedAnswer || !openSubmit}
                                                     value={blankAnswerInput}
                                                     required
                                                     onChange={(e) => {setBlankAnswerInput(e.target.value)}}/> 
@@ -434,7 +434,7 @@ function GamePage() {
                                         </div>
                                         {
                                             !displayCorrectAnswer ?
-                                            <button className="BlankAnswerSubmitButton" type="submit" disabled={submittedAnswer || currentTime === 0}>
+                                            <button className="BlankAnswerSubmitButton" type="submit" disabled={submittedAnswer || !openSubmit}>
                                                 <strong>Confirm</strong>
                                             </button> :
                                             <span className="BlankCorrectAnswer">{`Correct Answer: ${currentDisplayProblem?.correct_answer.Blanks}`}</span>
