@@ -93,8 +93,6 @@ router.post("/insertJoinHistoryInfo", async (req, res) => {
         const hostUserId = await redisClient.hGet(roomCode, "Host-UserId");
         const gameStartTime = await redisClient.hGet(roomCode, "GameStartTime");
         const problemSnapShotId = await redisClient.hGet(roomCode, "ProblemSnapShotID");
-        // Cannot use problem set ID directly as we are doing snapshots and not record relations
-        // Need to have a snapshot ID first in order to insert in here
         const values = userIds.map(userId => [userId, hostUserId, new Date(Number(gameStartTime)).toISOString().slice(0, 19).replace('T', ' '), Number(problemSnapShotId)]);
         const insertJoinHistoryQuery = 'INSERT INTO join_history (user_id, join_history_hosted_by, join_history_game_start_datetime, join_history_snapshot_id) VALUES ?';
         const [resultHeader] = await db.query(insertJoinHistoryQuery, [values]);
@@ -119,7 +117,7 @@ router.post("/insertAnswerHistoryScore", async (req, res) => {
     let successSessionIds = [], failedSessionIds = [];
     for (const [sessionId, userId] of Object.entries(allSessionsWithUserId)) {
         if (sessionId !== hostSessionId) {
-            const sessionAnswerHistory = await redisClient.hGetAll(`${sessionId}-${roomCode}-Answer-History`);
+            const sessionAnswerHistory = await redisClient.lRange(`${sessionId}-${roomCode}-Answer-History`, 0, -1);
             const sessionScore = await redisClient.hGet(`${roomCode}-Session-Score`, sessionId);
             const updateQuery = `UPDATE join_history SET join_history_score = ?, join_history_answer_history = ?, join_history_completness = ?
                                 WHERE join_history_id IN (?) AND user_id = ?`;
@@ -267,8 +265,13 @@ router.post("/fetchProblemSetSnapShotId", async (req, res) => {
 
 router.post("/getHistoryRecord", async (req, res) => {
     const {userId} = req.body;
-    // Need to join 4 tables, join_history, user_info, problem_set_snapshots, snapshot_questions...
-    const selectQuery = ``;
+    const selectQuery = `SELECT join_history_id, host.username as Host, ps.problem_set_title as ProblemSetTitle, join_history_score,
+                            join_history_game_start_datetime,
+                            join_history_completness, join_history_snapshot_id
+                            FROM join_history j 
+                            JOIN user_info host ON j.join_history_hosted_by = host.user_id
+                            JOIN problem_set_snapshots ps ON ps.snapshot_id = j.join_history_snapshot_id
+                            WHERE j.user_id = ?`;
     try {
         const historyRecords = await db.query(selectQuery, [userId]);
         res.status(200).json({historyRecords: historyRecords[0]});

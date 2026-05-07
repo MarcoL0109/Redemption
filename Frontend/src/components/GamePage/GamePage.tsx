@@ -38,6 +38,7 @@ function GamePage() {
     const [isRankListOverlayOpen, setIsRankListOverlayOpen] = useState<boolean>(false);
     const [playerIndex, setPlayerIndex] = useState<number>(-1);
     const playerIndexRef = useRef(-1);
+    const [openSubmit, setOpenSubmit] = useState<boolean>(true);
     const [displayCorrectAnswer, setDisplayCorrectAnswer] = useState<boolean>(false);
     const [selectedOption, setSelectedOption] = useState<string>("");
     const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -158,6 +159,10 @@ function GamePage() {
                     setCurrentTime(timeAllowed);
                 });
 
+                socket.on("set-open-submit", ({ isOpen }) => {
+                    setOpenSubmit(isOpen);
+                })
+
                 socket.on("receive-count-down-update", ({secondsLeft}) => {
                     setCountDown(secondsLeft);
                 })
@@ -251,7 +256,7 @@ function GamePage() {
 
 
     const handleSubmitClientAnswer = async (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!submittedAnswer && currentTime > 0) {
+        if (!submittedAnswer && openSubmit) {
             const selectedId = e.currentTarget.dataset.id;
             const session = await getSessionID();
             if (selectedId && socketRef.current) {
@@ -418,12 +423,12 @@ function GamePage() {
                                         <div>
                                             {
                                                 <input className="BlankAnswerInput" 
-                                                type="text"
-                                                placeholder="Type Your Answer"
-                                                readOnly={submittedAnswer}
-                                                value={blankAnswerInput}
-                                                required
-                                                onChange={(e) => {setBlankAnswerInput(e.target.value)}}/> 
+                                                    type="text"
+                                                    placeholder="Type Your Answer"
+                                                    readOnly={submittedAnswer || openSubmit}
+                                                    value={blankAnswerInput}
+                                                    required
+                                                    onChange={(e) => {setBlankAnswerInput(e.target.value)}}/> 
                                             }
                                             
                                         </div>

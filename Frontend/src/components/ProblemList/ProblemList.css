@@ -24,6 +24,7 @@
     background-color: rgb(122, 118, 118);
     font-family: 'Courier New', Courier, monospace;
     position: sticky;
+    cursor: pointer;
     top: 0;
 }
 
@@ -55,6 +56,7 @@
     font-size: 25px;
     display: flex;
     justify-content: center;
+    cursor: pointer;
     align-items: center;
     font-family: 'Courier New', Courier, monospace;
     background-color: rgb(122, 118, 118);

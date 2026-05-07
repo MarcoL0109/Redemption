@@ -82,11 +82,13 @@ module.exports = function(io, redisClient) {
             }
             const problem = problemList[i];
             activeRoomProblems.set(roomCode, problem);
+            io.to(roomSocketId).emit("set-open-submit", {isOpen: true});
             io.to(roomSocketId).emit("receive-problem", { currProblem: problem });
 
             problemStartTime.set(roomCode, Date.now());
             await runProblemTimer(problem.time_allowed_in_seconds, "percentage");
 
+            io.to(roomSocketId).emit("set-open-submit", {isOpen: false});
             io.to(roomSocketId).emit("display-correct-answer");
             await runProblemTimer(5, "percentage");
 
@@ -95,7 +97,7 @@ module.exports = function(io, redisClient) {
             const hostSession = await redisClient.hGet(roomCode, "Host");
             for (const sessionId in allProgress) {
                 if (allProgress[sessionId] !== String(currProblemId) && sessionId !== hostSession) {
-                    await redisClient.hSet(`${sessionId}-${roomCode}-Answer-History`, currProblemId, "TIMEOUT_NULL");
+                    await redisClient.rPush(`${sessionId}-${roomCode}-Answer-History`, "TIMEOUT_NULL");
                 }
             }
 
@@ -161,23 +163,25 @@ module.exports = function(io, redisClient) {
 
     const storeUserJoinData = async (roomCode) => {
         const loggedInUser = await redisClient.hVals(`${roomCode}-Session-UserId`);
-        try {
-            const insertHistoryRecord = await fetch(`${ROOM_API_URL}/insertJoinHistoryInfo`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                }, credentials: "include",
-                body: JSON.stringify({roomCode: roomCode, userIds: loggedInUser})
-            })
-            if (insertHistoryRecord.status === 200) {
-                const insertedRecordJSON = await insertHistoryRecord.json();
-                const insertRecordMapping = insertedRecordJSON.mapping;
-                await redisClient.hSet(`${roomCode}-UserId-HistoryId`, insertRecordMapping);
-                console.log(`Users with ${loggedInUser} has inserted a new join hisotry to the database`)
+        if (loggedInUser.length > 0) {
+             try {
+                const insertHistoryRecord = await fetch(`${ROOM_API_URL}/insertJoinHistoryInfo`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }, credentials: "include",
+                    body: JSON.stringify({roomCode: roomCode, userIds: loggedInUser})
+                })
+                if (insertHistoryRecord.status === 200) {
+                    const insertedRecordJSON = await insertHistoryRecord.json();
+                    const insertRecordMapping = insertedRecordJSON.mapping;
+                    await redisClient.hSet(`${roomCode}-UserId-HistoryId`, insertRecordMapping);
+                    console.log(`Users with ${loggedInUser} has inserted a new join hisotry to the database`)
+                }
+            } catch (error) {
+                console.error(error);
             }
-        } catch (error) {
-            console.error(error);
-        } 
+        }
     }
 
 

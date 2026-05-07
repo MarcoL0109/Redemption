@@ -419,6 +419,7 @@ function ProblemList() {
             return;
         } 
         await fetch_problem_list();
+        setIsLoaded(true);
         await handleUpdateLastWriteTime();
     }
 

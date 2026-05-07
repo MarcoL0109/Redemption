@@ -17,26 +17,26 @@
 
 
 .ProblemAnswerContainer {
-    flex: 1;                /* Occupies remaining space */
+    flex: 1;
     display: flex;
     flex-direction: column;
     width: 100%;
-    min-height: 0;          /* Crucial for flex child to shrink */
+    min-height: 0;
 }
 
-/* Use flex: 2 and flex: 1 to define proportions instead of vh */
 .ProblemTextSection {
-    flex: 2;                /* Takes 2/3 of space */
+    flex: 2;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 30px;
-    min-height: 0;          /* Crucial for flex child to shrink */
+    min-height: 0;
 }
 
 .BlankCorrectAnswer {
     margin-top: 25px;
+    color: black;
 }
 
 

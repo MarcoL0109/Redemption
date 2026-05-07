@@ -6,11 +6,12 @@ import "./HistroyPage.css"
 
 export interface HistoryCardProp {
     recordId: number,
-    recordDate: string,
-    gameStartDatetime: string,
-    hostedName: string,
-    completness: string,
+    hostName: string,
     problemSetName: string,
+    score: number,
+    gameStartDatetime: string,
+    completness: string,
+    snapShotID: number,
 }
 
 
@@ -23,9 +24,9 @@ function HistoryPage() {
 
 
     const mapApiRecordToInterface = (apiData: any): HistoryCardProp => {
-        const dateObj = apiData.join_room_game_start_datetime instanceof Date 
-        ? apiData.join_room_game_start_datetime 
-        : new Date(apiData.join_room_game_start_datetime);
+        const dateObj = apiData.join_history_game_start_datetime instanceof Date 
+        ? apiData.join_history_game_start_datetime 
+        : new Date(apiData.join_history_game_start_datetime);
 
         const dd = String(dateObj.getDate()).padStart(2, '0');
         const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -35,11 +36,12 @@ function HistoryPage() {
         const ss = String(dateObj.getSeconds()).padStart(2, '0');
         return {
             recordId: apiData.join_history_id,
-            recordDate: new Date(apiData.join_history_date).toISOString().replace('T', ' ').slice(0, 19),
+            hostName: apiData.host || "Unknown Host",
+            score: apiData.join_history_score,
             gameStartDatetime: `${dd}-${mm}-${yyyy} ${hh}:${min}:${ss}`,
-            hostedName: apiData.Host || "Unknown Host",
             completness: apiData.join_history_completness,
-            problemSetName: apiData.ProblemSet
+            problemSetName: apiData.ProblemSet,
+            snapShotID: apiData.join_history_snapshot_id
         };
     };
 
@@ -71,8 +73,9 @@ function HistoryPage() {
                 historyRecords.map((history) =>
                     <div key={history.recordId} className="HistoryListContainer">
                         <ul className="ProblemList">
-                        <HistoyCard recordId={history.recordId} recordDate={history.recordDate}
-                                    gameStartDatetime={history.gameStartDatetime} hostedName={history.hostedName}
+                        <HistoyCard recordId={history.recordId}
+                                    score={history.score} snapShotID={history.snapShotID}
+                                    gameStartDatetime={history.gameStartDatetime} hostName={history.hostName}
                                     completness={history.completness} problemSetName={history.problemSetName}
                                 />
                         </ul>

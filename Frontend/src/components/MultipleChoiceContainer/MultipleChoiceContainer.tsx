@@ -1,6 +1,5 @@
 import TextareaAutosize from "react-textarea-autosize";
 import "./MultipleChoiceContainer.css"
-import { useState, useEffect } from "react";
 
 
 interface MultipleChoiceContainerProps {
@@ -24,7 +23,6 @@ const MultipleChoiceContainer: React.FC<MultipleChoiceContainerProps> = ({
             return (
                 
                 <div className="Options">
-                    {/* {`${option_label}-${problem_id}`} */}
                     <input
                         type="radio"
                         id={`${option_label}-${problem_id}`}

@@ -22,7 +22,7 @@ module.exports = function(io, redisClient) {
                     redisClient.hDel(`${roomCode}-Session-Player`, playerSession),
                     redisClient.hDel(`${roomCode}-Session-Socket`, playerSession),
                     redisClient.hDel(`${roomCode}-Session-Score`, playerSession),
-                    redisClient.hDel(`${playerSession}-Answer-History`, playerSession),
+                    redisClient.del(`${playerSession}-Answer-History`, playerSession),
                     redisClient.hDel(`${roomCode}-Last-Problem-Answered`, playerSession),
                     redisClient.hDel(`${roomCode}-Session-UserId`, playerSession),
                 ]);
@@ -83,7 +83,7 @@ module.exports = function(io, redisClient) {
                 returnScore += scoreForTime;
             }
             await redisClient.hIncrBy(`${roomCode}-Session-Score`, sessionId, returnScore);
-            await redisClient.hSet(`${sessionId}-${roomCode}-Answer-History`, currProblem.problem_id, clientAnswer);
+            await redisClient.rPush(`${sessionId}-${roomCode}-Answer-History`, clientAnswer);
             await redisClient.hSet(`${roomCode}-Session-Last-Problem-Answered`, sessionId, currProblem.problem_id);
             io.to(socket_id).emit("check-answer-response", {
                 correct: isCorrectAnswer,

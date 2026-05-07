@@ -70,6 +70,8 @@ function Sortable({ id, index, question_text, question_type, sequence_no, answer
         const correctBlankAnswer = event.target.value;
         const prevCorrectAnswer = currentCorrectAnswer;
 
+        setBlankAnswer(correctBlankAnswer);
+
         setCurrentCorrectAnswer(prevCorrectAnswers => ({
             ...prevCorrectAnswers,
             "Blanks": correctBlankAnswer,
@@ -211,7 +213,7 @@ function Sortable({ id, index, question_text, question_type, sequence_no, answer
                                     <label className="CaseSensitiveModeLabel" htmlFor={`CaseSensitiveMode ${id}`}>Case Sensitive</label>
                                 </div>
                                 <div className="BlankAnswerContainer">
-                                    <input className="BlankAnswerInput" type="text" defaultValue={blankAnswer} onChange={handleCorrectBlankAnswerChange}/>
+                                    <input className="BlankAnswerInput" type="text" value={blankAnswer} onChange={handleCorrectBlankAnswerChange}/>
                                 </div>
                                 
                             </div>
