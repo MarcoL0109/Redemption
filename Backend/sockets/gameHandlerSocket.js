@@ -37,7 +37,7 @@ module.exports = function(io, redisClient) {
                         "Content-Type": "application/json"
                     },
                     credentials: "include",
-                    body: JSON.stringify({roomCode: roomCode, completness: 2, userId: playerUserId, problemSetId: problemSetId})
+                    body: JSON.stringify({roomCode: roomCode, completness: 2, userId: playerUserId})
                 })
                 const repson = await updateKickStatus.json();
             } catch (error) {

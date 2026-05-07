@@ -1,4 +1,5 @@
 const express = require('express');
+const crypto = require('crypto');
 const router = express.Router();
 const {redisClient, subscriber} = require("../utils/redis");
 const db = require('../models/db');
@@ -87,17 +88,24 @@ router.post("/getRoomHost", async (req, res) => {
 
 
 router.post("/insertJoinHistoryInfo", async (req, res) => {
-    const {roomCode, problemSetId, userIds} = req.body;
+    const {roomCode, userIds} = req.body;
     try {
         const hostUserId = await redisClient.hGet(roomCode, "Host-UserId");
         const gameStartTime = await redisClient.hGet(roomCode, "GameStartTime");
-        const values = userIds.map(userId => [userId, problemSetId, hostUserId, new Date(Number(gameStartTime)).toISOString().slice(0, 19).replace('T', ' ')]);
-        const insertJoinHistoryQuery = 'INSERT INTO join_history (user_id, join_room_problems_set, join_room_hosted_by, join_room_game_start_datetime) VALUES ?';
-        await db.query(insertJoinHistoryQuery, [values]);
-        res.status(200).json({message: "Record Inserted"});
+        const problemSnapShotId = await redisClient.hGet(roomCode, "ProblemSnapShotID");
+        // Cannot use problem set ID directly as we are doing snapshots and not record relations
+        // Need to have a snapshot ID first in order to insert in here
+        const values = userIds.map(userId => [userId, hostUserId, new Date(Number(gameStartTime)).toISOString().slice(0, 19).replace('T', ' '), Number(problemSnapShotId)]);
+        const insertJoinHistoryQuery = 'INSERT INTO join_history (user_id, join_history_hosted_by, join_history_game_start_datetime, join_history_snapshot_id) VALUES ?';
+        const [resultHeader] = await db.query(insertJoinHistoryQuery, [values]);
+        const firstId = resultHeader.insertId;
+        const insertRecordMapping = Object.fromEntries(
+            userIds.map((userId, index) => [userId, firstId + index])
+        );
+        res.status(200).json({success: true, mapping: insertRecordMapping});
     } catch (error) {
         console.log(error);
-        res.status(500).json({message: "Internal Server Error"});
+        res.status(500).json({success: false, mapping: null});
     }
 })
 
@@ -105,19 +113,18 @@ router.post("/insertJoinHistoryInfo", async (req, res) => {
 router.post("/insertAnswerHistoryScore", async (req, res) => {
     const {roomCode} = req.body;
     const allSessionsWithUserId = await redisClient.hGetAll(`${roomCode}-Session-UserId`);
-    const gameStartTimeFromRedis = await redisClient.hGet(roomCode, "GameStartTime");
-    const formattedStartTime = new Date(Number(gameStartTimeFromRedis)).toISOString().replace('T', ' ').slice(0, 19);
+    const historyRecords = await redisClient.hVals(`${roomCode}-UserId-HistoryId`);
+    const historyNumericId = historyRecords.map(Number);
     const hostSessionId = await redisClient.hGet(roomCode, "Host");
-    const problemSetId = await redisClient.hGet(roomCode, "ProblemSetId");
     let successSessionIds = [], failedSessionIds = [];
     for (const [sessionId, userId] of Object.entries(allSessionsWithUserId)) {
         if (sessionId !== hostSessionId) {
             const sessionAnswerHistory = await redisClient.hGetAll(`${sessionId}-${roomCode}-Answer-History`);
             const sessionScore = await redisClient.hGet(`${roomCode}-Session-Score`, sessionId);
-            const updateQuery = `UPDATE join_history SET join_history_score = ?, join_room_answer_history = ?, join_history_completness = ?
-                                WHERE join_room_game_start_datetime = ? AND join_room_problems_set = ? AND user_id = ?`;
+            const updateQuery = `UPDATE join_history SET join_history_score = ?, join_history_answer_history = ?, join_history_completness = ?
+                                WHERE join_history_id IN (?) AND user_id = ?`;
             try {
-                await db.query(updateQuery, [sessionScore, JSON.stringify(sessionAnswerHistory), "Completed", formattedStartTime, Number(problemSetId), Number(userId)]);
+                await db.query(updateQuery, [sessionScore, JSON.stringify(sessionAnswerHistory), "Completed", historyNumericId, Number(userId)]);
                 successSessionIds.push(sessionId);
             } catch (error) {
                 console.error(`SYNC_FAILURE: User ${userId} | Session ${sessionId}`, error);
@@ -136,19 +143,18 @@ router.post("/insertAnswerHistoryScore", async (req, res) => {
 
 
 router.post("/updateCompletness", async (req, res) => {
-    const {roomCode, completness, userId = null, problemSetId} = req.body;
+    const {roomCode, completness, userId = null} = req.body;
     const completnessMap = {2: "Kicked", 3: "Terminated By Host"};
-    const gameStartTimeFromRedis = await redisClient.hGet(roomCode, "GameStartTime");
     const allSessionsWithUserId = await redisClient.hGetAll(`${roomCode}-Session-UserId`);
-    const hostSessionId = await redisClient.hGet(roomCode, "Host");
-    const formatGameStartTime = new Date(Number(gameStartTimeFromRedis)).toISOString().replace('T', ' ').slice(0, 19);
-    
+    const historyRecords = await redisClient.hVals(`${roomCode}-UserId-HistoryId`);
+    const historyNumericId = historyRecords.map(Number);
+    const hostSessionId = await redisClient.hGet(roomCode, "Host");    
     const isRoomStarted = await redisClient.hExists(roomCode, "Status");
     const updateQuery = `UPDATE join_history SET join_history_completness = ?
-                                WHERE user_id = ? AND join_room_game_start_datetime = ? AND join_room_problems_set = ?`;
+                                WHERE join_history_id IN (?) AND user_id = ?`;
     if (completness === 2 && userId !== null && isRoomStarted !== 0) {
         try {
-            await db.query(updateQuery, [completnessMap[completness], Number(userId), formatGameStartTime, Number(problemSetId)]);
+            await db.query(updateQuery, [completnessMap[completness], historyNumericId, Number(userId)]);
             console.log("Update successful");
             res.status(200).json({message: "User Status Updated Successfully"});
         } catch (error) {
@@ -160,7 +166,7 @@ router.post("/updateCompletness", async (req, res) => {
         for (const [sessionId, userId] of Object.entries(allSessionsWithUserId)) {
             if (sessionId !== hostSessionId) {
                 try {
-                    await db.query(updateQuery, [completnessMap[completness], Number(userId), formatGameStartTime, Number(problemSetId)]);
+                    await db.query(updateQuery, [completnessMap[completness], historyNumericId, Number(userId)]);
                     successSessionIds.push(sessionId);
                 } catch (error) {
                     console.error(`STATUS_SYNC_FAILURE: User ${userId} | Session ${sessionId}`, error);
@@ -178,14 +184,91 @@ router.post("/updateCompletness", async (req, res) => {
     }
 })
 
+
+router.post("/fetchProblemSetSnapShotId", async (req, res) => {
+    
+    try {
+        const { roomCode } = req.body;
+        
+        const problemSetId = await redisClient.hGet(roomCode, "ProblemSetId");
+        if (!problemSetId) return res.status(404).json({ error: "Problem Set not found" });
+
+        const [titleRows] = await db.query(
+            `SELECT problem_set_title FROM problem_sets WHERE problem_set_id = ?`, 
+            [problemSetId]
+        );
+        const [problemRows] = await db.query(
+            `SELECT problem_id, sequence_no, question_type, question_text, answer_options, correct_answer
+             FROM problems WHERE problem_set_id = ?`, 
+            [problemSetId]
+        );
+
+        if (titleRows.length === 0) return res.status(404).json({ error: "Problem set content missing" });
+
+        const title = titleRows[0].problem_set_title;
+
+        const snapshotData = {
+            title: title,
+            questions: problemRows.map(q => ({
+                id: q.problem_id,
+                seq: q.sequence_no,
+                type: q.question_type,
+                text: q.question_text,
+                options: q.answer_options,
+                answer: q.correct_answer
+            })).sort((a, b) => a.seq - b.seq)
+        };
+        
+        const snapShotString = JSON.stringify(snapshotData);
+        const snapshotHash = crypto.createHash('sha256').update(snapShotString).digest('hex');
+
+        const [checkHashRes] = await db.query(
+            `SELECT snapshot_id FROM problem_set_snapshots WHERE set_hash = ?`, 
+            [snapshotHash]
+        );
+
+        let snapShotId;
+
+        if (checkHashRes.length > 0) {
+            snapShotId = checkHashRes[0].snapshot_id;
+        } else {
+            const [resHeader] = await db.query(
+                `INSERT INTO problem_set_snapshots (set_hash, problem_set_title) VALUES (?, ?)`, 
+                [snapshotHash, title]
+            );
+            
+            snapShotId = resHeader.insertId;
+
+            const questionValues = problemRows.map(q => [
+                snapShotId,
+                q.question_text, 
+                q.question_type, 
+                JSON.stringify(q.correct_answer), 
+                JSON.stringify(q.answer_options), 
+                q.sequence_no
+            ]);
+
+            await db.query(
+                `INSERT INTO snapshot_questions 
+                (snapshot_id, question_text, question_type, correct_answer, answer_options, sequence_no) 
+                VALUES ?`, 
+                [questionValues]
+            );
+        }
+
+        res.status(200).json({ success: true, snapshotId: snapShotId });
+
+    } catch (error) {
+        console.error("Snapshot API Error:", error);
+        res.status(500).json({ success: false, error: "Internal Server Error" });
+    }
+});
+
+
 router.post("/getHistoryRecord", async (req, res) => {
     const {userId} = req.body;
-    const selectQuery = `SELECT join_history_id, join_history_date, join_room_game_start_datetime, 
-                            host.username as Host, join_history_completness, s.problem_set_title as ProblemSet
-                            FROM join_history j 
-                            JOIN problem_sets s ON j.join_room_problems_set = s.problem_set_id
-                            JOIN user_info host ON host.user_id = j.join_room_hosted_by
-                            WHERE j.user_id = ?`;
+    // Need to join 4 tables, join_history, user_info, problem_set_snapshots, snapshot_questions...
+    const selectQuery = ``;
     try {
         const historyRecords = await db.query(selectQuery, [userId]);
         res.status(200).json({historyRecords: historyRecords[0]});

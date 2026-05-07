@@ -25,6 +25,7 @@ module.exports = function(io, redisClient) {
             redisClient.del(`${roomCode}-Session-Last-Problem-Answered`),
             redisClient.del(`${roomCode}-UserId`),
             redisClient.del(`${roomCode}-Session-UserId`),
+            redisClient.del(`${roomCode}-UserId-HistoryId`),
         ]);
         const allSession = await redisClient.hGetAll(`${roomCode}-Session-Player`);
         for (const sessionId in allSession) {
@@ -159,7 +160,6 @@ module.exports = function(io, redisClient) {
 
 
     const storeUserJoinData = async (roomCode) => {
-        const problemSetIFromRedis = await redisClient.hGet(roomCode, "ProblemSetId");
         const loggedInUser = await redisClient.hVals(`${roomCode}-Session-UserId`);
         try {
             const insertHistoryRecord = await fetch(`${ROOM_API_URL}/insertJoinHistoryInfo`, {
@@ -167,14 +167,37 @@ module.exports = function(io, redisClient) {
                 headers: {
                     'Content-Type': 'application/json',
                 }, credentials: "include",
-                body: JSON.stringify({roomCode: roomCode, problemSetId: problemSetIFromRedis, userIds: loggedInUser})
+                body: JSON.stringify({roomCode: roomCode, userIds: loggedInUser})
             })
             if (insertHistoryRecord.status === 200) {
+                const insertedRecordJSON = await insertHistoryRecord.json();
+                const insertRecordMapping = insertedRecordJSON.mapping;
+                await redisClient.hSet(`${roomCode}-UserId-HistoryId`, insertRecordMapping);
                 console.log(`Users with ${loggedInUser} has inserted a new join hisotry to the database`)
             }
         } catch (error) {
             console.error(error);
         } 
+    }
+
+
+    const storeProblemSnapshots = async (roomCode) => {
+        try {
+            const snapShotResponse = await fetch(`${ROOM_API_URL}/fetchProblemSetSnapShotId`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                }, credentials: "include",
+                body: JSON.stringify({roomCode: roomCode})
+            })
+            if (snapShotResponse.status === 200) {
+                const snapShotJSON = await snapShotResponse.json();
+                const snapShotId = snapShotJSON.snapshotId;
+                await redisClient.hSet(roomCode, "ProblemSnapShotID", snapShotId);
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
 
 
@@ -227,6 +250,7 @@ module.exports = function(io, redisClient) {
                 if (isStarted === 0) {
                     await redisClient.hSet(roomCode, "Status", "Started")
                     await redisClient.hSet(roomCode, "GameStartTime", Date.now());
+                    await storeProblemSnapshots(roomCode);
                     await storeUserJoinData(roomCode);
                     const problemSetId = await redisClient.hGet(roomCode, "ProblemSetId");
                     streamProblems(problemSetId, roomCode);
@@ -267,7 +291,7 @@ module.exports = function(io, redisClient) {
                             "Content-Type": "application/json"
                         },
                         credentials: "include",
-                        body: JSON.stringify({roomCode: roomCode, completness: 3, userId: null, problemSetId: problemSetId})
+                        body: JSON.stringify({roomCode: roomCode, completness: 3, userId: null})
                     })
                 } catch (error) {
                     console.error(error);

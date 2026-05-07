@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import HistoyCard from "../HistoryCards/HistoryCard"
+import "./HistroyPage.css"
 
 
 export interface HistoryCardProp {
@@ -65,18 +66,20 @@ function HistoryPage() {
 
 
     return (
-        <div>
+        <div className="HomePageContainer">
             {
-                historyRecords.map((history) => 
-                    <div key={history.recordId}>
+                historyRecords.map((history) =>
+                    <div key={history.recordId} className="HistoryListContainer">
+                        <ul className="ProblemList">
                         <HistoyCard recordId={history.recordId} recordDate={history.recordDate}
                                     gameStartDatetime={history.gameStartDatetime} hostedName={history.hostedName}
                                     completness={history.completness} problemSetName={history.problemSetName}
-                        />
+                                />
+                        </ul>
                     </div>
                 )
             }
-        </div>
+        </div>            
     )
 }
 
