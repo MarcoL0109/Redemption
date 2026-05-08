@@ -18,7 +18,6 @@ function ResultPage() {
         navigate("/");
     }
 
-
     return (
         <div className="ResultPageContainer">
             <h1>

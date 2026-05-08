@@ -30,7 +30,7 @@ function HistoyCard({recordId, hostName, score, gameStartDatetime, completness, 
                         {
                             completness === "Completed" ?
                             `Score: ${score}`:
-                            `Not Availabel when ${completness}`
+                            `Score: Not Available when ${completness}`
                         }
                         
                     </span>
