@@ -249,13 +249,11 @@ router.post("/fetchProblemSetSnapShotId", async (req, res) => {
             await db.query(
                 `INSERT INTO snapshot_questions 
                 (snapshot_id, question_text, question_type, correct_answer, answer_options, sequence_no) 
-                VALUES ?`, 
+                VALUES ?`,
                 [questionValues]
             );
         }
-
         res.status(200).json({ success: true, snapshotId: snapShotId });
-
     } catch (error) {
         console.error("Snapshot API Error:", error);
         res.status(500).json({ success: false, error: "Internal Server Error" });

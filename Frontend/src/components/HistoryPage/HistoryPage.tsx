@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import HistoyCard from "../HistoryCards/HistoryCard"
+import NavBar from "../NavBar/NavBar"
 import "./HistroyPage.css"
 
 
@@ -19,8 +20,9 @@ function HistoryPage() {
 
     // @ts-ignore
     const ROOM_API_URL = process.env.VITE_ROOM_MANAGEMENT_API_URL
-    const {userId} = useParams();
     const [historyRecords, setHistoryRecords] = useState<HistoryCardProp[]>([]);
+    const location = useLocation();
+    const userData = location.state?.user_data;
 
 
     const mapApiRecordToInterface = (apiData: any): HistoryCardProp => {
@@ -36,11 +38,11 @@ function HistoryPage() {
         const ss = String(dateObj.getSeconds()).padStart(2, '0');
         return {
             recordId: apiData.join_history_id,
-            hostName: apiData.host || "Unknown Host",
+            hostName: apiData.Host || "Unknown Host",
             score: apiData.join_history_score,
             gameStartDatetime: `${dd}-${mm}-${yyyy} ${hh}:${min}:${ss}`,
             completness: apiData.join_history_completness,
-            problemSetName: apiData.ProblemSet,
+            problemSetName: apiData.ProblemSetTitle,
             snapShotID: apiData.join_history_snapshot_id
         };
     };
@@ -54,10 +56,11 @@ function HistoryPage() {
                     "Content-Type": "application/json"
                 },
                 credentials: "include",
-                body: JSON.stringify({userId: userId})
+                body: JSON.stringify({userId: userData.user_id})
             })
             if (fetchHistoryResponse.status === 200) {
                 const historyRecordJson = await fetchHistoryResponse.json();
+                console.log(historyRecordJson);
                 const historyRecordContent: HistoryCardProp[] = historyRecordJson.historyRecords.map(mapApiRecordToInterface);
                 setHistoryRecords(historyRecordContent)
             }
@@ -69,6 +72,7 @@ function HistoryPage() {
 
     return (
         <div className="HomePageContainer">
+            <NavBar user_data={userData}/>
             {
                 historyRecords.map((history) =>
                     <div key={history.recordId} className="HistoryListContainer">

@@ -151,12 +151,14 @@ module.exports = function(io, redisClient) {
                     }
                 }
                 const roomHostSession = await redisClient.hGet(roomCode, "Host");
-                const roomHostSocket = await redisClient.hGet(`${roomCode}-Session-Socket`, roomHostSession);
-                if (roomHostSocket) {
-                    io.to(roomHostSocket).emit("redirect-player-result-page", { playerRank: -1, rankingList: rankingList });
+                if (roomHostSession) {
+                    const roomHostSocket = await redisClient.hGet(`${roomCode}-Session-Socket`, roomHostSession);
+                    if (roomHostSocket) {
+                        io.to(roomHostSocket).emit("redirect-player-result-page", { playerRank: -1, rankingList: rankingList });
+                    }
                 }
                 await clearRoomInfo(roomCode);
-            }                
+            }              
         }
     }
 

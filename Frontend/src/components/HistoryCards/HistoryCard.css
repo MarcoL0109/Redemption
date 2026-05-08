@@ -1,4 +1,42 @@
-.HistoryCardContentContainer {
+.HistoryCardContainer {
     background-color: whitesmoke;
     color: black;
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 25px;
+    font-family: 'Courier New', Courier, monospace;
+    padding-left: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.HistroyInfoSpan {
+    font-size: 18px;
+}
+
+.completnessDiv {
+    border-radius: 20px;
+    background-color: rgb(29, 224, 29);
+    width: fit-content;
+    padding: 10px 10px 10px 10px;
+    margin: 20px 20px 10px 20px;
+    font-size: 20px
+}
+
+.completnessDiv.Completed {
+    background-color: rgb(29, 224, 29);
+}
+
+.completnessDiv.Kicked {
+    background-color: rgb(220, 44, 21);
+}
+
+.completnessDiv.Incomplete {
+    background-color: rgb(241, 131, 6);
+}
+
+.completnessDiv.Terminated {
+    background-color: rgb(80, 83, 80);
+    color: white
 }
