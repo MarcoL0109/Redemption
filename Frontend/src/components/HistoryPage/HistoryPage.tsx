@@ -72,7 +72,7 @@ function HistoryPage() {
 
     return (
         <div className="HomePageContainer">
-            <NavBar user_data={userData}/>
+            <NavBar/>
             {
                 historyRecords.map((history) =>
                     <div key={history.recordId} className="HistoryListContainer">

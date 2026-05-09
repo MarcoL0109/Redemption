@@ -11,6 +11,14 @@
     align-items: flex-end;
 }
 
+.HistoryCardContentContainer.clickable {
+    cursor: pointer;
+}
+
+.HistoryCardContentContainer.clickable :hover {
+    background-color: rgb(196, 188, 188);
+}
+
 .HistroyInfoSpan {
     font-size: 18px;
 }

@@ -1,6 +1,7 @@
 import './SignInPage.css';
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
+import { useUser } from '../../context/UserContext';
 
 
 function SignInPage() {
@@ -11,6 +12,7 @@ function SignInPage() {
     const [incorrectLoginInfo, setincorrectLoginInfo] = useState<boolean>(false);
     const [notActivated, setNotActivated] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const { refreshUser } = useUser();
     //@ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
 
@@ -30,6 +32,7 @@ function SignInPage() {
             setincorrectLoginInfo(login_status.status === 401 || login_status.status === 404);
             setNotActivated(login_status.status === 400);
             if (login_status.status === 200) {
+                refreshUser();
                 navigate("/Home");
             }
             setIsSubmitting(false);

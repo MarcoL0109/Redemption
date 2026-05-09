@@ -1,5 +1,6 @@
 
 import { HistoryCardProp } from "../HistoryPage/HistoryPage";
+import { useNavigate } from "react-router-dom";
 import "./HistoryCard.css";
 
 // useEffect is not called in here, call it in the historyContent page
@@ -13,11 +14,17 @@ function HistoyCard({recordId, hostName, score, gameStartDatetime, completness, 
         "Completed": "Completed",
         "Kicked": "Kicked"
     }
+    const navigate = useNavigate();
+
+
+    const handleViewHistoryDetail = () => {
+        
+    }
 
 
     return (
         <li className="HistoryCardContainer">
-            <div className="HistoryCardContentContainer">
+            <div className={`HistoryCardContentContainer ${completness === "Completed" ? "Clickable" : ""}`} onClick={handleViewHistoryDetail}>
                 <h2>{problemSetName}</h2>
                 <div>
                     <span className="HistroyInfoSpan">Hosted By: {hostName}</span>
@@ -31,8 +38,7 @@ function HistoyCard({recordId, hostName, score, gameStartDatetime, completness, 
                             completness === "Completed" ?
                             `Score: ${score}`:
                             `Score: Not Available when ${completness}`
-                        }
-                        
+                        }   
                     </span>
                 </div>
             </div>

@@ -486,7 +486,7 @@ function ProblemList() {
     
     return (
         <div className="HomePageContainer">
-            <NavBar user_data={userData} />
+            <NavBar/>
 
             <Overlays isOpen={isOverlayOpen}>
                 <h1>Bye Bye Records</h1>

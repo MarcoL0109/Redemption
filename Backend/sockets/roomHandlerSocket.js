@@ -15,6 +15,7 @@ module.exports = function(io, redisClient) {
     const clearRoomInfo = async (roomCode) => {
         activeRoomProblems.delete(roomCode);
         problemStartTime.delete(roomCode);
+        console.log("Cleaning room", roomCode);
         await Promise.all([
             redisClient.del(`${roomCode}-List`),
             redisClient.del(roomCode),
@@ -304,8 +305,9 @@ module.exports = function(io, redisClient) {
                     const responseJSON = await updateKickStatus.json();
                     const responseSummary = responseJSON.result;
                     console.log(responseSummary);
+                } finally {
+                    await clearRoomInfo(roomCode);
                 }
-                await clearRoomInfo(roomCode);
             }
         },
 

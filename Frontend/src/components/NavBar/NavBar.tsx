@@ -4,37 +4,32 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { useState } from "react";
 import UserAccountBox from "../UserAccountBox/UserAccountBox";
 import { useNavigate } from "react-router-dom";
+import { useUser } from '../../context/UserContext';
 
-interface NavBarProps {
-    user_data: {username: string, email: string, user_id: number, created_at: string, user_icon: string};
-}
 
-const NavBar: React.FC<NavBarProps> = ({user_data}) => {
+const NavBar: React.FC = () => {
 
-    // @ts-ignore
-    const UTILS_API_URL = process.env.VITE_UTILS_API_URL;
     const navigate = useNavigate();
-    const [isDisplay, setIsDisplay] = useState<boolean>(false);
+    const [isDisplay, setIsDisplay] = useState<boolean>(false);    
+    const { userData, loading } = useUser();
 
+    console.log("What:", userData);
 
-    const handleProfileClick = async (event: React.MouseEvent) => {
+    const handleProfileClick = (event: React.MouseEvent) => {
         event.stopPropagation();
         setIsDisplay(prev => !prev);
-        // const testInsertImage = await fetch(`${UTILS_API_URL}/InsertImage`, {
-        //     method: "POST",
-        //     credentials: "include",
-        // })
     };
 
-
-    const handleJoinRoom = () => {
-        navigate("/");
+    if (loading) {
+        return <nav className="NavBar"><h1 className="NavBarTitleText">Redemption</h1></nav>;
     }
 
+    if (!userData) {
+        return <nav className="NavBar">Please Log In</nav>;
+    }
 
-    const handleClose = () => {
-        setIsDisplay(false);
-    };
+    const handleJoinRoom = () => navigate("/");
+    const handleClose = () => setIsDisplay(false);
 
     return (
         <nav className="NavBar">
@@ -45,15 +40,15 @@ const NavBar: React.FC<NavBarProps> = ({user_data}) => {
                 </div>
                 <div className="UserIconCircle" onClick={handleProfileClick}>
                     {
-                        user_data.user_icon === "" ? <FontAwesomeIcon icon={faUser} size="3x" /> :
-                        <img className="UserIconImage" src={user_data.user_icon} alt="User Icon" />
+                        userData.user_icon === "" ? <FontAwesomeIcon icon={faUser} size="3x" /> :
+                        <img className="UserIconImage" src={userData.user_icon} alt="User Icon" />
                     }
                 </div>
             </div>    
             
             {
                 isDisplay &&
-                <UserAccountBox onClose={handleClose} user_data={user_data}/>
+                <UserAccountBox onClose={handleClose} user_data={userData}/>
             }
         </nav>
     );

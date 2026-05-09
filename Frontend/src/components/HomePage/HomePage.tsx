@@ -5,6 +5,7 @@ import Overlays from "../Overlays/Overlay";
 import { Mosaic } from 'react-loading-indicators';
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useUser } from "../../context/UserContext";
 
 
 export interface ProblemSetModificationMap {
@@ -33,13 +34,7 @@ function HomePage() {
     const USER_API_URL = process.env.VITE_USER_API_URL;
     // @ts-ignore
     const PROBLEM_SET_API_URL = process.env.VITE_PROBLEM_SETS_API_URL;
-    const [userData, setUserData] = useState<{ username: string; email: string; user_id: number; created_at: string, user_icon: string }>({
-        username: "",
-        email: "",
-        user_id: -1,
-        created_at: "",
-        user_icon: "",
-    });
+    const { userData, loading } = useUser();
     const [problemSets, setProblemSets] = useState<ProblemSet[]>([
         {
         problem_set_id: -1, problem_set_title: "", problem_set_description: "", 
@@ -81,7 +76,6 @@ function HomePage() {
         setIsLoaded(true);
     }
 
-    
     useEffect(() => {
         const checkUserValidation = async () => {
             const getSessionInfoRepsonse = await fetch(`${UTILS_API_URL}/SessionInfo`, {
@@ -93,37 +87,19 @@ function HomePage() {
             if (session_user_id === null) {
                 navigate("/SignIn");
             } else {
-                const get_user_data_response = await fetch(`${USER_API_URL}/getUserInfo`, {
-                    method: "POST",
-                    headers: {
-                        "Content-type": "application/json"
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({user_id: session_user_id}),
-                });
-
-                const user_data_json = await get_user_data_response.json();
-                const user_data_content = user_data_json.userData;
-
-                let image_url = "";
-                if (user_data_content.user_icon !== null) {
-                    const arrayBuffer = new Uint8Array(user_data_content.user_icon.data);
-                    const image_blob = new Blob([arrayBuffer], { type: 'image/jpg' });
-                    image_url = URL.createObjectURL(image_blob);
-                }
-                setUserData({
-                    username: user_data_content.username,
-                    email: user_data_content.email,
-                    user_id: user_data_content.user_id,
-                    created_at: user_data_content.create_date.toString(),
-                    user_icon: image_url,
-                })
                 await fetch_problem_sets(session_user_id);
             }
         }
         checkUserValidation();
     }, []);
 
+
+    if (loading) {
+        return null;
+    }
+    if (!userData) {
+        return <span>User Data Not Found</span>
+    }
 
     const handleEditMode = async () => {
         setEditMode(true);
@@ -300,7 +276,7 @@ function HomePage() {
 
     return (
         <div className="HomePageContainer">
-            <NavBar user_data={userData}/>
+            <NavBar/>
             <Overlays isOpen={isOverlayOpen}>
                 <h1>Bye Bye Records</h1>
                 <p>{`${potentialDeleteList.length} Problem Set(s) Selected For Deletion. Once they are deleted, they are gone forever. Are you

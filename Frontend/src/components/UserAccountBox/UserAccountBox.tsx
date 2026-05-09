@@ -2,6 +2,7 @@ import "./UserAccountBox.css";
 import { useRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { useUser } from '../../context/UserContext';
 import { useNavigate } from "react-router-dom";
 import UserIcon from '../../assets/user_icon.svg';
 import CogIcon from '../../assets/setting_icon.svg'
@@ -21,6 +22,7 @@ const UserAccountBox: React.FC<UserAccountBoxProps> = ({ onClose, user_data }) =
     // @ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
     const nevigate = useNavigate();
+    const { logout } = useUser();
 
 
     const handleLogOut = async () => {
@@ -32,6 +34,7 @@ const UserAccountBox: React.FC<UserAccountBoxProps> = ({ onClose, user_data }) =
             credentials: "include",
         })
         if (logout_response.status === 200) {
+            logout();
             nevigate("/SignIn")
         }
     }

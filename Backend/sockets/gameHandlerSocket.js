@@ -22,7 +22,7 @@ module.exports = function(io, redisClient) {
                     redisClient.hDel(`${roomCode}-Session-Player`, playerSession),
                     redisClient.hDel(`${roomCode}-Session-Socket`, playerSession),
                     redisClient.hDel(`${roomCode}-Session-Score`, playerSession),
-                    redisClient.del(`${playerSession}-Answer-History`, playerSession),
+                    redisClient.del(`${playerSession}-${roomCode}-Answer-History`, playerSession),
                     redisClient.hDel(`${roomCode}-Last-Problem-Answered`, playerSession),
                     redisClient.hDel(`${roomCode}-Session-UserId`, playerSession),
                 ]);

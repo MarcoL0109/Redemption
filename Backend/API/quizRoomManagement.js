@@ -148,19 +148,21 @@ router.post("/updateCompletness", async (req, res) => {
     const historyNumericId = historyRecords.map(Number);
     const hostSessionId = await redisClient.hGet(roomCode, "Host");    
     const isRoomStarted = await redisClient.hExists(roomCode, "Status");
+    let successSessionIds = [], failedSessionIds = [];
     const updateQuery = `UPDATE join_history SET join_history_completness = ?
                                 WHERE join_history_id IN (?) AND user_id = ?`;
     if (completness === 2 && userId !== null && isRoomStarted !== 0) {
         try {
             await db.query(updateQuery, [completnessMap[completness], historyNumericId, Number(userId)]);
-            console.log("Update successful");
-            res.status(200).json({message: "User Status Updated Successfully"});
+            successSessionIds.push(userId);
         } catch (error) {
             console.error(error);
-            res.status(500).json({message: "Interal Server Error"});
+            failedSessionIds.push({
+                userId: userId,
+                error: error.message
+            });
         }
     } else if (isRoomStarted !== 0) {
-        let successSessionIds = [], failedSessionIds = [];
         for (const [sessionId, userId] of Object.entries(allSessionsWithUserId)) {
             if (sessionId !== hostSessionId) {
                 try {
@@ -176,10 +178,10 @@ router.post("/updateCompletness", async (req, res) => {
                 }
             }
         };
-        res.status(200).json({summary: {total: successSessionIds.length + failedSessionIds.length,
-            successCount: successSessionIds.length, failedCount: failedSessionIds.length,
-        }, result: {success: successSessionIds, failed: failedSessionIds}})
     }
+    res.status(200).json({summary: {total: successSessionIds.length + failedSessionIds.length,
+        successCount: successSessionIds.length, failedCount: failedSessionIds.length,
+    }, result: {success: successSessionIds, failed: failedSessionIds}})
 })
 
 

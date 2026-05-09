@@ -3,6 +3,7 @@ import Overlays from "../Overlays/Overlay";
 import NavBar from "../NavBar/NavBar";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useUser } from '../../context/UserContext';
 import "./JoimRoom.css";
 
 
@@ -18,18 +19,7 @@ function JoinRoom() {
   const [isKickOverlayOpen, setIsKickOverlayOpen] = useState<boolean>(false);
   const [isClosedRoomOverlayOpen, setIsClosedRoomOverlayOpen] = useState<boolean>(false);
   const [isRoomExpiredOverlayOpen, setIsRoomExpiredOverlayOpen] = useState<boolean>(false);
-  //@ts-ignore
-  const UTILS_API_URL = process.env.VITE_UTILS_API_URL;
-  //@ts-ignore
-  const USER_API_URL = process.env.VITE_USER_API_URL;
-  const [userData, setUserData] = useState<{ username: string; email: string; user_id: number; created_at: string, user_icon: string }>({
-      username: "",
-      email: "",
-      user_id: -1,
-      created_at: "",
-      user_icon: "",
-  });
-  const [userId, setUserId] = useState<number>(-1);
+  const { userData, loading } = useUser();
 
 
   useEffect(() => {
@@ -47,47 +37,13 @@ function JoinRoom() {
     }, [closeRoom, navigate, location.pathname]);
 
 
-  const fetchUserData = async () => {
-    const getSessionInfoRepsonse = await fetch(`${UTILS_API_URL}/SessionInfo`, {
-        method: "GET",
-        credentials: "include"
-    })
-    const session_info_body = await getSessionInfoRepsonse.json();
-    const session_user_id = session_info_body.session.user_id || null
-    if (session_user_id) {
-      setUserId(session_user_id);
-      const get_user_data_response = await fetch(`${USER_API_URL}/getUserInfo`, {
-        method: "POST",
-        headers: {
-            "Content-type": "application/json"
-        },
-        credentials: "include",
-        body: JSON.stringify({user_id: session_user_id}),
-      });
-
-      const user_data_json = await get_user_data_response.json();
-      const user_data_content = user_data_json.userData;
-
-      let image_url = "";
-      if (user_data_content.user_icon !== null) {
-          const arrayBuffer = new Uint8Array(user_data_content.user_icon.data);
-          const image_blob = new Blob([arrayBuffer], { type: 'image/jpg' });
-          image_url = URL.createObjectURL(image_blob);
-      }
-      setUserData({
-          username: user_data_content.username,
-          email: user_data_content.email,
-          user_id: user_data_content.user_id,
-          created_at: user_data_content.create_date.toString(),
-          user_icon: image_url,
-      })
+    if (loading) {
+        return <nav className="NavBar"><h1 className="NavBarTitleText">Redemption</h1></nav>;
     }
-  }
 
-
-  useEffect(() => {
-    fetchUserData();
-  }, [])
+    if (!userData) {
+        return <nav className="NavBar">Please Log In</nav>;
+    }
 
 
   const handleCloseOverlay = () => {
@@ -127,12 +83,12 @@ function JoinRoom() {
       </Overlays>
       
       {
-        userId === -1 ?
+        userData.user_id === -1 ?
         <button onClick={() => navigate("/SignIn")} className="SigninButton">
           <strong>Sign in</strong>
         </button> :
         <div className="NavbarContainer">
-          <NavBar user_data={userData}/>
+          <NavBar/>
         </div>
         
       }
