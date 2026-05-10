@@ -18,10 +18,11 @@ function HistoryRecord() {
     const {recordId, snapShotId} = useParams();
     const [snapShotContent, setSnapShotContent] = useState<HistoryRecords[]>([]);
     const [currIndex, setCurrIndex] = useState<number>(0);
-    const [answerHistory, setAnswerHistory] = useState<String[]>([]);
+    const [answerHistory, setAnswerHistory] = useState<string[]>([]);
     // @ts-ignore
     const HISTORY_API_URL = process.env.VITE_HISTORY_MANAGEMENT_API_URL;
     const currentDisplayProblem = snapShotContent[currIndex];
+    const currentAnswerHistory = answerHistory[currIndex];
 
 
     useEffect(() => {
@@ -53,7 +54,7 @@ function HistoryRecord() {
             if (fetchAnswerHistoryResponse.status === 200) {
                 const fetchAnswerHistoryJSON = await fetchAnswerHistoryResponse.json();
                 const answerHistory = fetchAnswerHistoryJSON.result;
-                setAnswerHistory(answerHistory);
+                if (answerHistory.length > 0) setAnswerHistory(answerHistory[0].join_history_answer_history);
             }
         }
         fetchSnapShots();
@@ -93,10 +94,10 @@ function HistoryRecord() {
                     {
                         currentDisplayProblem?.question_type === "Multiple Choice" ?
                         <div className="OptionsContainer">
-                            <div className={"OptionADiv"} data-id="option-A">{currentDisplayProblem?.answer_options.A}</div>
-                            <div className={"OptionBDiv"} data-id="option-B">{currentDisplayProblem?.answer_options.B}</div>
-                            <div className={"OptionCDiv"} data-id="option-C">{currentDisplayProblem?.answer_options.C}</div>
-                            <div className={"OptionDDiv"} data-id="option-D">{currentDisplayProblem?.answer_options.D}</div>
+                            <div className={`OptionADivNoHover ${currentDisplayProblem.correct_answer.MC === "A" ? "Correct" : 'Wrong'} ${currentAnswerHistory === 'A' ? "Selected": ''}`} data-id="option-A">{currentDisplayProblem?.answer_options.A}</div>
+                            <div className={`OptionBDivNoHover ${currentDisplayProblem.correct_answer.MC === "B" ? "Correct" : 'Wrong'} ${currentAnswerHistory === 'B' ? "Selected": ''}`} data-id="option-B">{currentDisplayProblem?.answer_options.B}</div>
+                            <div className={`OptionCDivNoHover ${currentDisplayProblem.correct_answer.MC === "C" ? "Correct" : 'Wrong'} ${currentAnswerHistory === 'C' ? "Selected": ''}`} data-id="option-C">{currentDisplayProblem?.answer_options.C}</div>
+                            <div className={`OptionDDivNoHover ${currentDisplayProblem.correct_answer.MC === "D" ? "Correct" : 'Wrong'} ${currentAnswerHistory === 'D' ? "Selected": ''}`} data-id="option-D">{currentDisplayProblem?.answer_options.D}</div>
                         </div> :
                         <div className="BlankAnswerContainer">
                             <form className="BlankFormContainer">
@@ -105,10 +106,8 @@ function HistoryRecord() {
                                         {
                                             <input className="BlankAnswerInput" 
                                                 type="text"
-                                                placeholder="Type Your Answer"
                                                 readOnly={true}
-                                                value="Testing"
-                                                required
+                                                defaultValue={currentAnswerHistory}
                                             /> 
                                         }
                                         

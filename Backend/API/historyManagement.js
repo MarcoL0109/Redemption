@@ -117,9 +117,12 @@ router.post("/getSnapShotContent", async (req, res) => {
 
 router.post("/getAnswerHistory", async (req, res) => {
     const {historyRecordId} = req.body;
-    const selectQuery = "SELECT join_history_answer_history WHERE join_history_id = ?";
+    const selectQuery = "SELECT join_history_answer_history FROM join_history WHERE join_history_id = ?";
     try {
         const [answerHistory] = await db.query(selectQuery, [historyRecordId]);
+        if (answerHistory.length === 0) {            
+            return res.status(200).json({ result: [] });
+        }
         res.status(200).json({result: answerHistory});
     } catch (error) {
         console.error(error);
