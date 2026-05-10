@@ -1,0 +1,29 @@
+.SwitchProblemButtonContainer {
+    display: flex;
+    width: 100%;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.SwitchProblemButtonContainer button {
+    flex: 1;
+    padding: 10px;
+    cursor: pointer;
+    height: 75px;
+    font-size: 30px;;
+    background-color: rgba(245, 245, 245, 0.5);;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.SwitchProblemButtonContainer button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.SwitchProblemButtonContainer button:hover {
+    border: none;
+    cursor: pointer;
+    background-color: rgb(94, 90, 90);
+}

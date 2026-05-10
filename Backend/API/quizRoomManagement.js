@@ -1,5 +1,4 @@
 const express = require('express');
-const crypto = require('crypto');
 const router = express.Router();
 const {redisClient, subscriber} = require("../utils/redis");
 const db = require('../models/db');

@@ -102,6 +102,32 @@ router.post("/getHistoryRecord", async (req, res) => {
 })
 
 
+router.post("/getSnapShotContent", async (req, res) => {
+    const {snapShotId} = req.body;
+    const selectQuery = "SELECT question_text, question_type, correct_answer, answer_options, sequence_no FROM snapshot_questions WHERE snapshot_id = ? ORDER BY sequence_no";
+    try {
+        const [snapShotContent] = await db.query(selectQuery, [Number(snapShotId)]);
+        res.status(200).json({result: snapShotContent});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: "Internal Server Error"});
+    }
+})
+
+
+router.post("/getAnswerHistory", async (req, res) => {
+    const {historyRecordId} = req.body;
+    const selectQuery = "SELECT join_history_answer_history WHERE join_history_id = ?";
+    try {
+        const [answerHistory] = await db.query(selectQuery, [historyRecordId]);
+        res.status(200).json({result: answerHistory});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: "Internal Server Error"});
+    }
+})
+
+
 
 
 

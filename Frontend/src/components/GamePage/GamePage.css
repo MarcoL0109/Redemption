@@ -49,6 +49,11 @@
     min-height: 0;
 }
 
+
+.ProblemTextContainer {
+    font-size: 35px;
+}
+
 .OptionsContainer {
     width: 100%;
     height: 100%;
