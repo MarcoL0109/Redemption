@@ -13,6 +13,7 @@ const userAPIs = require('./API/accountManagement.js');
 const utilAPIs = require('./utils/utils.js');
 const problemSetsAPIs = require('./API/problemSetManagement.js');
 const roomManagementAPI = require('./API/quizRoomManagement.js');
+const historyManagementAPI = require('./API/historyManagement.js');
 
 const app = express();
 
@@ -46,6 +47,7 @@ async function startApp() {
         app.use("/utils/", utilAPIs);
         app.use("/api/problemsets", problemSetsAPIs);
         app.use("/api/rooms", roomManagementAPI);
+        app.use("/api/history", historyManagementAPI);
 
         app.get('/', (req, res) => {
             res.sendFile(path.join(distPath, 'index.html'));

@@ -14,6 +14,7 @@ import PlayerNamePendingPage from "./components/PlayerNamePendingPage/PlayerName
 import GamePage from "./components/GamePage/GamePage";
 import ResultPage from "./components/ResultPage/ResultPage";
 import HistoryPage from "./components/HistoryPage/HistoryPage";
+import HistoryRecord from "./components/HistoryRecordDetail/HistoryRecordPage";
 import { UserProvider } from "./context/UserContext";
 
 
@@ -36,7 +37,7 @@ function App() {
             <Route path="/GamePage/:userId/:username/:roomId/:problem_set_id" element={<GamePage/>} />
             <Route path="/ResultPage/:userId/:username/:roomId" element={<ResultPage/>} />
             <Route path="/HistoryPage/" element={<HistoryPage/>} />
-
+            <Route path="/HistoryRecord/:recordId/:snapShotId" element={<HistoryRecord/>} />
           </Routes>
         </BrowserRouter>
     </UserProvider>

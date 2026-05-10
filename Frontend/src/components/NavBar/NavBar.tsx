@@ -13,8 +13,6 @@ const NavBar: React.FC = () => {
     const [isDisplay, setIsDisplay] = useState<boolean>(false);    
     const { userData, loading } = useUser();
 
-    console.log("What:", userData);
-
     const handleProfileClick = (event: React.MouseEvent) => {
         event.stopPropagation();
         setIsDisplay(prev => !prev);

@@ -5,6 +5,7 @@ const {activeRoomProblems, problemStartTime} = require("../utils/gameStates")
 const {constructPlayerList, constructRankingList, constructPlayerOrder} = require("../utils/gameUtils");
 const PROBLEM_SET_API_URL = process.env.VITE_PROBLEM_SETS_API_URL;
 const ROOM_API_URL = process.env.VITE_ROOM_MANAGEMENT_API_URL;
+const HISTORY_API_URL = process.env.VITE_HISTORY_MANAGEMENT_API_URL;
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 
@@ -15,7 +16,6 @@ module.exports = function(io, redisClient) {
     const clearRoomInfo = async (roomCode) => {
         activeRoomProblems.delete(roomCode);
         problemStartTime.delete(roomCode);
-        console.log("Cleaning room", roomCode);
         await Promise.all([
             redisClient.del(`${roomCode}-List`),
             redisClient.del(roomCode),
@@ -190,7 +190,7 @@ module.exports = function(io, redisClient) {
 
     const storeProblemSnapshots = async (roomCode) => {
         try {
-            const snapShotResponse = await fetch(`${ROOM_API_URL}/fetchProblemSetSnapShotId`, {
+            const snapShotResponse = await fetch(`${HISTORY_API_URL}/fetchInsertProblemSetSnapShotId`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',

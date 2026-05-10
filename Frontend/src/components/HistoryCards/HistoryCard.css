@@ -11,12 +11,12 @@
     align-items: flex-end;
 }
 
-.HistoryCardContentContainer.clickable {
+.HistoryCardContainer.clickable {
     cursor: pointer;
 }
 
-.HistoryCardContentContainer.clickable :hover {
-    background-color: rgb(196, 188, 188);
+.HistoryCardContainer.clickable:hover {
+    background-color: rgb(231, 229, 229);
 }
 
 .HistroyInfoSpan {

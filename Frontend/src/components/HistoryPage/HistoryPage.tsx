@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useLocation } from "react-router-dom"
 import HistoyCard from "../HistoryCards/HistoryCard"
 import NavBar from "../NavBar/NavBar"
-import "./HistroyPage.css"
+import { useUser } from "../../context/UserContext"
 
 
 export interface HistoryCardProp {
@@ -19,11 +19,11 @@ export interface HistoryCardProp {
 function HistoryPage() {
 
     // @ts-ignore
-    const ROOM_API_URL = process.env.VITE_ROOM_MANAGEMENT_API_URL
+    const HISTORY_API_URL = process.env.VITE_HISTORY_MANAGEMENT_API_URL;
     const [historyRecords, setHistoryRecords] = useState<HistoryCardProp[]>([]);
-    const location = useLocation();
-    const userData = location.state?.user_data;
+    const {userData} = useUser();
 
+    if (!userData) return null;
 
     const mapApiRecordToInterface = (apiData: any): HistoryCardProp => {
         const dateObj = apiData.join_history_game_start_datetime instanceof Date 
@@ -50,7 +50,7 @@ function HistoryPage() {
 
     useEffect(() => {
         const fetchHistoryRecords = async () => {
-            const fetchHistoryResponse = await fetch(`${ROOM_API_URL}/getHistoryRecord`, {
+            const fetchHistoryResponse = await fetch(`${HISTORY_API_URL}/getHistoryRecord`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
