@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 interface UserData {
     username: string;
@@ -37,7 +37,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUserData(DEFAULT_USER);
     };
 
-    const fetchUser = async () => {
+    const fetchUser = useCallback(async () => {
         const getSessionInfoRepsonse = await fetch(`${UTILS_API_URL}/SessionInfo`, {
             method: "GET",
             credentials: "include"
@@ -61,11 +61,16 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const user_data_content = user_data_json.userData;
 
         let image_url = "";
-        if (user_data_content.user_icon !== null) {
-            const arrayBuffer = new Uint8Array(user_data_content.user_icon.data);
-            const image_blob = new Blob([arrayBuffer], { type: 'image/jpg' });
-            image_url = URL.createObjectURL(image_blob);
+        try {
+            const response = await fetch(`${USER_API_URL}/getAvatarUrl/${user_data_content.user_id}`);
+            if (response.ok) {
+                const data = await response.json();
+                image_url = data.imageUrl;
+            }
+        } catch (err) {
+            console.error("Failed to load avatar", err);
         }
+
         setUserData({
             username: user_data_content.username,
             email: user_data_content.email,
@@ -74,7 +79,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             user_icon: image_url,
         })
         setLoading(false);
-    };
+    }, []);
+
 
     useEffect(() => {
         fetchUser();

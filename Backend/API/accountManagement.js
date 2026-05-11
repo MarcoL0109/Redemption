@@ -271,7 +271,7 @@ router.get("/getAvatarUrl/:userId", async (req, res) => {
         const [rows] = await db.query(query, [userId]);
 
         if (!rows || !rows[0].user_icon) {
-            return res.status(404).json({ error: "No avatar found" });
+            return res.status(200).json({ imageUrl: "" });
         }
         const s3Key = rows[0].user_icon;
         const command = new GetObjectCommand({

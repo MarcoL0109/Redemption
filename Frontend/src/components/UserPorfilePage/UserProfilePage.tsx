@@ -10,12 +10,11 @@ import { useParams } from "react-router-dom";
 
 function UserProfilePage() {
 
-    const {userData} = useUser();
+    const {userData, refreshUser} = useUser();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const MAX_FILE_SIZE = 2 * 1024 * 1024;
     const {userId} = useParams()    
     const [avatarUrl, setAvatarUrl] = useState<string>();
-    const [loading, setLoading] = useState(true);
     // @ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
 
@@ -28,8 +27,6 @@ function UserProfilePage() {
             }
         } catch (err) {
             console.error("Failed to load avatar", err);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -75,7 +72,7 @@ function UserProfilePage() {
                 },
                 body: file
             });
-            const saveAvatarKey = await fetch(`${USER_API_URL}/saveAvatarKey`, {
+            await fetch(`${USER_API_URL}/saveAvatarKey`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -83,10 +80,8 @@ function UserProfilePage() {
                 credentials: "include",
                 body: JSON.stringify({userId: userId, key: key})
             })
-            if (saveAvatarKey.status === 200) {
-                console.log("S3 bucket Key saved");
-            }
             await fetchAvatar();
+            refreshUser();
         }
     }
 
