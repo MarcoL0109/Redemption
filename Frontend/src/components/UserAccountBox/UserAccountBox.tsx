@@ -44,6 +44,10 @@ const UserAccountBox: React.FC<UserAccountBoxProps> = ({ onClose, user_data }) =
         nevigate(`/HistoryPage/`);
     }
 
+    const handleDirectUserProfile = () => {
+        nevigate(`/UserProfilePage/${user_data.user_id}`);
+    }
+
 
     useEffect(() => {
         const id = requestAnimationFrame(() => {
@@ -73,7 +77,7 @@ const UserAccountBox: React.FC<UserAccountBoxProps> = ({ onClose, user_data }) =
             </div>
 
             <div className="ActionButtonContainer">
-                <div className="ActionButton">
+                <div className="ActionButton" onClick={handleDirectUserProfile}>
                     <div className="IconContainers">
                         <img className="iconImage" src={UserIcon} alt="User Icon"/>
                         <strong>Profile</strong>

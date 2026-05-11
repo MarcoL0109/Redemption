@@ -5,7 +5,7 @@ const router = express.Router();
 const db = require('../models/db');
 const { v4: uuidv4 } = require('uuid');
 const nodemailer = require("nodemailer")
-const {encrypt_object, decrypt_object} = require("../security_utils/encryption")
+const {encrypt_object, decrypt_object} = require("../security_utils/encryption");
 const transport = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -13,7 +13,10 @@ const transport = nodemailer.createTransport({
         pass: process.env.REACT_APP_NODEMAILERPASSWORD,
     },
     from: process.env.REACT_APP_NODEMAILERAUTHOR
-})
+});
+const s3Client = require("../models/s3Config").default;
+const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 
 router.post("/login", async (req, res) => {
@@ -227,6 +230,62 @@ router.post("/getUserInfo", async (req, res) => {
     const [user_info] = await db.query("SELECT user_id, create_date, email, user_icon, username, user_icon FROM user_info WHERE user_id = ?", [user_id]);
     return res.json({userData: user_info[0]})
 })
+
+
+router.post("/getNewAvatarImageURL", async (req, res) => {
+    const {userId, fileType} = req.body;
+    const key = `profiles/User-${userId}-Avatar.jpg`;
+    const command = new PutObjectCommand({
+        Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
+        Key: key,
+        ContentType: fileType,
+    });
+    try {
+        const url = await getSignedUrl(s3Client, command, { expiresIn: 60 });        
+        res.status(200).json({ uploadUrl: url, key: key });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Could not generate upload URL" });
+    }
+})
+
+
+router.post("/saveAvatarKey", async (req, res) => {
+    const {userId, key} = req.body;
+    const updateKeyQuery = `UPDATE user_info SET user_icon = ? WHERE user_id = ?`;
+    try {
+        await db.query(updateKeyQuery, [key, userId]);
+        res.status(200).json({message: "S# Bucket Key Saved"});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: "Internal Server Error"});
+    }
+})
+
+
+router.get("/getAvatarUrl/:userId", async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const query = "SELECT user_icon FROM user_info WHERE user_id = ?";
+        const [rows] = await db.query(query, [userId]);
+
+        if (!rows || !rows[0].user_icon) {
+            return res.status(404).json({ error: "No avatar found" });
+        }
+        const s3Key = rows[0].user_icon;
+        const command = new GetObjectCommand({
+            Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
+            Key: s3Key,
+        });
+        const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+
+        res.json({ imageUrl: url });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
 
 
 module.exports = router;

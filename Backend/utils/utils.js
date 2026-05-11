@@ -10,14 +10,4 @@ router.get("/SessionInfo", (req, res) => {
 })
 
 
-router.post("/InsertImage", (req, res) => {
-    fs.readFile("./Frontend/src/assets/test.jpg", (err, data) => {
-        if (err) throw err;
-
-        const sqlInsert = 'UPDATE user_info SET user_icon = ? WHERE user_id = 4';
-        db.query(sqlInsert, [data]);
-        console.log("image inerted!");
-    });
-})
-
 module.exports = router;

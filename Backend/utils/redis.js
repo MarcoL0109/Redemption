@@ -8,7 +8,6 @@ const redisClient = redis.createClient({
 });
 const subscriber = redisClient.duplicate();
 
-// Create an anonymous async function and call it immediately
 (async () => {
     try {
         await redisClient.connect();
@@ -17,7 +16,6 @@ const subscriber = redisClient.duplicate();
         await subscriber.connect();
         console.log("Subscriber Redis Connected successfully");
 
-        // Now that we are connected, set the config
         await redisClient.configSet('notify-keyspace-events', 'Ex');
         console.log("Redis Keyspace Notifications enabled");
         

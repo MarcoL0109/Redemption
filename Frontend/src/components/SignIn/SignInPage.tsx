@@ -2,6 +2,8 @@ import './SignInPage.css';
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { useUser } from '../../context/UserContext';
+import Eye from "../../assets/eye.svg";
+import HiddenEye from "../../assets/HiddenEye.svg";
 
 
 function SignInPage() {
@@ -12,6 +14,7 @@ function SignInPage() {
     const [incorrectLoginInfo, setincorrectLoginInfo] = useState<boolean>(false);
     const [notActivated, setNotActivated] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [hidden, setHidden] = useState<boolean>(true);
     const { refreshUser } = useUser();
     //@ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
@@ -42,6 +45,11 @@ function SignInPage() {
         }
     };
 
+
+    const handleHiddenState = () => {
+        setHidden(prev => !prev);
+    }
+
     
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -57,7 +65,10 @@ function SignInPage() {
             <div className="SignInBox">
                 <form className="SignInForm" onSubmit={handleSubmit}>
                     <input className="email_form_inputs" type="text" placeholder="Email" required value={email} onChange={(e) => {setEmail(e.target.value)}}/>
-                    <input className="password_form_inputs" type="password" placeholder="Password" required value={password} onChange={(e) => {setPassword(e.target.value)}}/>
+                    <div className="InputPasswordContainer">
+                        <input className="password_form_inputs" type={hidden ? "password" : "text"} placeholder="Password" required value={password} onChange={(e) => {setPassword(e.target.value)}}/>
+                        <img className="EyeIcon" src={hidden ? Eye : HiddenEye} alt="Eye Icon" onClick={handleHiddenState}/>
+                    </div>
                     <button type="submit" className="SignInButton" disabled={isSubmitting}>
                         <strong>Sign In</strong>
                     </button>
