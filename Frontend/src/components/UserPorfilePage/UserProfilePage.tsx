@@ -14,26 +14,8 @@ function UserProfilePage() {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const MAX_FILE_SIZE = 2 * 1024 * 1024;
     const {userId} = useParams()    
-    const [avatarUrl, setAvatarUrl] = useState<string>();
     // @ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
-
-    const fetchAvatar = async () => {
-        try {
-            const response = await fetch(`${USER_API_URL}/getAvatarUrl/${userId}`);
-            if (response.ok) {
-                const data = await response.json();
-                setAvatarUrl(data.imageUrl); 
-            }
-        } catch (err) {
-            console.error("Failed to load avatar", err);
-        }
-    };
-
-
-    useEffect(() => {
-        fetchAvatar();
-    }, [userId]);
 
 
     const handleIconClick = () => {
@@ -80,7 +62,6 @@ function UserProfilePage() {
                 credentials: "include",
                 body: JSON.stringify({userId: userId, key: key})
             })
-            await fetchAvatar();
             refreshUser();
         }
     }
@@ -91,8 +72,14 @@ function UserProfilePage() {
             <NavBar />
             <div onClick={handleIconClick} className="UserProfileContainer">
                 <div className="ProfileUserAvatar">
-                    {avatarUrl ? (
-                        <img src={avatarUrl} alt="User Avatar" className="AvatarImage" />
+                    {userData?.user_icon !== "" ? (
+                        <img src={userData?.user_icon} 
+                        alt="User Avatar"
+                        className="AvatarImage"
+                        onError={() => {
+                            refreshUser();
+                        }}
+                        />
                         ) : (
                         <FontAwesomeIcon icon={faUser} size="10x" />
                     )}

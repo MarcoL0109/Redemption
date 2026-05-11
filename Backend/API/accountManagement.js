@@ -255,7 +255,7 @@ router.post("/saveAvatarKey", async (req, res) => {
     const updateKeyQuery = `UPDATE user_info SET user_icon = ? WHERE user_id = ?`;
     try {
         await db.query(updateKeyQuery, [key, userId]);
-        res.status(200).json({message: "S# Bucket Key Saved"});
+        res.status(200).json({message: "S3 Bucket Key Saved"});
     } catch (error) {
         console.error(error);
         res.status(500).json({message: "Internal Server Error"});
