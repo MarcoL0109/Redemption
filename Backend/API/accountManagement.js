@@ -36,19 +36,19 @@ router.post("/login", async (req, res) => {
         else if (!is_activated) {return res.status(400).json({message: "Account Not Activated"})}
         else {
             const userId = result[0].user_id;
-            await db.query(`UPDATE user_info SET last_login = NOW() WHERE user_id = ?`, [userId]);
             req.session.user_id = userId;
             const fetchLastLoginDetailsQuery = `SELECT last_login, login_streak FROM user_info u JOIN user_stats us ON u.user_id = us.user_id WHERE u.user_id = ?`;
             const [loginInfo] = await db.query(fetchLastLoginDetailsQuery, [userId]);
             let newStreak = 0;
             if (loginInfo.length) {
                 newStreak = calculateStreak(loginInfo[0].last_login, loginInfo[0].login_streak);
-                await db.query(`UPDATE TABLE user_stats SET login_streak = ? WHERE user_id = ?`, [newStreak, userId]);
+                await db.query(`UPDATE user_stats SET login_streak = ? WHERE user_id = ?`, [newStreak, userId]);
             }
             else {
                 newStreak = 1;
                 await db.query(`INSERT INTO user_stats (user_id, login_streak) VALUES (?, ?)`, [userId, 1]);
             }
+            await db.query(`UPDATE user_info SET last_login = NOW() WHERE user_id = ?`, [userId]);
             return res.status(200).json({ message: "Login successfully", streak: newStreak });
         }
         } catch (error) {
