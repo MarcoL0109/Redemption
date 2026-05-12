@@ -6,6 +6,7 @@ interface UserData {
     user_id: number;
     created_at: string;
     user_icon: string;
+    login_streak: number;
 }
 
 interface UserContextType {
@@ -20,7 +21,8 @@ export const DEFAULT_USER: UserData = {
     email: "",
     user_id: -1,
     created_at: new Date().toISOString(),
-    user_icon: "" 
+    user_icon: "" ,
+    login_streak: 0
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -77,6 +79,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             user_id: user_data_content.user_id,
             created_at: user_data_content.create_date.toString(),
             user_icon: image_url,
+            login_streak: user_data_content.login_streak,
         })
         setLoading(false);
     }, []);

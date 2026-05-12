@@ -36,7 +36,9 @@ function SignInPage() {
             setNotActivated(login_status.status === 400);
             if (login_status.status === 200) {
                 refreshUser();
-                navigate("/Home");
+                const data = await login_status.json();
+                const streak = data.streak;
+                navigate("/Home", { state: { streak: streak } });
             }
             setIsSubmitting(false);
         } catch (error) {

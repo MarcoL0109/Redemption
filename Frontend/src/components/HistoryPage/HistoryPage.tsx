@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useLocation } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import HistoyCard from "../HistoryCards/HistoryCard"
 import NavBar from "../NavBar/NavBar"
 import { useUser } from "../../context/UserContext"
@@ -22,6 +22,7 @@ function HistoryPage() {
     const HISTORY_API_URL = process.env.VITE_HISTORY_MANAGEMENT_API_URL;
     const [historyRecords, setHistoryRecords] = useState<HistoryCardProp[]>([]);
     const {userData} = useUser();
+    const navigate = useNavigate();
 
     if (!userData) return null;
 
@@ -50,6 +51,9 @@ function HistoryPage() {
 
     useEffect(() => {
         const fetchHistoryRecords = async () => {
+            if (userData.user_id === -1) {
+                navigate("/SignIn");
+            }
             const fetchHistoryResponse = await fetch(`${HISTORY_API_URL}/getHistoryRecord`, {
                 method: "POST",
                 headers: {
@@ -65,7 +69,6 @@ function HistoryPage() {
                 setHistoryRecords(historyRecordContent)
             }
         }
-
         fetchHistoryRecords();
     }, [])
 

@@ -15,8 +15,9 @@ const transport = nodemailer.createTransport({
     from: process.env.REACT_APP_NODEMAILERAUTHOR
 });
 const s3Client = require("../models/s3Config").default;
-const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+const { PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const {calculateStreak} = require("../utils/streakHelper");
 
 
 router.post("/login", async (req, res) => {
@@ -34,8 +35,21 @@ router.post("/login", async (req, res) => {
         if (!correct_password) {return res.status(401).json({ message: "Password Incorrect" })}
         else if (!is_activated) {return res.status(400).json({message: "Account Not Activated"})}
         else {
-            req.session.user_id = result[0].user_id;
-            return res.status(200).json({ message: "Login successfully" });
+            const userId = result[0].user_id;
+            await db.query(`UPDATE user_info SET last_login = NOW() WHERE user_id = ?`, [userId]);
+            req.session.user_id = userId;
+            const fetchLastLoginDetailsQuery = `SELECT last_login, login_streak FROM user_info u JOIN user_stats us ON u.user_id = us.user_id WHERE u.user_id = ?`;
+            const [loginInfo] = await db.query(fetchLastLoginDetailsQuery, [userId]);
+            let newStreak = 0;
+            if (loginInfo.length) {
+                newStreak = calculateStreak(loginInfo[0].last_login, loginInfo[0].login_streak);
+                await db.query(`UPDATE TABLE user_stats SET login_streak = ? WHERE user_id = ?`, [newStreak, userId]);
+            }
+            else {
+                newStreak = 1;
+                await db.query(`INSERT INTO user_stats (user_id, login_streak) VALUES (?, ?)`, [userId, 1]);
+            }
+            return res.status(200).json({ message: "Login successfully", streak: newStreak });
         }
         } catch (error) {
             console.log(error);
@@ -227,7 +241,7 @@ router.post("/ResetPassword", async (req, res) => {
 
 router.post("/getUserInfo", async (req, res) => {
     const { user_id } = req.body;
-    const [user_info] = await db.query("SELECT user_id, create_date, email, user_icon, username, user_icon FROM user_info WHERE user_id = ?", [user_id]);
+    const [user_info] = await db.query("SELECT * FROM user_info uf JOIN user_stats us ON uf.user_id = us.user_id WHERE uf.user_id = ?", [user_id]);
     return res.json({userData: user_info[0]})
 })
 

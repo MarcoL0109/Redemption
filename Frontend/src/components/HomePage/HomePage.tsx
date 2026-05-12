@@ -3,7 +3,7 @@ import NavBar from "../NavBar/NavBar";
 import ProblemSetCard from "../ProblemSetCard/ProblemSetCard";
 import Overlays from "../Overlays/Overlay";
 import { Mosaic } from 'react-loading-indicators';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 
@@ -58,6 +58,8 @@ function HomePage() {
     const [potentialDeleteList, setPotentialDeleteList] = useState<number[]>([]);
     const [clearToggle, setClearToggle] = useState<number>(0);
     const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
+    const location = useLocation();
+    const [streak, setStreak] = useState(location.state?.streak || 0);
 
 
     const fetch_problem_sets = async (session_user_id: number) => {

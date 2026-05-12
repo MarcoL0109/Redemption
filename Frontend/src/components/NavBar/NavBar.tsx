@@ -5,6 +5,7 @@ import { useState } from "react";
 import UserAccountBox from "../UserAccountBox/UserAccountBox";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../../context/UserContext';
+import Fire from "../../assets/Fire.svg";
 
 
 const NavBar: React.FC = () => {
@@ -36,6 +37,8 @@ const NavBar: React.FC = () => {
                 <div className="joinRoomButton" onClick={handleJoinRoom}>
                     <h2>Join Room</h2>
                 </div>
+                <img className="StreakIcon" src={Fire} alt="Streak Icon" />
+                {userData.login_streak}
                 <div className="UserIconCircle" onClick={handleProfileClick}>
                     {
                         userData.user_icon === "" ? <FontAwesomeIcon icon={faUser} size="3x" /> :

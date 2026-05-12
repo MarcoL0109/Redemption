@@ -3,19 +3,29 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./UserProfilePage.css";
 import {useUser} from "../../context/UserContext";
-import { useRef, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useRef, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-// Use S3 for Avatar image storing. Also remember to alter the database for storing user_icon
 
 function UserProfilePage() {
+
+    // A new table for storing user game stats: user_id, login streaks, highest score, 
+    //                                          total join count, number of quiz owned
 
     const {userData, refreshUser} = useUser();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const MAX_FILE_SIZE = 2 * 1024 * 1024;
-    const {userId} = useParams()    
+    const {userId} = useParams()
+    const navigate = useNavigate();
     // @ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
+
+
+    useEffect(() => {
+        if (userData?.user_id === -1) {
+            navigate("/SignIn");
+        }
+    }, [])
 
 
     const handleIconClick = () => {
@@ -91,8 +101,9 @@ function UserProfilePage() {
                     accept=".png, .jpg, .jpeg"
                     style={{ display: 'none' }}
                 />
-                <div>
-                    <h1><strong>{userData?.username}</strong></h1>
+                <div className="userInfoContainer">
+                    <h2><strong>{userData?.username}</strong></h2>
+                    <em>Join At: {userData?.created_at ? userData.created_at.split('T')[0] : "Loading..."}</em>
                 </div>
             </div>
             

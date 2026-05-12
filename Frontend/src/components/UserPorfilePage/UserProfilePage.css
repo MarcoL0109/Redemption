@@ -1,7 +1,6 @@
 .UserProfileContainer {
     margin-top: 25px;
-    margin-left: 25px;
-    display: flex;
+    margin-left: 110px;
 }
 
 .ProfileUserAvatar {
@@ -21,4 +20,8 @@
     height: 250px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.userInfoContainer {
+    font-family: 'Courier New', Courier, monospace;
 }
