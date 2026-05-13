@@ -38,7 +38,7 @@ const NavBar: React.FC = () => {
                     <h2>Join Room</h2>
                 </div>
                 <img className="StreakIcon" src={Fire} alt="Streak Icon" />
-                {userData.login_streak}
+                <h2 className="StreakCount">{userData.login_streak}</h2>
                 <div className="UserIconCircle" onClick={handleProfileClick}>
                     {
                         userData.user_icon === "" ? <FontAwesomeIcon icon={faUser} size="3x" /> :

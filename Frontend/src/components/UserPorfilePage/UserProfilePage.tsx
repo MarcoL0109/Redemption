@@ -5,6 +5,8 @@ import "./UserProfilePage.css";
 import {useUser} from "../../context/UserContext";
 import { useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Tick from "../../assets/tick.svg";
+import Trophy from "../../assets/trophy.svg";
 
 
 function UserProfilePage() {
@@ -22,9 +24,7 @@ function UserProfilePage() {
 
 
     useEffect(() => {
-        if (userData?.user_id === -1) {
-            navigate("/SignIn");
-        }
+        refreshUser()
     }, [])
 
 
@@ -78,33 +78,60 @@ function UserProfilePage() {
 
 
     return (
-        <div className="HomePageContainer">
+        <div className="UserProfilePageContainer">
             <NavBar />
             <div onClick={handleIconClick} className="UserProfileContainer">
-                <div className="ProfileUserAvatar">
-                    {userData?.user_icon !== "" ? (
-                        <img src={userData?.user_icon} 
-                        alt="User Avatar"
-                        className="AvatarImage"
-                        onError={() => {
-                            refreshUser();
-                        }}
-                        />
-                        ) : (
-                        <FontAwesomeIcon icon={faUser} size="10x" />
-                    )}
+                <div>
+                    <div className="ProfileUserAvatar">
+                        {userData?.user_icon !== "" ? (
+                            <img src={userData?.user_icon} 
+                            alt="User Avatar"
+                            className="AvatarImage"
+                            onError={() => {
+                                refreshUser();
+                            }}
+                            />
+                            ) : (
+                            <FontAwesomeIcon icon={faUser} size="10x" />
+                        )}
+                    </div>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleAvatarImageUpload}
+                        accept=".png, .jpg, .jpeg"
+                        style={{ display: 'none' }}
+                    />
+                    <div className="userInfoContainer">
+                        <h2><strong>{userData?.username}</strong></h2>
+                        <em>Join At: {userData?.created_at ? userData.created_at.split('T')[0] : "Loading..."}</em>
+                    </div>
                 </div>
-                <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleAvatarImageUpload}
-                    accept=".png, .jpg, .jpeg"
-                    style={{ display: 'none' }}
-                />
-                <div className="userInfoContainer">
-                    <h2><strong>{userData?.username}</strong></h2>
-                    <em>Join At: {userData?.created_at ? userData.created_at.split('T')[0] : "Loading..."}</em>
+
+                <div className="userProfileRightSide">
+                    <div className="StatsCardContainer">
+                        <div className="StatsCard glow-green">
+                            <div className="CardHeader">
+                                <span className="CardLabel">Completed Quizzes</span>
+                                <img className="CardIcon" src={Tick} alt="Completed Icon"/>
+                            </div>
+                            <div className="CardBody">
+                                <h2 className="StatNumber">{userData?.no_completed_quiz}</h2>
+                            </div>
+                        </div>
+
+                        <div className="StatsCard glow-purple">
+                            <div className="CardHeader">
+                                <span className="CardLabel">Highest Score</span>
+                                <img className="CardIcon" src={Trophy} alt="Trophy Icon"/>
+                            </div>
+                            <div className="CardBody">
+                                <h2 className="StatNumber">{userData?.highest_score === -1 ? "-" : userData?.highest_score}</h2>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
             </div>
             
         </div>

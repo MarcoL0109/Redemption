@@ -68,7 +68,7 @@ function HistoryRecord() {
         <div className="GamePageContainer">
             <NavBar/>
             <div className="ProblemAnswerContainer">
-                <h2>Question {currIndex + 1}</h2>
+                <h2 className="QuestionNoHeader">Question {currIndex + 1}</h2>
                 <div className="ProblemTextSection">
                     <div className="ProblemTextContainer">
                         <span>{currentDisplayProblem?.question_text}</span>

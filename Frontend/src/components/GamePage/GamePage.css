@@ -104,41 +104,81 @@
 
 
 .OptionADiv_correct_selected {
+    background-color: rgb(8, 238, 8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
     opacity: 0.5;
 }
 
 
 .OptionADiv_wrong_selected {
+    background-color: rgb(231, 73, 73);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
     opacity: 0.5;
 }
 
 
 .OptionBDiv_correct_selected {
+    background-color: rgb(8, 238, 8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
     opacity: 0.5;
 }
 
 
 .OptionBDiv_wrong_selected {
+    background-color: rgb(231, 73, 73);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
     opacity: 0.5;
 }
 
 
 .OptionCDiv_correct_selected {
+    background-color: rgb(8, 238, 8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
     opacity: 0.5;
 }
 
 
 .OptionCDiv_wrong_selected {
+    background-color: rgb(231, 73, 73);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
     opacity: 0.5;
 }
 
 
 .OptionDDiv_correct_selected {
+    background-color: rgb(8, 238, 8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
     opacity: 0.5;
 }
 
 
 .OptionDDiv_wrong_selected {
+    background-color: rgb(231, 73, 73);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
     opacity: 0.5;
 }
 

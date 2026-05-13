@@ -22,7 +22,6 @@ function HistoryPage() {
     const HISTORY_API_URL = process.env.VITE_HISTORY_MANAGEMENT_API_URL;
     const [historyRecords, setHistoryRecords] = useState<HistoryCardProp[]>([]);
     const {userData} = useUser();
-    const navigate = useNavigate();
 
     if (!userData) return null;
 
@@ -51,9 +50,6 @@ function HistoryPage() {
 
     useEffect(() => {
         const fetchHistoryRecords = async () => {
-            if (userData.user_id === -1) {
-                navigate("/SignIn");
-            }
             const fetchHistoryResponse = await fetch(`${HISTORY_API_URL}/getHistoryRecord`, {
                 method: "POST",
                 headers: {
@@ -64,7 +60,6 @@ function HistoryPage() {
             })
             if (fetchHistoryResponse.status === 200) {
                 const historyRecordJson = await fetchHistoryResponse.json();
-                console.log(historyRecordJson);
                 const historyRecordContent: HistoryCardProp[] = historyRecordJson.historyRecords.map(mapApiRecordToInterface);
                 setHistoryRecords(historyRecordContent)
             }

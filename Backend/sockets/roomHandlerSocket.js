@@ -109,7 +109,7 @@ module.exports = function(io, redisClient) {
             } else {
 
                 try {
-                    const updateScoreAnswerHistory = await fetch(`${ROOM_API_URL}/insertAnswerHistoryScore`, {
+                    const updateScoreAnswerHistory = await fetch(`${HISTORY_API_URL}/insertAnswerHistoryScore`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -168,7 +168,7 @@ module.exports = function(io, redisClient) {
         const loggedInUser = await redisClient.hVals(`${roomCode}-Session-UserId`);
         if (loggedInUser.length > 0) {
              try {
-                const insertHistoryRecord = await fetch(`${ROOM_API_URL}/insertJoinHistoryInfo`, {
+                const insertHistoryRecord = await fetch(`${HISTORY_API_URL}/insertJoinHistoryInfo`, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
@@ -292,7 +292,7 @@ module.exports = function(io, redisClient) {
                 io.in(roomSocketId).socketsLeave(roomSocketId);
                 try {
                     const problemSetId = await redisClient.hGet(roomCode, "ProblemSetId");
-                    const updateKickStatus = await fetch(`${ROOM_API_URL}/updateCompletness`, {
+                    const updateKickStatus = await fetch(`${HISTORY_API_URL}/updateCompletness`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"

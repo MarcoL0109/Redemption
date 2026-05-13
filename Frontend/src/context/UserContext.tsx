@@ -7,6 +7,8 @@ interface UserData {
     created_at: string;
     user_icon: string;
     login_streak: number;
+    highest_score: number;
+    no_completed_quiz: number;
 }
 
 interface UserContextType {
@@ -22,7 +24,9 @@ export const DEFAULT_USER: UserData = {
     user_id: -1,
     created_at: new Date().toISOString(),
     user_icon: "" ,
-    login_streak: 0
+    login_streak: 0,
+    highest_score: -1,
+    no_completed_quiz: 0
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -73,6 +77,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             console.error("Failed to load avatar", err);
         }
 
+
         setUserData({
             username: user_data_content.username,
             email: user_data_content.email,
@@ -80,6 +85,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             created_at: user_data_content.create_date.toString(),
             user_icon: image_url,
             login_streak: user_data_content.login_streak,
+            highest_score: user_data_content.highest_score === null ? -1: user_data_content.highest_score,
+            no_completed_quiz: user_data_content.no_of_completed_quiz
+
         })
         setLoading(false);
     }, []);

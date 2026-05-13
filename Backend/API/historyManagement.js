@@ -131,18 +131,115 @@ router.post("/getAnswerHistory", async (req, res) => {
 })
 
 
+router.post("/insertJoinHistoryInfo", async (req, res) => {
+    const {roomCode, userIds} = req.body;
+    try {
+        const hostUserId = await redisClient.hGet(roomCode, "Host-UserId");
+        const gameStartTime = await redisClient.hGet(roomCode, "GameStartTime");
+        const problemSnapShotId = await redisClient.hGet(roomCode, "ProblemSnapShotID");
+        const values = userIds.map(userId => [userId, hostUserId, new Date(Number(gameStartTime)).toISOString().slice(0, 19).replace('T', ' '), Number(problemSnapShotId)]);
+        const insertJoinHistoryQuery = 'INSERT INTO join_history (user_id, join_history_hosted_by, join_history_game_start_datetime, join_history_snapshot_id) VALUES ?';
+        const [resultHeader] = await db.query(insertJoinHistoryQuery, [values]);
+        const firstId = resultHeader.insertId;
+        const insertRecordMapping = Object.fromEntries(
+            userIds.map((userId, index) => [userId, firstId + index])
+        );
+        res.status(200).json({success: true, mapping: insertRecordMapping});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({success: false, mapping: null});
+    }
+})
 
 
+router.post("/insertAnswerHistoryScore", async (req, res) => {
+    const {roomCode} = req.body;
+    const allSessionsWithUserId = await redisClient.hGetAll(`${roomCode}-Session-UserId`);
+    const historyRecords = await redisClient.hVals(`${roomCode}-UserId-HistoryId`);
+    const historyNumericId = historyRecords.map(Number);
+    const hostSessionId = await redisClient.hGet(roomCode, "Host");
+    let successSessionIds = [], failedSessionIds = [];
+    for (const [sessionId, userId] of Object.entries(allSessionsWithUserId)) {
+        if (sessionId !== hostSessionId) {
+            const sessionAnswerHistory = await redisClient.lRange(`${sessionId}-${roomCode}-Answer-History`, 0, -1);
+            const sessionScore = await redisClient.hGet(`${roomCode}-Session-Score`, sessionId);
+            try {
+                await db.query(`UPDATE join_history 
+                                SET join_history_score = ?, join_history_answer_history = ?, join_history_completness = ?
+                                WHERE join_history_id IN (?) AND user_id = ?;`, 
+                                [sessionScore, JSON.stringify(sessionAnswerHistory), "Completed", historyNumericId, userId]);
+                await db.query(
+                    `UPDATE user_stats 
+                    SET highest_score = ? 
+                    WHERE user_id = ? AND highest_score < ?`,
+                    [sessionScore, userId, sessionScore]
+                );
+                await db.query(
+                    `UPDATE user_stats
+                    SET no_of_completed_quiz = no_of_completed_quiz + 1
+                    WHERE user_id = ?`,
+                    [userId]
+                );
+                successSessionIds.push(sessionId);
+            } catch (error) {
+                console.error(`SYNC_FAILURE: User ${userId} | Session ${sessionId}`, error);
+                failedSessionIds.push({
+                    userId: userId,
+                    sessionId: sessionId,
+                    error: error.message
+                });
+            }
+        }
+    };
+    res.status(200).json({summary: {total: successSessionIds.length + failedSessionIds.length,
+        successCount: successSessionIds.length, failedCount: failedSessionIds.length,
+    }, result: {success: successSessionIds, failed: failedSessionIds}})
+})
 
 
-
-
-
-
-
-
-
-
+router.post("/updateCompletness", async (req, res) => {
+    const {roomCode, completness, userId = null} = req.body;
+    const completnessMap = {2: "Kicked", 3: "Terminated By Host"};
+    const allSessionsWithUserId = await redisClient.hGetAll(`${roomCode}-Session-UserId`);
+    const historyRecords = await redisClient.hVals(`${roomCode}-UserId-HistoryId`);
+    const historyNumericId = historyRecords.map(Number);
+    const hostSessionId = await redisClient.hGet(roomCode, "Host");    
+    const isRoomStarted = await redisClient.hExists(roomCode, "Status");
+    let successSessionIds = [], failedSessionIds = [];
+    const updateQuery = `UPDATE join_history SET join_history_completness = ?
+                                WHERE join_history_id IN (?) AND user_id = ?`;
+    if (completness === 2 && userId !== null && isRoomStarted !== 0) {
+        try {
+            await db.query(updateQuery, [completnessMap[completness], historyNumericId, Number(userId)]);
+            successSessionIds.push(userId);
+        } catch (error) {
+            console.error(error);
+            failedSessionIds.push({
+                userId: userId,
+                error: error.message
+            });
+        }
+    } else if (isRoomStarted !== 0) {
+        for (const [sessionId, userId] of Object.entries(allSessionsWithUserId)) {
+            if (sessionId !== hostSessionId) {
+                try {
+                    await db.query(updateQuery, [completnessMap[completness], historyNumericId, Number(userId)]);
+                    successSessionIds.push(sessionId);
+                } catch (error) {
+                    console.error(`STATUS_SYNC_FAILURE: User ${userId} | Session ${sessionId}`, error);
+                    failedSessionIds.push({
+                        userId: userId,
+                        sessionId: sessionId,
+                        error: error.message
+                    });
+                }
+            }
+        };
+    }
+    res.status(200).json({summary: {total: successSessionIds.length + failedSessionIds.length,
+        successCount: successSessionIds.length, failedCount: failedSessionIds.length,
+    }, result: {success: successSessionIds, failed: failedSessionIds}})
+})
 
 
 module.exports = router

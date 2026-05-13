@@ -1,6 +1,17 @@
+.UserProfilePageContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    background-color: #38343B;
+    overflow: hidden;
+    align-items: center;
+}
+
+
 .UserProfileContainer {
     margin-top: 25px;
-    margin-left: 110px;
+    display: flex;
 }
 
 .ProfileUserAvatar {
@@ -23,5 +34,92 @@
 }
 
 .userInfoContainer {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+.userProfileRightSide {
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.StatsCardContainer {
+    padding-left: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    grid-template-rows: 1fr 1fr;
+    height: 250px;
+    width: 600px;
+    justify-items: center;
+    align-items: center;
+}
+
+.StatsCardContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    padding: 30px;
+    width: 650px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.StatsCard {
+    background: rgba(255, 255, 255, 0.05); /* Slight transparency */
+    backdrop-filter: blur(10px); /* Glass effect */
+    border-radius: 15px;
+    padding: 20px;
+    height: 180px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.StatsCard:hover {
+    transform: translateY(-5px);
+}
+
+.glow-green { border-bottom: 4px solid #4ecca3; }
+.glow-green:hover { box-shadow: 0 0 15px rgba(78, 204, 163, 0.3); }
+
+.glow-purple { border-bottom: 4px solid #bb86fc; }
+.glow-purple:hover { box-shadow: 0 0 15px rgba(187, 134, 252, 0.3); }
+
+.CardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.CardLabel {
+    color: #888;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    font-weight: 800;
+    margin-right: 5px;
+}
+
+.CardIcon {
+    width: 28px;
+    height: 28px;
+    opacity: 0.8;
+}
+
+.StatNumber {
+    color: #fff;
+    font-size: 2.8rem;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
