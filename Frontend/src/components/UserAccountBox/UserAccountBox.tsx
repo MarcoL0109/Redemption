@@ -70,49 +70,41 @@ const UserAccountBox: React.FC<UserAccountBoxProps> = ({ onClose, user_data }) =
         <div className={`AccountInfoBox ${isVisible ? "show": ""}`} ref={ref}>
             <div className="UserNameIconContainer">
                 <div className="BoxUserIconCircle">
-                    {user_data.user_icon === "" ? <FontAwesomeIcon icon={faUser} size="3x" /> : 
+                    {user_data.user_icon === "" ? <FontAwesomeIcon icon={faUser} size="2x" /> : 
                     <img className="UserIconImage" src={user_data.user_icon} alt="User Icon" />}
                 </div>
-                <h2 className="UsernameHeader"><strong>{user_data.username}</strong></h2>
+                <div className="UserTextInfo">
+                    <h2 className="UsernameHeader">{user_data.username}</h2>
+                    <span className="UserStatus">Online</span>
+                </div>
             </div>
 
             <div className="ActionButtonContainer">
                 <div className="ActionButton" onClick={handleDirectUserProfile}>
-                    <div className="IconContainers">
-                        <img className="iconImage" src={UserIcon} alt="User Icon"/>
-                        <strong>Profile</strong>
-                    </div>
-                    
+                    <img className="iconImage" src={UserIcon} alt="Profile"/>
+                    <strong>Profile</strong>
                 </div>
 
                 <div className="ActionButton">
-                    <div className="IconContainers">
-                        <img className="iconImage" src={CogIcon} alt="Cog Icon"/>
-                        <strong>Settings</strong>
-                    </div>
-                    
+                    <img className="iconImage" src={CogIcon} alt="Settings"/>
+                    <strong>Settings</strong>
                 </div>
 
                 <div className="ActionButton">
-                    <div className="IconContainers">
-                        <img className="collectionImage" src={CollectionIcon} alt="Collection Icon"/>
-                        <strong>Albums</strong>
-                    </div>
-                    
+                    <img className="collectionImage" src={CollectionIcon} alt="Albums"/>
+                    <strong>Albums</strong>
                 </div>
 
                 <div className="ActionButton" onClick={handleDirectHistoryPage}>
-                    <div className="IconContainers">
-                        <img className="historyImage" src={HistoryIcon} alt="History Icon"/>
-                        <strong>History</strong>
-                    </div>
+                    <img className="historyImage" src={HistoryIcon} alt="History"/>
+                    <strong>History</strong>
                 </div>
             </div>
 
             <div className="SignOutContainer">
                 <button className="SignOutButton" onClick={handleLogOut}>
-                    <FontAwesomeIcon className="LogOutIcon" icon={faArrowRightFromBracket} size="2x" color="red"/>
-                    <strong>Sign Out</strong>
+                    <FontAwesomeIcon className="LogOutIcon" icon={faArrowRightFromBracket} />
+                    <span>Sign Out</span>
                 </button>
             </div>
         </div>

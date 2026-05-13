@@ -45,33 +45,35 @@ function InputPinBox({username, userId}: InputPINProps) {
     
     
     return (    
-        <div className="InputPINBoxDiv">
+        <div className="InputPINBoxDiv glass-panel">
             <form className="PINForm" onSubmit={handleSearchRoom}>
-                <input className="RoomCodeInput" 
-                        type="text"
-                        placeholder="Enter PIN Code"
-                        required
-                        onChange={handleRoomCodeChange}/>
-                <button className="ConfirmButton">
-                    <strong>Enter</strong>
+                <div className="InputWrapper">
+                    <input className="RoomCodeInput" 
+                            type="text"
+                            placeholder="ENTER PIN CODE"
+                            required
+                            onChange={handleRoomCodeChange}/>
+                    <div className="input-line"></div>
+                </div>
+                
+                <button className="ConfirmButton neon-btn-gold">
+                    <strong>ENTER</strong>
                 </button>
-                {
-                    displayRoomNotFound &&
-                    <div className="RoomNotFoundErrorMessageContainer">
-                        <span className="RoomNotFoundErrorMessage">Room Not Found</span>
-                    </div>
-                    
-                }
 
-                {
-                    displayRoomLocked &&
-                    <div className="RoomNotFoundErrorMessageContainer">
-                        <span className="RoomNotFoundErrorMessage">The Room is Locked By the Host</span>
-                    </div>
-                    
-                }
+                <div className="ErrorContainer">
+                    {displayRoomNotFound && (
+                        <div className="ErrorMessage anim-shake">
+                            <span className="RoomNotFoundErrorMessage">ACCESS DENIED: Room Not Found</span>
+                        </div>
+                    )}
+
+                    {displayRoomLocked && (
+                        <div className="ErrorMessage anim-shake">
+                            <span className="RoomNotFoundErrorMessage">SECURE LOCK: Room Restricted</span>
+                        </div>
+                    )}
+                </div>
             </form>
-            
         </div>
     )
 }

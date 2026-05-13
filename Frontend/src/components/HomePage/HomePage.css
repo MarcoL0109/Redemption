@@ -28,66 +28,6 @@
     z-index: 0;  
 }
 
-.AddProblemSetButtonContainer {
-    margin-top: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.AddProblemSetButton {
-    width: 100px;
-    height: 100px;
-}
-
-.circle {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background-color: #E3AB13;;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 50px;
-}
-
-.circle:hover {
-    background-color: #ffbc05;
-    cursor: pointer;
-}
-
-.add-symbol {
-    font-size: 70px;
-    color: white;
-    font-weight: bold;
-    position: relative;
-    top: -5px;
-}
-
-.AddDivButtonContainer {
-    display: flex;
-    justify-content: center;
-}
-
-.HomePageDeleteButton {
-    margin-top: 20px;
-    margin-left: 10px;
-    height: 50px;
-    font-size: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(122, 118, 118);
-    font-family: 'Courier New', Courier, monospace;
-    position: sticky;
-    top: 0;
-}
-
-
-.HomePageDeleteButton:hover {
-    background-color: rgb(162, 160, 160);
-}
-
 
 .CreateFirstProblemTextMessage {
     font-family: 'Courier New', Courier, monospace;
@@ -98,4 +38,260 @@
     display: flex;
     justify-content: center;
     margin-top: 30px;
+}
+
+.AddDivButtonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.TerminalAddButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.button-frame {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    background: rgba(78, 204, 163, 0.05); /* Very faint green tint */
+    border: 2px solid rgba(78, 204, 163, 0.3);
+    border-radius: 12px; /* Or use 50% for a circle, but 12px feels more "tech" */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.plus-icon {
+    font-size: 40px;
+    color: #4ecca3;
+    font-weight: 200;
+    transition: all 0.3s ease;
+}
+
+.button-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    color: #4ecca3;
+    letter-spacing: 3px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+/* The "Glow" and "Hover" States */
+.TerminalAddButton:hover .button-frame {
+    background: rgba(78, 204, 163, 0.15);
+    border-color: #4ecca3;
+    box-shadow: 0 0 30px rgba(78, 204, 163, 0.3);
+    transform: scale(1.1) rotate(90deg); /* Rotation adds a "mechanical" feel */
+}
+
+.TerminalAddButton:hover .plus-icon {
+    transform: rotate(-90deg); /* Keeps the plus symbol vertical while frame rotates */
+    text-shadow: 0 0 10px #4ecca3;
+}
+
+.TerminalAddButton:hover .button-label {
+    opacity: 1;
+    text-shadow: 0 0 8px rgba(78, 204, 163, 0.5);
+}
+
+/* Optional: Scanning Line Effect */
+.button-frame::after {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(78, 204, 163, 0.2),
+        transparent
+    );
+    transition: none;
+}
+
+.TerminalAddButton:hover .button-frame::after {
+    animation: scan 1.5s infinite linear;
+}
+
+@keyframes scan {
+    0% { top: -100%; }
+    100% { top: 100%; }
+}
+
+/* 3. Typography & Header */
+.AlertHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.WarningTitleText {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 5px;
+    color: #ff5f5f;
+    margin: 0;
+}
+
+.WarningMessageText {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #bbb;
+    margin-bottom: 35px;
+    letter-spacing: 1px;
+}
+
+.Highlight {
+    color: #fff;
+    font-weight: 800;
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+/* 4. Action Buttons */
+.overlay__buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.confirmDelete {
+    background: #ff5f5f;
+    color: #000;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 900;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.confirmDelete:hover {
+    background: #ff3333;
+    box-shadow: 0 0 20px rgba(255, 95, 95, 0.4);
+    transform: scale(1.05);
+}
+
+.cancelDelete {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.cancelDelete:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+}
+
+/* 5. The Pulse Animation */
+.WarningPulse {
+    width: 12px;
+    height: 12px;
+    background: #ff5f5f;
+    border-radius: 50%;
+    animation: alert-pulse 1.5s infinite;
+}
+
+@keyframes alert-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.ControlConsole {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+
+.CommandBar {
+    display: flex;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+/* Base Button Style */
+.CommandButton {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.6);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+/* Specific Action Colors */
+.edit-btn:hover {
+    border-color: #4ecca3;
+    color: #4ecca3;
+    background: rgba(78, 204, 163, 0.05);
+    box-shadow: 0 0 15px rgba(78, 204, 163, 0.2);
+}
+
+.delete-btn:hover {
+    border-color: #ff5f5f;
+    color: #ff5f5f;
+    background: rgba(255, 95, 95, 0.05);
+    box-shadow: 0 0 15px rgba(255, 95, 95, 0.2);
+}
+
+/* Active State Styles (Save/Abort) */
+.active-override {
+    background: rgba(78, 204, 163, 0.05);
+    border: 1px solid rgba(78, 204, 163, 0.2);
+}
+
+.save-btn {
+    background: #4ecca3;
+    border: none;
+    color: #0a0a0a;
+    font-weight: 900;
+}
+
+.save-btn:hover {
+    background: #fff;
+    box-shadow: 0 0 20px #4ecca3;
+}
+
+.revert-btn {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.revert-btn:hover {
+    background: rgba(255, 95, 95, 0.1);
+    color: #ff5f5f;
+    border-color: #ff5f5f;
 }

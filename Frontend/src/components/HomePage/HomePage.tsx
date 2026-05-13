@@ -264,7 +264,6 @@ function HomePage() {
     const handleCloseOverlay = () => {
         setPotentialDeleteList([]);
         setIsOverlayOpen(false);
-        setDeleteMode(false);
     }
 
 
@@ -280,32 +279,51 @@ function HomePage() {
         <div className="HomePageContainer">
             <NavBar/>
             <Overlays isOpen={isOverlayOpen}>
-                <h1>Bye Bye Records</h1>
-                <p>{`${potentialDeleteList.length} Problem Set(s) Selected For Deletion. Once they are deleted, they are gone forever. Are you
-                        sure you want to delete those records?`}</p>
-                <div className="overlay__buttons">
-                    <button className="confirmDelete" onClick={handleConfirmDelete}>Confirm</button>
-                    <button className="cancelDelete" onClick={handleCloseOverlay}>Cancel</button>
+                <div className="DeleteAlertContent">
+                    <div className="AlertHeader">
+                        <h1 className="WarningTitleText">CRITICAL OPERATION</h1>
+                        <div className="WarningPulse"></div>
+                    </div>
+                    
+                    <p className="WarningMessageText">
+                        <span className="Highlight">{potentialDeleteList.length} DATA MODULES</span> 
+                        SELECTED FOR PERMANENT PURGE. ONCE EXECUTED, DATA RECOVERY IS IMPOSSIBLE.
+                    </p>
+                    
+                    <div className="overlay__buttons">
+                        <button className="confirmDelete neon-btn-red" onClick={handleConfirmDelete}>
+                            CONFIRM
+                        </button>
+                        <button className="cancelDelete" onClick={handleCloseOverlay}>
+                            ABORT
+                        </button>
+                    </div>
                 </div>
             </Overlays>
 
-            {
-                (isloaded && problemSets.length > 0) ?
-                <div className="">
-                    {
-                        editMode || deleteMode ?
-                        <div className="SaveRevertButtonContainer">
-                            <button className="SaveButton" onClick={handleSave}>Save</button>
-                            <button className="RevertButton" onClick={handleCancel}>Cancel</button>
-                        </div>:
-                        <div className="SaveRevertButtonContainer">
-                            <button className="SaveButton" onClick={handleEditMode}>Edit</button>
-                            <button className="HomePageDeleteButton" onClick={handleDelete}>Delete</button>
+            {isloaded && problemSets.length > 0 && (
+                <div className="ControlConsole">
+                    {editMode || deleteMode ? (
+                        <div className="CommandBar active-override">
+                            <button className="CommandButton save-btn" onClick={handleSave}>
+                                <span className="btn-glitch">SAVE CHANGES</span>
+                            </button>
+                            <button className="CommandButton revert-btn" onClick={handleCancel}>
+                                ABORT CHANGES
+                            </button>
                         </div>
-                    }
-                </div> :
-                null
-            }
+                    ) : (
+                        <div className="CommandBar">
+                            <button className="CommandButton edit-btn" onClick={handleEditMode}>
+                                MODIFY ARCHIVE
+                            </button>
+                            <button className="CommandButton delete-btn" onClick={handleDelete}>
+                                PURGE MODE
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
 
             {
                 (isloaded && problemSets.length == 0) &&
@@ -336,8 +354,12 @@ function HomePage() {
             {
                 isloaded && 
                 <div className="AddDivButtonContainer">
-                    <div className="circle" onClick={handleAddProblemSet}>
-                        <div className="add-symbol">+</div>
+                    <div className="TerminalAddButton" onClick={handleAddProblemSet}>
+                        <div className="button-frame">
+                            <div className="plus-icon">+</div>
+                            <div className="button-glitch"></div>
+                        </div>
+                        <span className="button-label">NEW PROBLEM SETS</span>
                     </div>
                 </div>
             }

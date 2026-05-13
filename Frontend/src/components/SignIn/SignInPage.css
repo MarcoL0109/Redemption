@@ -1,148 +1,172 @@
-.SignInBox {
+/* 1. Main Background Container */
+.SignInContainer {
+    position: relative; /* Essential for the absolute HomeButton */
+    height: 100vh;
+    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 30px;
-    background-color: #232323;
-    width: 350px;
-    border-radius: 5%;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
+    overflow: hidden;
+    font-family: 'Inter', sans-serif; /* Or any clean sans-serif */
 }
 
-.SignInForm {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    max-width: 400px;
-}
-
-.SignInButton {
-    padding: 10px 12px;
-    background: #E3AB13;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 25px;
-    margin-top: 5px;
-}
-
-
-.EyeIcon {
-  position: absolute;
-  right: 7px;
-  width: 20px;
-  cursor: pointer;
-  opacity: 0.6;
-}
-
-.EyeIcon:hover {
-  opacity: 1;
-}
-
-
-.InputPasswordContainer {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.SignInButton:hover {
-    background-color: #ffbc05;
-}
-
+/* 2. Floating Home Button (Top Left) */
 .HomeButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 6px 10px;
-    color: white;
-    background-color: transparent;
-    border: none;
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 30px;
-    transition: 0.3s ease-in;
+    transition: 0.3s ease;
+    z-index: 10;
 }
 
 .HomeButton:hover {
-    background-color: white;
-    color: black;
+    background: rgba(78, 204, 163, 0.1);
+    border-color: #4ecca3;
+    color: #4ecca3;
+    box-shadow: 0 0 15px rgba(78, 204, 163, 0.2);
 }
 
-.SignInContainer {
+/* 3. The Glass Authentication Box */
+.SignInBox {
+    width: 100%;
+    max-width: 400px;
+    padding: 50px 40px;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: #38343B;
 }
 
+/* 4. Title & Subtitle Styling */
 .TitleText {
-    color: white;
-    font-family: "Inika", serif;
+    font-family: 'Orbitron', sans-serif; /* If using Google Fonts */
+    font-size: 2rem;
+    letter-spacing: 8px;
+    color: #fff;
+    margin: 0;
+    text-align: center;
 }
 
-.email_form_inputs {
-    padding: 8px 12px;
-    font-size: 16px;
-    border: none;
-    border-bottom: 1px solid #ccc;
-    border-radius: 6px;
+.SubtitleText {
+    font-size: 0.75rem;
+    color: #4ecca3;
+    letter-spacing: 4px;
+    margin: 10px 0 40px 0;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+/* 5. Form & Input Layout */
+.SignInForm {
     width: 100%;
-    box-sizing: border-box;
-    outline: none;
-    background: none;
-    color: white;
-    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
+.email_form_inputs, 
 .password_form_inputs {
-    padding: 8px 12px;
-    font-size: 16px;
-    border: none;
-    border-bottom: 1px solid #ccc;
-    border-radius: 6px;
     width: 100%;
-    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 16px;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 1rem;
     outline: none;
-    background: none;
-    color: white;
-    text-align: left;
+    transition: all 0.3s ease;
 }
 
-.SignUpTag {
-    float: right;
-    color: white;
+.email_form_inputs:focus, 
+.password_form_inputs:focus {
+    border-color: #4ecca3;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 10px rgba(78, 204, 163, 0.1);
 }
 
-.ForgotPasswordTag {
-    color: white;
+/* 6. Password Container with Eye Icon */
+.InputPasswordContainer {
+    position: relative;
+    width: 100%;
+}
+
+.EyeIcon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: 0.2s;
+}
+
+.EyeIcon:hover {
+    opacity: 1;
+}
+
+.SignInButton {
+    width: 100%;
+    padding: 16px;
+    background: #4ecca3;
+    border: none;
+    border-radius: 12px;
+    color: #0a0a0a;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.SignInButton:hover:not(:disabled) {
+    background: #45b391;
+    box-shadow: 0 0 25px rgba(78, 204, 163, 0.4);
+    transform: translateY(-2px);
+}
+
+.SignInButton:disabled {
+    background: #2a4d42;
+    color: #555;
+    cursor: not-allowed;
 }
 
 .AccountManagementTags {
-    margin-top: 5px;
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active{
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: white;
-    box-shadow: inset 0 0 20px 20px transparent;
-}
-
-
-.AccoutNotFoundMessage {
-    color: red;
-    font-family: 'Roboto', sans-serif;
-}
-
-.AccoutNotFoundMessageContainer {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.ForgotPasswordTag, 
+.SignUpTag {
+    color: #888;
+    font-size: 0.85rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.ForgotPasswordTag:hover, 
+.SignUpTag:hover {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+.ErrorMessage {
+    color: #ff5f5f;
+    font-size: 0.8rem;
     margin-bottom: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
 }

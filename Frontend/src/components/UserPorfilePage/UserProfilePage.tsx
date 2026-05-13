@@ -130,6 +130,10 @@ function UserProfilePage() {
                             </div>
                         </div>
                     </div>
+
+                    <div className="StatsCardContainer">
+                        Latest Activity
+                    </div>
                 </div>
                 
             </div>

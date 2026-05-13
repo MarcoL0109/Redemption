@@ -85,59 +85,57 @@ function ProblemSetCard({problem_set, editMode, deleteMode, is_temp, handleClear
 
 
     return (
-        <div className={deleteMode? `FixedProblemSetCards${toggle === 1? '_hover': ''}`: "ProblemSetCards"} onClick={handleonClick}>
-            {
-                deleteMode ?
-                <div className={`selectBoxContainer${toggle === 1 ? '_hover': ''}`}>
-                    <input className="deleteCheckBox"
-                            type="checkbox"
-                            checked={toggle === 1}
-                            onChange={handleDeleteCheckBoxChange}>
-                    </input>
-                </div> :
-                null
-            }
+        <div className={`ProblemSetCard ${deleteMode ? 'delete-mode' : ''} ${toggle === 1 ? 'selected' : ''}`} onClick={handleonClick}>
+            {deleteMode && (
+                <div className="SelectionOverlay">
+                    <input 
+                        className="DeleteCheckBox"
+                        type="checkbox"
+                        checked={toggle === 1}
+                        onChange={handleDeleteCheckBoxChange}
+                    />
+                </div>
+            )}
             
-            <div className="ProblemSetTitleContainer">
-                {
-                    editMode ? 
-                    <TextareaAutosize
-                        defaultValue={problem_set.problem_set_title}
-                        placeholder={"Enter Problem Set title"}
-                        minRows={1}
-                        maxRows={3}
-                        cols={35}
-                        required
-                        onChange={handleProblemSetTitleChange}>
-                    </TextareaAutosize> : 
-                    <strong className="ProblemSetTitle">{problem_set.problem_set_title}</strong>
-                }        
-            </div>
-            
-            <div className="ProblemSetDescriptionContainer">
-                {
-                    editMode ? 
-                    <TextareaAutosize
-                        defaultValue={problem_set.problem_set_description}
-                        placeholder={"Enter Problem Set Description"}
-                        minRows={1}
-                        maxRows={4}
-                        cols={35}
-                        onChange={handleProblemSetDescriptionChange}>
-                    </TextareaAutosize> : 
-                    <span>{problem_set.problem_set_description}</span>
-                }
+            <div className="CardBody">
+                <div className="ProblemSetTitleContainer">
+                    {editMode ? (
+                        <TextareaAutosize
+                            className="EditInput title-edit"
+                            defaultValue={problem_set.problem_set_title}
+                            placeholder="Set Title"
+                            onChange={handleProblemSetTitleChange}
+                        />
+                    ) : (
+                        <h3 className="ProblemSetTitle">{problem_set.problem_set_title}</h3>
+                    )}        
+                </div>
+                
+                <div className="ProblemSetDescriptionContainer">
+                    {editMode ? (
+                        <TextareaAutosize
+                            className="EditInput desc-edit"
+                            defaultValue={problem_set.problem_set_description}
+                            placeholder="Set Description"
+                            onChange={handleProblemSetDescriptionChange}
+                        />
+                    ) : (
+                        <p className="ProblemSetDescription">{problem_set.problem_set_description}</p>
+                    )}
+                </div>
             </div>
 
-            <div className="bottomContainer">
-                <div className="ProblemSetCountContainer">
-                    <span>{problem_set.problem_counts} Problems</span><br/>
-                    <span>Last Update: {problem_set.last_update_at && formatDate(problem_set.last_update_at)}</span>                      
+            <div className="CardFooter">
+                <div className="MetaData">
+                    <span className="CountBadge">{problem_set.problem_counts} MODULES</span>
+                    <span className="UpdateText">REV: {problem_set.last_update_at && formatDate(problem_set.last_update_at)}</span>                      
                 </div>
 
-                <div className="PlayButton">
-                    <img className="PlayButtonIcon" src={PlayButton} alt="Play Icon"/>
-                </div>
+                {!deleteMode && !editMode && (
+                    <div className="PlayButton">
+                        <img className="PlayButtonIcon" src={PlayButton} alt="Initialize"/>
+                    </div>
+                )}
             </div>
         </div>
     )

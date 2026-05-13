@@ -1,14 +1,17 @@
 .HistoryCardContainer {
-    background-color: whitesmoke;
-    color: black;
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 25px;
-    font-family: 'Courier New', Courier, monospace;
-    padding-left: 10px;
+    list-style: none;
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px 24px;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+    /* margin-top: 50px; */
+    width: 100%;
 }
 
 .HistoryCardContainer.clickable {
@@ -16,36 +19,72 @@
 }
 
 .HistoryCardContainer.clickable:hover {
-    background-color: rgb(231, 229, 229);
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(5px);
+    border-color: #4ecca3;
 }
 
-.HistroyInfoSpan {
-    font-size: 18px;
+.HistoryCardHeader {
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+    margin-bottom: 8px;
+}
+
+.ProblemSetName {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: 600;
+}
+
+.GameDate {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.HistoryDetails {
+    display: flex;
+    gap: 25px;
+}
+
+.HistoryInfoSpan {
+    font-size: 0.9rem;
+    color: #bbb;
+}
+
+.ScoreValue {
+    color: #4ecca3;
+    font-weight: bold;
+    font-size: 1rem;
 }
 
 .completnessDiv {
+    padding: 6px 14px;
     border-radius: 20px;
-    background-color: rgb(29, 224, 29);
-    width: fit-content;
-    padding: 10px 10px 10px 10px;
-    margin: 20px 20px 10px 20px;
-    font-size: 20px;
-    text-wrap: nowrap;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 25px;
 }
 
-.completnessDiv.Completed {
-    background-color: rgb(29, 224, 29);
+.status-completed {
+    background: rgba(78, 204, 163, 0.2);
+    color: #4ecca3;
+    border: 1px solid #4ecca3;
 }
 
-.completnessDiv.Kicked {
-    background-color: rgb(220, 44, 21);
+.status-pending {
+    background: rgba(255, 184, 108, 0.2);
+    color: #ffb86c;
+    border: 1px solid #ffb86c;
 }
 
-.completnessDiv.Incomplete {
-    background-color: rgb(241, 131, 6);
-}
 
-.completnessDiv.Terminated {
-    background-color: rgb(80, 83, 80);
-    color: white
+/* Status: Aborted (Pulse Red) */
+.status-aborted {
+    background: rgba(255, 95, 95, 0.15);
+    color: #ff5f5f;
+    border: 1px solid rgba(255, 95, 95, 0.4);
 }

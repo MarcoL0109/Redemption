@@ -84,7 +84,7 @@ function JoinRoom() {
       
       {
         userData.user_id === -1 ?
-        <button onClick={() => navigate("/SignIn")} className="SigninButton">
+        <button onClick={() => navigate("/SignIn")} className="HomeButton">
           <strong>Sign in</strong>
         </button> :
         <div className="NavbarContainer">
@@ -94,7 +94,12 @@ function JoinRoom() {
       }
       
       <div className="BoxContainer">
-        <h1 className="TitleText"><strong>REDEMPTION</strong></h1>
+        {
+          userData.user_id !== -1 ?
+          <p className="TaglineText">READY FOR YOUR NEXT CHALLENGE?</p>:
+          <h1>REDEMPTION</h1>
+        }
+        
         <InputPinBox username={userData.username} userId={userData.user_id}/>
       </div>
     </div>

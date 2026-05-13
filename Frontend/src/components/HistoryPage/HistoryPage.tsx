@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import HistoyCard from "../HistoryCards/HistoryCard"
 import NavBar from "../NavBar/NavBar"
 import { useUser } from "../../context/UserContext"
+import "./HistoryPage.css"
 
 
 export interface HistoryCardProp {

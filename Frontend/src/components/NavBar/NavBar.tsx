@@ -31,26 +31,34 @@ const NavBar: React.FC = () => {
     const handleClose = () => setIsDisplay(false);
 
     return (
-        <nav className="NavBar">
-            <h1 className="NavBarTitleText" onClick={() => navigate("/Home")}><strong>Redemption</strong></h1>
+        <nav className="NavBar glass-nav">
+            <div className="NavBrand" onClick={() => navigate("/Home")}>
+                <h1 className="NavBarTitleText">REDEMPTION</h1>
+                <div className="brand-glow"></div>
+            </div>
+
             <div className="NavBarButtonsContainer">
-                <div className="joinRoomButton" onClick={handleJoinRoom}>
-                    <h2>Join Room</h2>
-                </div>
-                <img className="StreakIcon" src={Fire} alt="Streak Icon" />
-                <h2 className="StreakCount">{userData.login_streak}</h2>
-                <div className="UserIconCircle" onClick={handleProfileClick}>
-                    {
-                        userData.user_icon === "" ? <FontAwesomeIcon icon={faUser} size="3x" /> :
-                        <img className="UserIconImage" src={userData.user_icon} alt="User Icon" />
-                    }
+                <button className="joinRoomButton neon-btn" onClick={handleJoinRoom}>
+                    <span className="btn-text">Join Room</span>
+                    <div className="btn-glow"></div>
+                </button>
+
+                <div className="StatsWrapper">
+                    <div className="StreakDisplay">
+                        <img className="StreakIcon" src={Fire} alt="Streak" />
+                        <span className="StreakCount">{userData.login_streak}</span>
+                    </div>
+
+                    <div className="UserIconCircle" onClick={handleProfileClick}>
+                        {userData.user_icon === "" ? 
+                            <FontAwesomeIcon icon={faUser} className="default-avatar" /> :
+                            <img className="UserIconImage" src={userData.user_icon} alt="User Avatar" />
+                        }
+                    </div>
                 </div>
             </div>    
             
-            {
-                isDisplay &&
-                <UserAccountBox onClose={handleClose} user_data={userData}/>
-            }
+            {isDisplay && <UserAccountBox onClose={handleClose} user_data={userData}/>}
         </nav>
     );
 };

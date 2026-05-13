@@ -1,87 +1,127 @@
-.ProblemSetCards {
-    background-color: #242425;
-    opacity: 0.7;
-    border-radius: 10px;
-    width: 318px;
-    height: auto;
-}
-
-.ProblemSetCards:hover {
-    background-color: #5a5a62;
+.ProblemSetCard {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 220px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
     cursor: pointer;
 }
 
-.FixedProblemSetCards {
-    background-color: #242425;
-    opacity: 0.7;
-    border-radius: 10px;
-    width: 318px;
-    height: auto;
+.ProblemSetCard:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: #4ecca3;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-.FixedProblemSetCards_hover {
-    background-color: #5a5a62;
-    opacity: 0.7;
-    border-radius: 10px;
-    width: 318px;
-    height: auto;
+/* Delete Mode States */
+.ProblemSetCard.delete-mode {
+    border-color: rgba(255, 95, 95, 0.3);
 }
 
+.ProblemSetCard.selected {
+    border-color: #ff5f5f;
+    background: rgba(255, 95, 95, 0.05);
+    box-shadow: 0 0 20px rgba(255, 95, 95, 0.1);
+}
+
+/* Title & Description */
 .ProblemSetTitle {
-    font-size: 25px;
-    font-family: Courier, monospace;;
+    color: #fff;
+    font-size: 1.25rem;
+    margin: 0 0 10px 0;
+    letter-spacing: 1px;
 }
 
-.ProblemSetTitleContainer {
-    padding-top: 10px;
-    padding-left: 5px;
+.ProblemSetDescription {
+    color: #bbb;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-.ProblemSetDescriptionContainer {
-    padding-left: 5px;
-    font-size: 20px;
-    margin-top: 5px; 
-    font-family: Courier, monospace;
+/* Edit Inputs */
+.EditInput {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #4ecca3;
+    padding: 8px;
+    outline: none;
+    resize: none;
 }
 
-.ProblemSetCountContainer {
-    bottom: 10px;
-    padding-left: 5px;
-    font-family: Courier, monospace;
+/* Footer & Meta */
+.CardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     margin-top: 20px;
 }
 
-.PlayButtonIcon {
-    width: 50px;
-    height: 50px;
-    margin-right: 5px;
-    padding-bottom: 5px;;
+.MetaData {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
+.CountBadge {
+    font-size: 0.7rem;
+    color: #4ecca3;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.UpdateText {
+    font-size: 0.65rem;
+    color: #666;
+    text-transform: uppercase;
+}
+
+/* Play Button */
 .PlayButton {
+    width: 40px;
+    height: 40px;
+    background: #4ecca3;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: 0.3s;
+    box-shadow: 0 0 15px rgba(78, 204, 163, 0.3);
 }
 
-.bottomContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.ProblemSetCard:hover .PlayButton {
+    transform: scale(1.1);
+    background: #fff;
 }
 
-.selectBoxContainer {
-    background-color: #242425;
-    display: flex;
-    justify-content: end;
+.PlayButtonIcon {
+    width: 16px;
+    /* If your icon is black, it will pop against the green/white */
 }
 
-.selectBoxContainer_hover {
-    background-color: #5a5a62;
-    display: flex;
-    justify-content: end;
+/* Delete Checkbox Overlay */
+.SelectionOverlay {
+    position: absolute;
+    top: 15px;
+    right: 15px;
 }
 
-.deleteCheckBox {
-    transform: scale(1.25);
+.DeleteCheckBox {
+    width: 20px;
+    height: 20px;
+    accent-color: #ff5f5f;
+    cursor: pointer;
 }

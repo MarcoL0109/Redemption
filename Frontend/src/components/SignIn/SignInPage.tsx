@@ -63,24 +63,45 @@ function SignInPage() {
             <button onClick={() => navigate("/")} className="HomeButton">
                 <strong>Join Room</strong>
             </button>
-            <h1 className="TitleText"><strong>REDEMPTION</strong></h1>
+
             <div className="SignInBox">
+                {/* Title is now INSIDE the glass box */}
+                <h1 className="TitleText">REDEMPTION</h1>
+                <p className="SubtitleText">PROVE YOUR WORTH</p>
+                
                 <form className="SignInForm" onSubmit={handleSubmit}>
-                    <input className="email_form_inputs" type="text" placeholder="Email" required value={email} onChange={(e) => {setEmail(e.target.value)}}/>
-                    <div className="InputPasswordContainer">
-                        <input className="password_form_inputs" type={hidden ? "password" : "text"} placeholder="Password" required value={password} onChange={(e) => {setPassword(e.target.value)}}/>
-                        <img className="EyeIcon" src={hidden ? Eye : HiddenEye} alt="Eye Icon" onClick={handleHiddenState}/>
-                    </div>
-                    <button type="submit" className="SignInButton" disabled={isSubmitting}>
-                        <strong>Sign In</strong>
-                    </button>
-                    <div className="AccountManagementTags">
-                        {incorrectLoginInfo && <div className="AccoutNotFoundMessageContainer"><span className="AccoutNotFoundMessage">Incorrect Username or Password</span></div>}
-                        {notActivated && <div className="AccoutNotFoundMessageContainer"><span className="AccoutNotFoundMessage">Account Not Activated</span></div>}
-                        <a onClick={() => (navigate("/ForgotPassword"))} className="ForgotPasswordTag"><strong>Forgot Password?</strong></a>
-                        <a onClick={() => {navigate('/SignUp')}} className="SignUpTag"><strong>Sign Up</strong></a>
-                    </div>
+                    <input 
+                        className="email_form_inputs" 
+                        type="text" 
+                        placeholder="Email" 
+                        required 
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                     
+                    <div className="InputPasswordContainer">
+                        <input 
+                            className="password_form_inputs" 
+                            type={hidden ? "password" : "text"} 
+                            placeholder="Password" 
+                            required 
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <img className="EyeIcon" src={hidden ? Eye : HiddenEye} alt="Toggle" onClick={handleHiddenState}/>
+                    </div>
+
+                    {incorrectLoginInfo && <div className="ErrorMessage anim-shake">Incorrect Credentials</div>}
+                    {notActivated && <div className="ErrorMessage anim-shake">Account Not Activated</div>}
+
+                    <button type="submit" className="SignInButton" disabled={isSubmitting}>
+                        <strong>{isSubmitting ? "AUTHENTICATING..." : "SIGN IN"}</strong>
+                    </button>
+
+                    <div className="AccountManagementTags">
+                        <a onClick={() => navigate("/ForgotPassword")} className="ForgotPasswordTag">Forgot Password?</a>
+                        <a onClick={() => navigate('/SignUp')} className="SignUpTag">Sign Up</a>
+                    </div>
                 </form>
             </div>
         </div>

@@ -11,18 +11,17 @@
 
 
 .overlay__container {
-    background-color: white;
-    color: black;
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    z-index : 10;
-    padding: 30px;
-    width: fit-content;
-    height: fit-content;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(20, 20, 20, 0.95);
+    color: white;
+    padding: 40px;
+    width: 450px;
+    border-radius: 20px;
+    z-index: 101;
+    
 }
 
 

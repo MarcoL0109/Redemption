@@ -1,65 +1,92 @@
-/* InputPINBox.css */
-
 .InputPINBoxDiv {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  background-color: #232323;;
-  border-radius: 5%;
+    width: 400px;
+    padding: 40px;
+    background: rgba(20, 20, 20, 0.85);
+    backdrop-filter: blur(25px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+    text-align: center;
 }
 
-
-.PINForm {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  max-width: 360px;
+.PINHeader {
+    color: #fff;
+    font-size: 0.9rem;
+    letter-spacing: 5px;
+    margin-bottom: 30px;
+    opacity: 0.7;
 }
 
+/* Input Styling */
+.InputWrapper {
+    position: relative;
+    margin-bottom: 25px;
+}
 
 .RoomCodeInput {
-  padding: 8px 12px;
-  font-size: 16px;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%;
-  box-sizing: border-box;
-  outline: none;
-  background: none;
-  color: white;
-  text-align: left;
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 0;
+    color: #ffb86c; /* Amber color for PINs */
+    font-size: 1.8rem;
+    text-align: center;
+    letter-spacing: 8px;
+    outline: none;
+    transition: border-color 0.3s;
 }
 
+.RoomCodeInput:focus {
+    border-bottom: 2px solid #ffb86c;
+}
 
+.RoomCodeInput::placeholder {
+    font-size: 1rem;
+    letter-spacing: 2px;
+    opacity: 0.3;
+}
+
+/* Gold Neon Button */
 .ConfirmButton {
-  padding: 10px 12px;
-  background: #E3AB13;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 25px;
+    width: 100%;
+    padding: 15px;
+    background: transparent;
+    border: 1px solid #ffb86c;
+    color: #ffb86c;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    letter-spacing: 3px;
+    transition: all 0.3s ease;
 }
-
 
 .ConfirmButton:hover {
-  background-color: #ffbc05;
+    background: rgba(255, 184, 108, 0.1);
+    box-shadow: 0 0 20px rgba(255, 184, 108, 0.3);
+    transform: scale(1.02);
 }
 
-
-.ConfirmButton:active { transform: translateY(1px); }
-
-
-.RoomNotFoundErrorMessage {
-  color: red;
+/* Error Messaging */
+.ErrorContainer {
+    height: 40px; /* Fixed height prevents layout shift */
+    margin-top: 15px;
 }
 
+.ErrorMessage {
+    color: #ff5f5f;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
 
-.RoomNotFoundErrorMessageContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* Animation for wrong codes */
+.anim-shake {
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
 }
