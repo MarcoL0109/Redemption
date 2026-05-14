@@ -251,61 +251,85 @@ function PendingStartRoom() {
 
     
     return (
-        <div className="HomePageContainer">
-            <div className="RoomCodeContainer">
-                <div>
-                    <h1>Room Code: {roomId}</h1>
+        <div className="PendingStartRoomContainer">
+            <div className="LobbyHeader">
+                <div className="SessionIdentity">
+                    <span className="TerminalLabel">ROOM INITIATED</span>
+                    <h1 className="RoomCodeDisplay">{roomId}</h1>
+                </div>
+                <div className={`SecurityStatus ${toggleLock ? 'locked' : 'active'}`}>
+                    <span className="StatusDot"></span>
+                    {toggleLock ? 'CHANNEL LOCKED' : 'CHANNEL OPEN'}
                 </div>
             </div>
-            <div className="JoinerListContainer">
-                <table className="JoinerList">
-                    <thead>
-                        <tr>
-                            <th className={`PlayerListRow${isHost ? "" : "_Norm"}`}>Player No.</th>
-                            <th className={`PlayerListRow${isHost ? "" : "_Norm"}`}>Player Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            playerList.map((player, index) => 
-                                <tr key={index}>
-                                    <td className={`PlayerListRow${isHost ? "" : "_Norm"}`}>{index + 1}</td>
-                                    <td className={`PlayerListRow${isHost ? "" : "_Norm"}`}>{player}</td>
-                                    {
-                                        isHost && 
-                                        <td className="KickPlayerButtonColumn"> 
-                                            {   index !== 0 ?  
-                                                <button className="btn btn-danger" onClick={() => handleKickPlayer((index + 1).toString())}>Kick Player</button>:
-                                                null
-                                            }
-                                        </td>
-                                    }
-                                </tr>
-                            )
-                        }
-                    </tbody>
-                </table>
-            </div>
-            {
-                isHost ?
-                <div className="roomOperationButtonContainer">
-                    <button className="btn btn-start button-outside-table" onClick={handleStartRoom}>Start</button>
-                    <button className={toggleLock ? "btn btn-neutral button-outside-table": "btn btn-primary button-outside-table"} onClick={handleLockRoom}>{toggleLock ? "Unlock": "Lock"}</button>
-                    <button className="btn btn-danger button-outside-table" onClick={triggerTerminateOverlay}>Terminate</button>
-                </div> :
-                <div className="roomOperationButtonContainer">
-                    <button className="btn btn-danger button-outside-table" onClick={triggerLeaveOverlay}>Leave</button>
+
+            <div className="RosterSection">
+                <div className="RosterMeta">
+                    <span className="MetaLabel">ACTIVE UNITS IN LOBBY</span>
+                    <span className="MetaCount">{playerList.length} / 100</span>
                 </div>
-            }
+                
+                <div className="UnitGrid">
+                    {playerList.map((player, index) => (
+                        <div key={index} className={`UnitCard ${index === 0 ? 'host-unit' : ''}`}>
+                            <div className="UnitMain">
+                                <span className="UnitID">{String(index + 1).padStart(2, '0')}</span>
+                                <span className="UnitName">{player}</span>
+                                {index === 0 && <span className="HostBadge">MASTER</span>}
+                            </div>
+                            
+                            {isHost && index !== 0 && (
+                                <button 
+                                    className="KickUnitBtn" 
+                                    onClick={() => handleKickPlayer((index + 1).toString())}
+                                >
+                                    DISCONNECT
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="CommandDock">
+                <div className="DockBlur"></div>
+                <div className="DockActions">
+                    {isHost ? (
+                        <>
+                            <button className="ConsoleAction init-btn" onClick={handleStartRoom}>
+                                INITIALIZE SESSION
+                            </button>
+                            <button 
+                                className={`ConsoleAction ${toggleLock ? 'warn-btn' : 'neutral-btn'}`} 
+                                onClick={handleLockRoom}
+                            >
+                                {toggleLock ? 'UNLOCK CHANNEL' : 'LOCK CHANNEL'}
+                            </button>
+                            <button className="ConsoleAction danger-btn" onClick={triggerTerminateOverlay}>
+                                TERMINATE
+                            </button>
+                        </>
+                    ) : (
+                        <button className="ConsoleAction danger-btn" onClick={triggerLeaveOverlay}>
+                            ABORT CONNECTION
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            {/* Tactical Overlay */}
             <Overlays isOpen={isOverlayOpen}>
-                <div>
-                    <div>
-                        <h2>{hostLeave ? "Ending" : "Leaving"} the Party Before It Starts?</h2>
-                        <p>You are about to {hostLeave ? "terminate" : "leave"} this room. Are you sure you want to {hostLeave ? "end" : "leave"} this party before it starts?</p>
+                <div className="TerminalOverlayContent">
+                    <div className="OverlayHeader">
+                        <h2>{hostLeave ? "SYSTEM TERMINATION" : "NODE DISCONNECT"}</h2>
                     </div>
+                    <p className="OverlayMsg">
+                        Warning: You are attempting to {hostLeave ? "terminate the session" : "disconnect from the link"}. 
+                        This action is irreversible. Proceed with extraction?
+                    </p>
                     <div className="overlay__buttons">
-                        <button className="confirmDelete" onClick={handleLeaveRoom}>Confirm</button>
-                        <button className="cancelDelete" onClick={handleCloseOverlay}>Cancel</button>
+                        <button className="confirmDelete neon-btn-red" onClick={handleLeaveRoom}>CONFIRM EXIT</button>
+                        <button className="cancelDelete" onClick={handleCloseOverlay}>ABORT EXIT</button>
                     </div>
                 </div>  
             </Overlays> 

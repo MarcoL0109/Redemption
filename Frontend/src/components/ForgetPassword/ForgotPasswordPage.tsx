@@ -10,6 +10,7 @@ function ForgotPasswordPage() {
     const [inputEmail, setInputEmail] = useState<string>("");
     const [userAccountNotFound, setuserAccountNotFound] = useState<boolean>(false);
     const [displayLoading, setDisplayLoading] = useState<boolean>(false);
+    // @ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
 
     const handleForgotPassword = async (email: string) => {
@@ -42,35 +43,40 @@ function ForgotPasswordPage() {
             <button onClick={() => navigate("/")} className="HomeButton">
                 <strong>Join Room</strong>
             </button>
-            <h1 className="TitleText"><strong>REDEMPTION</strong></h1>
+            
             <div className="ForgotPasswordBox">
+                <h1 className="TitleText">REDEMPTION</h1>
+                <p className="SubtitleText">RECOVERY INITIALIZATION</p>
+                
                 <form onSubmit={handleSubmit} className="ForgotPasswordForm">
-                    <input 
-                        className="email_form_inputs"
-                        type="email" placeholder="Email"
-                        required
-                        value={inputEmail}
-                        onChange={(e) => setInputEmail(e.target.value)}
-                    />
-                    {
-                        userAccountNotFound &&
-                        <div className="AccoutNotFoundMessageContainer">
-                            <span className="AccoutNotFoundMessage">Account Not Found</span>
-                        </div>
-                    }
-                    {
-                        !displayLoading &&
-                        <button type="submit" className="SendCodeButton">
-                            <strong>Send Code</strong>
-                        </button>
-                    }
+                    <div className="InputWrapper">
+                        <input 
+                            className="email_form_inputs"
+                            type="email" 
+                            placeholder="ENTER REGISTERED EMAIL"
+                            required
+                            value={inputEmail}
+                            onChange={(e) => setInputEmail(e.target.value)}
+                        />
+                    </div>
 
-                    {
-                        displayLoading &&
+                    <div className="FeedbackArea">
+                        {userAccountNotFound && (
+                            <div className="ErrorMessage anim-shake">
+                                <span>ERROR: ACCOUNT NOT LOCATED</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {!displayLoading ? (
+                        <button type="submit" className="SendCodeButton">
+                            <strong>SEND RECOVERY CODE</strong>
+                        </button>
+                    ) : (
                         <div className="loading_icon_animations">
-                            <FourSquare color="#ffbc05" size="medium" text="" textColor="" />
+                            <FourSquare color="#4ecca3" size="medium" text="" />
                         </div>
-                    }
+                    )}
                 </form>
             </div>
         </div>

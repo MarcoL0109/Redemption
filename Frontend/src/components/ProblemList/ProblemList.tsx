@@ -167,6 +167,19 @@ function ProblemList() {
         fetch_user_data_from_session();
     }, []);
 
+    useEffect(() => {
+        const hasModified = Object.keys(modifiedProblems).length > 0;
+        const hasDeleted = potentialDelete.length > 0;
+        const hasCreated = Object.keys(potentialCreate).length > 0;
+
+        // If any of these are true, the state is no longer "Saved"
+        if (hasModified || hasDeleted || hasCreated) {
+            setIsSaved(false);
+        } else {
+            setIsSaved(true);
+        }
+    }, [modifiedProblems, potentialDelete, potentialCreate]);
+
 
     useEffect(() => {
         const cleanedProblems = { ...modifiedProblems };
@@ -458,7 +471,6 @@ function ProblemList() {
                 return;
             }
         }
-        // Need to set the start room time in here
         navigate(`/PendingStartRoom/${userData.user_id}/${userData.username}/${room_code}/${problem_set_id}`);
     }
 
@@ -508,27 +520,38 @@ function ProblemList() {
             </Overlays>
 
             {
-                <div className="ButtonsContainer">
-                    {
-                        ((Object.keys(modifiedProblems).length > 0 || potentialDelete.length > 0 || Object.keys(potentialCreate).length > 0) && isSaved) &&
-                        <div className="SaveRevertButtonContainer">
-                            <button className="SaveButton" onClick={handleSave}>Save</button>
-                            <button className="RevertButton" onClick={handleRevert}>Revert</button>
+            <div className="GlobalActionsContainer">
+                {((Object.keys(modifiedProblems).length > 0 || potentialDelete.length > 0 || Object.keys(potentialCreate).length > 0) && !isSaved) && (
+                    <div className="PendingChangesConsole anim-slide-up">
+                        <div className="StatusIndicator">
+                            <span className="blink-dot"></span>
+                            <span className="StatusLabel">UNSAVED DATA DETECTED</span>
                         </div>
-                    }
-                    {
-                        isSaved &&
-                        <div className="startQuizButtonContainer">
-                            <button className="StartButton" onClick={handleStartRoom} disabled={!isLoaded}>Start</button>
+                        <div className="ActionGroup">
+                            <button className="ConsoleButton save-btn" onClick={handleSave}>
+                                COMMIT CHANGES
+                            </button>
+                            <button className="ConsoleButton revert-btn" onClick={handleRevert}>
+                                REVERT STATE
+                            </button>
                         </div>
-                    }
-                </div>
-                
-            }
+                    </div>
+                )}
 
-            {
-                ((Object.keys(modifiedProblems).length > 0 || potentialDelete.length > 0 || Object.keys(potentialCreate).length > 0) && !isSaved) &&
-                <Commet color="#59acef" size="small" />
+                {isSaved && (
+                    <div className="PrimaryLaunchContainer">
+                        <button 
+                            className="LaunchButton" 
+                            onClick={handleStartRoom} 
+                            disabled={!isLoaded}
+                        >
+                            <div className="button-glitch-layer"></div>
+                            <span className="LaunchText">INITIALIZE SESSION</span>
+                        </button>
+                    </div>
+                )}
+            </div>
+                
             }
             
             {
@@ -562,9 +585,17 @@ function ProblemList() {
                                 </ul>
                             </SortableContext>
                         </DndContext>
-                        <div className="AddDivButtonContainer">
-                            <div className="circle" onClick={handleTempAddProblems}>
-                                <div className="add-symbol">+</div>
+                        <div className="AddProblemContainer">
+                            <div className="TerminalAppendButton" onClick={handleTempAddProblems}>
+                                <div className="append-line left"></div>
+                                <div className="append-content">
+                                    <span className="plus-symbol">+</span>
+                                    <span className="append-text">APPEND NEW PROBLEM_NODE</span>
+                                </div>
+                                <div className="append-line right"></div>
+                                
+                                <div className="corner-bracket top-left"></div>
+                                <div className="corner-bracket bottom-right"></div>
                             </div>
                         </div>
                     </div>

@@ -1,83 +1,190 @@
-/* --- Base Reset & Global Styles --- */
 * { box-sizing: border-box; }
 
-/* --- Layout Containers --- */
-.PendingRoomContainer {
+.PendingStartRoomContainer {
     min-height: 100vh;
-    background-color: #38343B;
+    background: #0a0a0a;
+    padding: 40px 20px 140px; /* Space for sticky dock */
     display: flex;
     flex-direction: column;
-    align-items: center; /* Ensures content centers horizontally */
-    padding: 20px;
-}
-
-.RoomCodeContainer {
-    display: flex;
-    justify-content: center;
-    font-family: 'Courier New', Courier, monospace;
-    margin-bottom: 20px;
-}
-
-.JoinerListContainer {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-
-.JoinerList {
-    background-color: whitesmoke;
-    width: 80%;
-    border-radius: 15px;
-    border: 1px solid black;
-    color: black;
-    font-family: 'Roboto', sans-serif;
-    border-collapse: collapse;
-    margin: 0 auto;
-}
-
-table, th, td {
-    padding: 12px;
-    text-align: center;
-    font-size: 25px;
-}
-
-.btn {
-    font-family: 'Roboto', sans-serif;
-    font-size: 20px;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    margin: 5px;
-    width: 170px;
-}
-
-
-.button-outside-table {
-    font-size: 25px;
-}
-
-.btn-start { background-color: #E3AB13; }
-.btn-start:hover { background-color: #ffbc05; }
-
-.btn-danger { background-color: #ea280f; color: white; }
-.btn-danger:hover { background-color: #f46350; }
-
-.btn-primary { background-color: rgb(53, 116, 234); color: white; }
-.btn-primary:hover { background-color: rgb(92, 140, 229); }
-
-.btn-neutral { background-color: rgb(90, 88, 88); color: white; }
-.btn-neutral:hover { background-color: rgb(133, 130, 130); }
-
-/* Kick button specifically smaller */
-.KickPlayerButton { font-size: 15px; }
-
-/* --- Container for Operations --- */
-.roomOperationButtonContainer {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    flex-wrap: wrap; /* Allows buttons to wrap on tiny screens */
+}
+
+/* 1. Lobby Header */
+.LobbyHeader {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.TerminalLabel {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    color: #4ecca3;
+    letter-spacing: 3px;
+    opacity: 0.8;
+}
+
+.RoomCodeDisplay {
+    font-size: 4rem;
+    color: #fff;
+    margin: 5px 0;
+    letter-spacing: 8px;
+}
+
+.SecurityStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+
+.SecurityStatus.active { color: #4ecca3; background: rgba(78, 204, 163, 0.1); }
+.SecurityStatus.locked { color: #ff5f5f;; background: rgba(255, 184, 108, 0.1); }
+
+/* 2. Unit Grid */
+.RosterSection {
+    width: 100%;
+    max-width: 800px;
+}
+
+.RosterMeta {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    font-size: 0.7rem;
+    color: #c6c3c3;
+    letter-spacing: 1px;
+}
+
+.UnitGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.UnitCard {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 15px 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.UnitCard.host-unit {
+    border-color: rgba(78, 204, 163, 0.3);
+    background: rgba(78, 204, 163, 0.03);
+}
+
+.UnitID { color: #4ecca3; font-family: 'Orbitron', sans-serif; margin-right: 15px; }
+.UnitName { color: #fff; font-weight: 500; }
+
+.HostBadge {
+    margin-left: 10px;
+    font-size: 0.6rem;
+    color: #4ecca3;
+    border: 1px solid #4ecca3;
+    padding: 1px 5px;
+    border-radius: 3px;
+}
+
+.KickUnitBtn {
+    background: transparent;
+    border: 1px solid rgba(255, 95, 95, 0.3);
+    color: #ff5f5f;
+    font-size: 0.6rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.KickUnitBtn:hover { background: #ff5f5f; color: #fff; }
+
+.CommandDock {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 30px;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+}
+
+.DockBlur {
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to top, #0a0a0a 80%, transparent);
+    backdrop-filter: blur(12px);
+    z-index: -1;
+}
+
+.DockActions {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.ConsoleAction {
+    flex: 1;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.init-btn { background: #4ecca3; color: #000; border: none; font-weight: 900; }
+.init-btn:hover { box-shadow: 0 0 20px rgba(78, 204, 163, 0.5); transform: translateY(-3px); }
+
+.danger-btn { background: rgba(255, 95, 95, 0.1); color: #ff5f5f; border-color: #ff5f5f; }
+.danger-btn:hover { background: #ff5f5f; color: #fff; }
+
+.warn-btn {
+    background: rgba(255, 184, 108, 0.05) !important;
+    border: 1px solid #ffb86c !important;
+    color: #ffb86c !important;
+    box-shadow: inset 0 0 10px rgba(255, 184, 108, 0.1);
+}
+
+.warn-btn:hover {
+    background: #ffb86c !important;
+    color: #0a0a0a !important;
+    box-shadow: 0 0 25px rgba(255, 184, 108, 0.5);
+}
+
+.neutral-btn {
+    background: rgba(0, 163, 255, 0.05) !important; 
+    border: 1px solid rgba(0, 163, 255, 0.4) !important;
+    color: rgba(140, 210, 255, 0.9) !important;
+}
+
+.neutral-btn:hover {
+    background: rgba(0, 163, 255, 0.15) !important;
+    border-color: #00a3ff !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(0, 163, 255, 0.3);
+}
+
+.neutral-btn:focus {
+    outline: none !important;
+    border-color: #00a3ff !important;
+}
+
+.ConsoleAction:focus, 
+.ConsoleAction:active,
+.ConsoleAction:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
 }

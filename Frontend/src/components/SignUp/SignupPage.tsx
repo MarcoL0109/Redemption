@@ -17,6 +17,7 @@ function SignUpPage() {
     const [displayLoading, setDisplayLoading] = useState<boolean>(false);
     const [displayErrorMessage, setDisplayErrorMessage] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    // @ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
 
 
@@ -81,66 +82,61 @@ function SignUpPage() {
             <button onClick={() => navigate("/")} className="HomeButton">
                 <strong>Join Room</strong>
             </button>
-            <h1 className="TitleText"><strong>REDEMPTION</strong></h1>
-            <div className="SignUpBox">
-                <form className="SignUpForm" onSubmit={handleSignUpSubmit}>
-                    <input 
-                        className="email_form_inputs"
-                        type="email"
-                        placeholder="Email"
-                        required
-                        value={signUpEmail}
-                        onChange={handleEmailChange}
-                    />
-                    <input 
-                        className="email_form_inputs"
-                        type="text"
-                        placeholder="Username"
-                        required
-                        value={userName}
-                        onChange={(e) => {setUsername(e.target.value)}}
-                    />
-                    <input 
-                        className="password_form_inputs" 
-                        type="password" placeholder="Password" 
-                        required
-                        value={inputPassword}
-                        onChange={handleInputPasswordChange}
-                    />
-                    <input 
-                        className="confirm_password_form_inputs" 
-                        type="password" 
-                        placeholder="Confirm Password" 
-                        required 
-                        value={confirmPassword} 
-                        onChange={handleConfirmPasswordChange} 
-                    />
-                    {diffPassword && 
-                        <div className="DiffPasswordContainer">
-                            <span>Confirmed Password not the same with input password</span>
-                        </div>
-                    }
-                    {existingAccount && 
-                        <div className="DiffPasswordContainer">
-                            <span>An Existing Account is Found under {signUpEmail}</span>
-                        </div>
-                    }
 
-                    {displayErrorMessage && 
-                        <div className="DiffPasswordContainer">
-                            <span>Something went wrong during registering your account. Please try again</span>
-                        </div>
-                    }
-                    {
-                        !displayLoading ?
-                            <button type="submit" className="SignUpButton" disabled={diffPassword || isSubmitting}>
-                                <strong>Sign Up</strong>
-                            </button> :
+            <div className="SignUpBox">
+                <h1 className="TitleText">REDEMPTION</h1>
+                <p className="SubtitleText">NEW_USER_ENLISTMENT</p>
+                
+                <form className="SignUpForm" onSubmit={handleSignUpSubmit}>
+                    <div className="InputScrollArea">
+                        <input 
+                            className="form_inputs"
+                            type="email"
+                            placeholder="EMAIL ADDRESS"
+                            required
+                            value={signUpEmail}
+                            onChange={handleEmailChange}
+                        />
+                        <input 
+                            className="form_inputs"
+                            type="text"
+                            placeholder="USERNAME"
+                            required
+                            value={userName}
+                            onChange={(e) => {setUsername(e.target.value)}}
+                        />
+                        <input 
+                            className="form_inputs" 
+                            type="password" 
+                            placeholder="PASSWORD" 
+                            required
+                            value={inputPassword}
+                            onChange={handleInputPasswordChange}
+                        />
+                        <input 
+                            className="form_inputs" 
+                            type="password" 
+                            placeholder="CONFIRM PASSWORD" 
+                            required 
+                            value={confirmPassword} 
+                            onChange={handleConfirmPasswordChange} 
+                        />
+                    </div>
+
+                    <div className="ErrorFeedbackArea">
+                        {diffPassword && <div className="ErrorMessage anim-shake">PASSWORDS_DO_NOT_MATCH</div>}
+                        {existingAccount && <div className="ErrorMessage anim-shake">ID_ALREADY_EXISTS</div>}
+                        {displayErrorMessage && <div className="ErrorMessage anim-shake">REGISTRATION_ERROR</div>}
+                    </div>
+
+                    {!displayLoading ?
+                        <button type="submit" className="SignUpButton" disabled={diffPassword || isSubmitting}>
+                            <strong>INITIALIZE ACCOUNT</strong>
+                        </button> :
                         <div className="loading_icon_animations">
-                            <FourSquare color="#ffbc05" size="medium" text="" textColor="" />
+                            <FourSquare color="#4ecca3" size="medium" text="" />
                         </div>
                     }
-                    
                 </form>
             </div>
         </div>

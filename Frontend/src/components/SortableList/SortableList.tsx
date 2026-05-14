@@ -5,7 +5,8 @@ import TextareaAutosize from "react-textarea-autosize";
 import MultipleChoiceContainer from "../MultipleChoiceContainer/MultipleChoiceContainer";
 import "./SortableList.css"
 import { AnswerOptions, CorrectAnswer, UpdatedValues } from '../ProblemList/ProblemList';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 
 
@@ -155,93 +156,87 @@ function Sortable({ id, index, question_text, question_type, sequence_no, answer
 
     return (
     
-        <li ref={setNodeRef} {...attributes} style={style} className="ProblemItem">
+        <li ref={setNodeRef} {...attributes} style={style} className="ProblemItem glass-item">
             <div className="ListContainer">
-                <div className="ButtonContainer">
-                    <button {...listeners} className="handle" />
+                {/* Drag Handle Section */}
+                <div className="DragHandleWrapper" {...listeners}>
+                    <div className="drag-dots"></div>
                 </div>  
+
                 <div className="QuestionContentDiv">
                     <div className="TextAreaContainer">
-                        <TextareaAutosize className="QuestionTextArea" 
+                        <TextareaAutosize 
+                            className="QuestionTextArea terminal-input" 
                             defaultValue={question_text}
-                            placeholder="Input question text"
+                            placeholder="[INPUT QUESTION DATA]"
                             minRows={1}
                             maxRows={8}
-                            cols={55}
-                            onChange={handleQuestionTextChange}>
-                        </TextareaAutosize>
+                            onChange={handleQuestionTextChange}
+                        />
 
-                        {
-                            mode === "Multiple Choice" ?
+                        {mode === "Multiple Choice" ? (
                             <div className="MCAnswerOptionContainer">
-                                <MultipleChoiceContainer
-                                    problem_id={id}
-                                    option_label="A"
-                                    option_text={answer_options.A}
-                                    selectedOption={selectedOption}
-                                    onChange={handleOptionChange}
-                                    onTextChange={(event) => handleOptionTextChange(event, "A")}
-                                />
-                                <MultipleChoiceContainer
-                                    problem_id={id}
-                                    option_label="B"
-                                    option_text={answer_options.B}
-                                    selectedOption={selectedOption}
-                                    onChange={handleOptionChange}
-                                    onTextChange={(event) => handleOptionTextChange(event, "B")} 
-                                />
-                                <MultipleChoiceContainer
-                                    problem_id={id}
-                                    option_label="C"
-                                    option_text={answer_options.C}
-                                    selectedOption={selectedOption}
-                                    onChange={handleOptionChange}
-                                    onTextChange={(event) => handleOptionTextChange(event, "C")} 
-                                />
-                                <MultipleChoiceContainer
-                                    problem_id={id}
-                                    option_label="D"
-                                    option_text={answer_options.D}
-                                    selectedOption={selectedOption}
-                                    onChange={handleOptionChange}
-                                    onTextChange={(event) => handleOptionTextChange(event, "D")} 
-                                />
-                            </div>:
-                            <div className="BlankAnswerContainer">
-                                <div className="CaseSensitiveContainer">
-                                    <input className="CaseSensitiveModeInput" checked={isCaseSensitive === 1} onChange={handleToggleCaseSensitive} type="checkbox" id={`CaseSensitiveMode ${id}`}/>
-                                    <label className="CaseSensitiveModeLabel" htmlFor={`CaseSensitiveMode ${id}`}>Case Sensitive</label>
-                                </div>
-                                <div className="BlankAnswerContainer">
-                                    <input className="BlankAnswerInput" type="text" value={blankAnswer} onChange={handleCorrectBlankAnswerChange}/>
-                                </div>
-                                
+                                {['A', 'B', 'C', 'D'].map((label) => (
+                                    <MultipleChoiceContainer
+                                        key={label}
+                                        problem_id={id}
+                                        option_label={label}
+                                        option_text={answer_options[label]}
+                                        selectedOption={selectedOption}
+                                        onChange={handleOptionChange}
+                                        onTextChange={(event) => handleOptionTextChange(event, label)}
+                                    />
+                                ))}
                             </div>
-                        }
+                        ) : (
+                            <div className="BlankAnswerContainer">
+                                <div className="BlankInputWrapper">
+                                    <input 
+                                        className="BlankAnswerInput terminal-field" 
+                                        type="text" 
+                                        placeholder="EXPECTED RESPONSE"
+                                        value={blankAnswer} 
+                                        onChange={handleCorrectBlankAnswerChange}
+                                    />
+                                    <div className="CaseSensitiveToggle">
+                                        <input 
+                                            className="CaseSensitiveModeInput" 
+                                            checked={isCaseSensitive === 1} 
+                                            onChange={handleToggleCaseSensitive} 
+                                            type="checkbox" 
+                                            id={`CaseSensitiveMode ${id}`}
+                                        />
+                                        <label className="CaseSensitiveModeLabel" htmlFor={`CaseSensitiveMode ${id}`}>
+                                            AA [MATCH_CASE]
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                     
-                    <div className="ModeSelectionContainer">
-                        <select className="ModeSelection" onChange={handleTimeChange} value={timeAllow}>
-                            {
-                                time_range.map(time => (
-                                    <option key={time} value={time} className="ModeOptions">{time}s</option>
-                                ))
-                            }
-                        </select>
-                        <select className="ModeSelection" onChange={handleModeChange} value={mode}>
-                            <option className="ModeOptions" value="Multiple Choice">
-                                MC
-                            </option>
-                            <option className="ModeOptions" value="Blanks">
-                                Blanks
-                            </option>
-                        </select>
-                    </div>
+                    <div className="NodeSettingsArea">
+                        <div className="SettingGroup">
+                            <span className="SettingLabel">LIMIT</span>
+                            <select className="ModeSelection custom-select" onChange={handleTimeChange} value={timeAllow}>
+                                {time_range.map(time => (
+                                    <option key={time} value={time}>{time}s</option>
+                                ))}
+                            </select>
+                        </div>
 
-                    <div className="DeleteButtonContainer">
-                        <button onClick={handleDelete} className="DeleteButton"><strong>Delete</strong></button>
+                        <div className="SettingGroup">
+                            <span className="SettingLabel">TYPE</span>
+                            <select className="ModeSelection custom-select" onChange={handleModeChange} value={mode}>
+                                <option value="Multiple Choice">MC</option>
+                                <option value="Blanks">BLANK</option>
+                            </select>
+                        </div>
+
+                        <button onClick={handleDelete} className="DeleteIconButton">
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
                     </div>
-                    
                 </div>
             </div>
         </li>
