@@ -12,6 +12,7 @@ const calculateStreak = (lastLoginDate, currentStreak) => {
     const diffInMs = today.getTime() - lastLogin.getTime();
     const diffInDays = Math.round(diffInMs / (1000 * 60 * 60 * 24));
 
+    
     if (diffInDays === 1) {
         return currentStreak + 1;
     } else if (diffInDays === 0) {

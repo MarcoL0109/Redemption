@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => {
                 newStreak = 1;
                 await db.query(`INSERT INTO user_stats (user_id, login_streak) VALUES (?, ?)`, [userId, 1]);
             }
-            await db.query(`UPDATE user_info SET last_login = NOW() WHERE user_id = ?`, [userId]);
+            await db.query(`UPDATE user_info SET last_login = UTC_TIMESTAMP() WHERE user_id = ?`, [userId]);
             return res.status(200).json({ message: "Login successfully", streak: newStreak });
         }
         } catch (error) {

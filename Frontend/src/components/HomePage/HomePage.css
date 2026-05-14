@@ -25,7 +25,8 @@
     transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
-    z-index: 0;  
+    z-index: 0;
+    filter: drop-shadow(0 0 8px #4ecca3) drop-shadow(0 0 20px rgba(78, 204, 163, 0.4));
 }
 
 
@@ -104,7 +105,6 @@
     text-shadow: 0 0 8px rgba(78, 204, 163, 0.5);
 }
 
-/* Optional: Scanning Line Effect */
 .button-frame::after {
     content: "";
     position: absolute;
@@ -163,7 +163,6 @@
     margin-bottom: 10px;
 }
 
-/* 4. Action Buttons */
 .overlay__buttons {
     display: flex;
     gap: 15px;
