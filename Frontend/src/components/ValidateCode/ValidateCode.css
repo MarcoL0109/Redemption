@@ -1,120 +1,154 @@
-.ValidateCodeBox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-    background-color: #232323;;
-    width: 300px;
-    border-radius: 5%;
-}
-
-.ValidateCodeForm {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    max-width: 400px;
-}
-
-.ValidateCodeButton {
-    padding: 10px 12px;
-    background: #E3AB13;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 25px;
-    margin: 10px 0px -15px 0px;
-    cursor: pointer;
-}
-
-.ValidateCodeButton:hover {
-    background-color: #ffbc05;
-}
-
-.ValidateCodeButton:disabled {
-    cursor: not-allowed;
-    background-color: grey;
-}
-
-.ValidateCodeButton:disabled:hover {
-    background-color: grey;
-}
-
 .ValidateCodeContainer {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: #38343B;
+    background-color: #0a0a0a;
+    font-family: 'Orbitron', sans-serif;
 }
 
-.TitleText {
-    color: white;
-    font-family: "Inika", serif;
+.ValidateCodeBox {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 450px;
+    backdrop-filter: blur(10px);
+    margin-top: 10px;
+}
+
+/* 1. Auth Target Display */
+.AuthTargetHeader {
+    margin-bottom: 30px;
+    padding: 15px;
+    background: rgba(78, 204, 163, 0.03);
+    border-left: 2px solid #4ecca3;
+}
+
+.AuthLabel {
+    font-size: 0.6rem;
+    color: #4ecca3;
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.EmailDisplay {
+    color: #eee;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.PulseDot {
+    width: 6px;
+    height: 6px;
+    background: #4ecca3;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #4ecca3;
+    animation: auth-pulse 1.5s infinite;
+}
+
+/* 2. Decryption Input */
+.DecryptionField {
+    margin-bottom: 30px;
+}
+
+.TerminalLabel {
+    font-size: 0.65rem;
+    color: #666;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.InputWrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .validation_code_inputs {
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
     width: 100%;
-    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 15px;
+    color: #fff;
+    font-size: 1.5rem;
+    letter-spacing: 10px;
+    text-align: center;
+    caret-color: #4ecca3;
+}
+
+.validation_code_inputs:focus {
     outline: none;
-    background: none;
-    color: white;
-    text-align: left;
+    border-color: #4ecca3;
+    box-shadow: 0 0 15px rgba(78, 204, 163, 0.1);
 }
 
-.SignUpTag {
-    float: right;
-    color: white;
+/* 3. Resend Link */
+.resend_tag {
+    font-size: 0.65rem;
+    text-align: right;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
 }
 
-.ForgotPasswordTag {
-    color: white;
+.resend_tag.active { color: #00a3ff; } /* Your new tactical blue */
+.resend_tag.disabled { color: #444; cursor: not-allowed; }
+
+/* 4. Validate Button */
+.ValidateCodeButton {
+    width: 100%;
+    padding: 15px;
+    background: #4ecca3;
+    border: none;
+    border-radius: 4px;
+    color: #000;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-.AccountManagementTags {
-    margin-top: 5px;
+.ValidateCodeButton:hover:not(:disabled) {
+    background: #fff;
+    box-shadow: 0 0 20px rgba(78, 204, 163, 0.4);
 }
 
-.email_span {
-    color: white;
+.ValidateCodeButton:disabled {
+    background: #1a1a1a;
+    color: #444;
 }
 
-.email_span_container {
-    text-align: left;
-    border-bottom: 1px rgb(216, 209, 209) solid;
-}
-
-.IncorrectValidationCode {
-    color: red;
-    font-family: 'Roboto', sans-serif;
-}
-
-.IncorrectValidationCodeContainer {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
+/* 5. Error Console */
+.ErrorConsole {
     margin-top: 20px;
+    min-height: 40px;
 }
 
-.valdation_code_input_container {
+.ErrorWrapper {
     display: flex;
-    justify-content: center;
-    border-bottom: 1px rgb(216, 209, 209) solid;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid rgba(255, 95, 95, 0.2);
+    padding: 10px;
+    background: rgba(255, 95, 95, 0.05);
+    height: 50px;
 }
 
-.resend_tag_disabled {
-    white-space: nowrap;
-}
+.ErrorCode { color: #ff5f5f; font-size: 0.6rem; letter-spacing: 1px; }
+.ErrorMessage { color: #ff5f5f; font-size: 0.7rem; font-weight: bold; }
 
-.resend_tag_disabled {
-    color: grey;
-}
-
-.resend_tag_ {
-    white-space: nowrap;
+@keyframes auth-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
 }

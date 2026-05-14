@@ -28,9 +28,9 @@
     width: 100%;
     background: transparent;
     border: none;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 2px solid rgba(178, 178, 178, 0.2);
     padding: 12px 0;
-    color: white(0, 0, 0, 0.3); /* Amber color for PINs */
+    color: white(0, 0, 0, 0.3);
     font-size: 1.8rem;
     text-align: center;
     letter-spacing: 8px;

@@ -13,6 +13,7 @@ function ValidateResetPasswordCode() {
     const [inputValidationCode, setInputValidationCode] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [countDown, setCountDown] = useState<number>(60);
+    // @ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
 
 
@@ -81,23 +82,58 @@ function ValidateResetPasswordCode() {
 
     return (
         <div className="ValidateCodeContainer">
-            <h1 className="TitleText"><strong>REDEMPTION</strong></h1>
+            <h1 className="TitleText">REDEMPTION</h1>
+            
             <div className="ValidateCodeBox">
                 <form className="ValidateCodeForm" onSubmit={handleSubmit}>
-                    <div className="email_span_container">
-                        <span className="email_span">{inputEmail}</span>
+                    {/* Target Identity Section */}
+                    <div className="AuthTargetHeader">
+                        <span className="AuthLabel">TARGET IDENTITY</span>
+                        <div className="EmailDisplay">
+                            <span className="PulseDot"></span>
+                            {inputEmail}
+                        </div>
                     </div>
-                    <div className="valdation_code_input_container">
-                        <input className="validation_code_inputs" type="text" required value={inputValidationCode} onChange={(e) => {setInputValidationCode(e.target.value)}}/>
-                        <a onClick={handleResend} className={`resend_tag_${countDown > 0 ? 'disabled' : ''}`}>Resend {`${countDown > 0 ? '(' + countDown + ')': ""}`}</a>
+
+                    {/* Input Field with Inline Resend */}
+                    <div className="DecryptionField">
+                        <label className="TerminalLabel">ENTER AUTH KEY</label>
+                        <div className="InputWrapper">
+                            <input 
+                                className="validation_code_inputs" 
+                                type="text" 
+                                placeholder="000000"
+                                required 
+                                value={inputValidationCode} 
+                                onChange={(e) => setInputValidationCode(e.target.value)}
+                            />
+                            <a 
+                                onClick={handleResend} 
+                                className={`resend_tag ${countDown > 0 ? 'disabled' : 'active'}`}
+                            >
+                                {countDown > 0 ? `Resend in ${countDown}s` : 'REQUEST NEW KEY'}
+                            </a>
+                        </div>
                     </div>
-                    <button type="submit" className="ValidateCodeButton" disabled={inputValidationCode === "" || isSubmitting}>
-                        <strong>Validate</strong>
+
+                    {/* Submit Button */}
+                    <button 
+                        type="submit" 
+                        className="ValidateCodeButton" 
+                        disabled={inputValidationCode === "" || isSubmitting}
+                    >
+                        {isSubmitting ? 'AUTHENTICATING...' : 'VALIDATE ACCESS'}
                     </button>
-                    <div className="IncorrectValidationCode">
-                        {incorrectCode && <div className="IncorrectValidationCodeContainer"><span className="AccoutNotFoundMessage">Incorrect Validation Code</span></div>}
-                    </div>
-                    
+
+                    {/* Error Message */}
+                    <div className="ErrorConsole">
+                        {incorrectCode && (
+                            <div className="ErrorWrapper">
+                                <span className="ErrorCode">ERR INVALID TOKEN</span>
+                                <span className="ErrorMessage">Access Denied: Code Mismatch</span>
+                            </div>
+                        )}
+                    </div> 
                 </form>
             </div>
         </div>

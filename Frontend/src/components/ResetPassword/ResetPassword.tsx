@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import "./ResetPassword.css"
 
 function ResetPassword() {
 
@@ -9,6 +10,7 @@ function ResetPassword() {
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [inputPassword, setInputPassword] = useState<string>("");
     const [diffPassword, setDiffPassword] = useState<boolean>(false);
+    // @ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
 
     
@@ -73,31 +75,48 @@ function ResetPassword() {
 
     return (
         <div className="SignUpContainer">
-            <h1 className="TitleText"><strong>REDEMPTION</strong></h1>
+            <h1 className="TitleText">REDEMPTION</h1>
+            
             <div className="SignUpBox">
+                <div className="BoxHeader">
+                    <span className="HeaderLabel">SECURITY OVERRIDE ACTIVE</span>
+                    <p className="HeaderSubtext">RE-CONFIGURE ACCESS CREDENTIALS</p>
+                </div>
+
                 <form className="SignUpForm" onSubmit={handleResetPasswordSubmit}>
-                    <input 
-                        className="password_form_inputs" 
-                        type="password" placeholder="Password" 
-                        required
-                        value={inputPassword}
-                        onChange={handleInputPasswordChange}
-                    />
-                    <input 
-                        className="confirm_password_form_inputs" 
-                        type="password" 
-                        placeholder="Confirm Password" 
-                        required 
-                        value={confirmPassword} 
-                        onChange={handleConfirmPasswordChange} 
-                    />
-                    {diffPassword && 
-                        <div className="DiffPasswordContainer">
-                            <span>Confirmed Password not the same with input password</span>
-                        </div>
-                    }
+                    <div className="CredentialField">
+                        <label className="FieldLabel">NEW PASSKEY</label>
+                        <input 
+                            className="password_form_inputs" 
+                            type="password" 
+                            required
+                            value={inputPassword}
+                            onChange={handleInputPasswordChange}
+                        />
+                    </div>
+
+                    <div className="CredentialField">
+                        <label className="FieldLabel">VERIFY PASSKEY</label>
+                        <input 
+                            className="confirm_password_form_inputs" 
+                            type="password" 
+                            required 
+                            value={confirmPassword} 
+                            onChange={handleConfirmPasswordChange} 
+                        />
+                    </div>
+
+                    <div className="StatusConsole">
+                        {diffPassword && (
+                            <div className="StatusMessage error">
+                                <span className="StatusIcon">!</span>
+                                <span className="StatusText">MISMATCH: CREDENTIAL SYNC FAILED</span>
+                            </div>
+                        )}
+                    </div>
+
                     <button type="submit" className="SignUpButton" disabled={diffPassword}>
-                        <strong>Confirm</strong>
+                        APPLY
                     </button>
                 </form>
             </div>
