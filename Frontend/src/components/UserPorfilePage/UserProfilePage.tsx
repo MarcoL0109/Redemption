@@ -80,64 +80,81 @@ function UserProfilePage() {
     return (
         <div className="UserProfilePageContainer">
             <NavBar />
-            <div onClick={handleIconClick} className="UserProfileContainer">
-                <div>
-                    <div className="ProfileUserAvatar">
-                        {userData?.user_icon !== "" ? (
-                            <img src={userData?.user_icon} 
-                            alt="User Avatar"
-                            className="AvatarImage"
-                            onError={() => {
-                                refreshUser();
-                            }}
-                            />
-                            ) : (
-                            <FontAwesomeIcon icon={faUser} size="10x" />
-                        )}
-                    </div>
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={handleAvatarImageUpload}
-                        accept=".png, .jpg, .jpeg"
-                        style={{ display: 'none' }}
-                    />
-                    <div className="userInfoContainer">
-                        <h2><strong>{userData?.username}</strong></h2>
-                        <em>Join At: {userData?.created_at ? userData.created_at.split('T')[0] : "Loading..."}</em>
-                    </div>
-                </div>
-
-                <div className="userProfileRightSide">
-                    <div className="StatsCardContainer">
-                        <div className="StatsCard glow-green">
-                            <div className="CardHeader">
-                                <span className="CardLabel">Completed Quizzes</span>
-                                <img className="CardIcon" src={Tick} alt="Completed Icon"/>
-                            </div>
-                            <div className="CardBody">
-                                <h2 className="StatNumber">{userData?.no_completed_quiz}</h2>
-                            </div>
-                        </div>
-
-                        <div className="StatsCard glow-purple">
-                            <div className="CardHeader">
-                                <span className="CardLabel">Highest Score</span>
-                                <img className="CardIcon" src={Trophy} alt="Trophy Icon"/>
-                            </div>
-                            <div className="CardBody">
-                                <h2 className="StatNumber">{userData?.highest_score === -1 ? "-" : userData?.highest_score}</h2>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="StatsCardContainer">
-                        Latest Activity
-                    </div>
-                </div>
-                
-            </div>
             
+            <div className="DossierMainWrapper">
+                <div className="DossierContainer">
+                    
+                    <div className="IdentityModule" onClick={handleIconClick}>
+                        <div className="AvatarScanner">
+                            <div className="ScannerLine"></div>
+                            <div className="ProfileUserAvatar">
+                                {userData?.user_icon !== "" ? (
+                                    <img 
+                                        src={userData?.user_icon} 
+                                        alt="User Avatar"
+                                        className="AvatarImage"
+                                        onError={refreshUser}
+                                    />
+                                ) : (
+                                    <div className="DefaultAvatarPlaceholder">
+                                        <FontAwesomeIcon icon={faUser} size="6x" />
+                                    </div>
+                                )}
+                            </div>
+                            <div className="AvatarOverlayText">UPDATE BIO LINK</div>
+                        </div>
+
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleAvatarImageUpload}
+                            accept=".png, .jpg, .jpeg"
+                            style={{ display: 'none' }}
+                        />
+
+                        <div className="IdentityText">
+                            <h2 className="UnitName">{userData?.username}</h2>
+                            <div className="UnitRank">RANK: OPERATIVE</div>
+                            <div className="JoinDate">
+                                COMMISSIONED: {userData?.created_at ? userData.created_at.split('T')[0] : "INITIALIZING..."}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="TelemetryModule">
+                        <div className="StatsGrid">
+                            <div className="DataPoint glow-mint">
+                                <div className="DataHeader">
+                                    <span className="DataLabel">SESSIONS COMPLETED</span>
+                                    <img className="DataIcon" src={Tick} alt="Completed"/>
+                                </div>
+                                <div className="DataValue">{userData?.no_completed_quiz}</div>
+                            </div>
+
+                            <div className="DataPoint glow-amber">
+                                <div className="DataHeader">
+                                    <span className="DataLabel">PEAK PERFORMANCE</span>
+                                    <img className="DataIcon" src={Trophy} alt="Trophy"/>
+                                </div>
+                                <div className="DataValue">
+                                    {userData?.highest_score === -1 ? "N/A" : userData?.highest_score}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="ActivityLog">
+                            <div className="LogHeader">
+                                <span className="LogTitle">LATEST ACTIVITY FEED</span>
+                                <div className="LogPulse"></div>
+                            </div>
+                            <div className="LogContent">
+                                <div className="EmptyLog">NO RECENT ROOM JOINED</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
         </div>
     )
 }
