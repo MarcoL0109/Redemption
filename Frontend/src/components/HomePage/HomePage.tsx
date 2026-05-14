@@ -348,7 +348,7 @@ function HomePage() {
                     }
                 </div> :
                 <div className="LoadingAnimationContainer">
-                    <Mosaic color="#d6af37" size="large"/>
+                    <Mosaic color="#4ecca3;" size="large"/>
                 </div>
             }
             {

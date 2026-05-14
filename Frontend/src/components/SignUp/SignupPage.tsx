@@ -85,7 +85,7 @@ function SignUpPage() {
 
             <div className="SignUpBox">
                 <h1 className="TitleText">REDEMPTION</h1>
-                <p className="SubtitleText">NEW_USER_ENLISTMENT</p>
+                <p className="SubtitleText">NEW USER ENLISTMENT</p>
                 
                 <form className="SignUpForm" onSubmit={handleSignUpSubmit}>
                     <div className="InputScrollArea">

@@ -1,118 +1,181 @@
-.SwitchProblemButtonContainer {
+
+.HistoryRecordPageContainer {
+    min-height: 100vh;
+    background: #0a0a0a;
+    font-family: 'Orbitron', sans-serif;
     display: flex;
+    flex-direction: column; 
+}
+
+.SimulationWrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    padding: 20px;
+    padding-bottom: 5vh;
+}
+
+.HistoryPageProblemAnswerContainer {
     width: 100%;
-    gap: 5px;
-    margin-bottom: 10px;
+    max-width: 900px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 40px;
+    backdrop-filter: blur(10px);
+    
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), 
+                0 0 20px rgba(78, 204, 163, 0.02);
 }
 
-.SwitchProblemButtonContainer button {
-    flex: 1;
-    padding: 10px;
-    cursor: pointer;
-    height: 75px;
-    font-size: 30px;
-    background-color: rgba(245, 245, 245, 0.5);;
+.AssessmentHeader {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
 }
 
-.SwitchProblemButtonContainer button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
-.SwitchProblemButtonContainer button:hover {
-    cursor: pointer;
-    background-color: rgb(94, 90, 90);
-}
-
-.OptionADivNoHover {
-    background-color: rgb(235, 84, 84);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-.OptionADivNoHover.Correct {
-    background-color: rgb(8, 238, 8);
-}
-
-.OptionADivNoHover.Wrong {
-    background-color: rgb(235, 84, 84);
-}
-
-.OptionBDivNoHover.Correct {
-    background-color: rgb(8, 238, 8);
-}
-
-.OptionBDivNoHover.Wrong {
-    background-color: rgb(235, 84, 84);
-}
-
-.OptionCDivNoHover.Correct {
-    background-color: rgb(8, 238, 8);
-}
-
-.OptionCDivNoHover.Wrong {
-    background-color: rgb(235, 84, 84);
-}
-
-.OptionDDivNoHover.Correct {
-    background-color: rgb(8, 238, 8);
-}
-
-.OptionDDivNoHover.Wrong {
-    background-color: rgb(235, 84, 84);
-}
-
-.OptionADivNoHover.Selected {
-    opacity: 0.5;
-}
-
-.OptionBDivNoHover.Selected {
-    opacity: 0.5;
-}
-
-.OptionCDivNoHover.Selected {
-    opacity: 0.5;
-}
-
-.OptionDDivNoHover.Selected {
-    opacity: 0.5;
-}
-
-
-.OptionBDivNoHover {
-    background-color: rgb(20, 237, 24);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-.OptionCDivNoHover {
-    background-color: rgb(232, 185, 18);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-.OptionDDivNoHover {
-    background-color: rgb(49, 128, 238);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
+.LiveTag {
+    font-size: 0.6rem;
+    color: #4ecca3;
+    letter-spacing: 3px;
+    display: block;
 }
 
 .QuestionNoHeader {
-    margin-left: 15px;
+    font-size: 1.5rem;
+    color: #fff;
 }
 
+/* 2. Navigation Control */
+.SwitchProblemButtonContainer {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #111;
+    padding: 5px;
+    border-radius: 6px;
+}
 
+.NavButton {
+    background: transparent;
+    border: none;
+    color: #4ecca3;
+    font-family: 'Orbitron';
+    font-size: 0.7rem;
+    cursor: pointer;
+    padding: 8px 12px;
+}
+
+.NavButton:disabled { color: #333; }
+
+.NodeProgress {
+    font-size: 0.8rem;
+    color: #666;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* 3. The Problem Display */
+.ProblemTextSection {
+    margin-bottom: 40px;
+}
+
+.PageHistoryProblemTextContainer {
+    position: relative;
+    padding: 30px;
+    background: rgba(78, 204, 163, 0.02);
+    text-align: center;
+}
+
+.QuestionText {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #eee;
+}
+
+.TextBracket {
+    position: absolute;
+    width: 20px;
+    height: 100%;
+    top: 0;
+    border: 2px solid #4ecca3;
+}
+
+.TextBracket.left { left: 0; border-right: none; }
+.TextBracket.right { right: 0; border-left: none; }
+
+/* 4. Tactical Options Grid */
+.OptionsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.TacticalOption {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 4px;
+    position: relative;
+}
+
+.OptionID {
+    font-weight: 900;
+    color: #4ecca3;
+    font-size: 1.2rem;
+}
+
+.OptionContent {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+/* Logic Coloring */
+.TacticalOption.is-selected {
+    border-color: #4ecca3;
+    background: rgba(78, 204, 163, 0.05);
+}
+
+.TacticalOption.is-correct.is-selected { background: rgba(78, 204, 163, 0.15); }
+.TacticalOption.is-wrong.is-selected { border-color: #ff5f5f; background: rgba(255, 95, 95, 0.1); }
+
+/* 5. Blank Answer View */
+.HistoryPageInputLabel {
+    font-size: 0.6rem;
+    color: #4ecca3;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.HistoryPageBlankAnswerInput {
+    width: 100%;
+    background: #000;
+    border: 1px solid #333;
+    padding: 15px;
+    color: #4ecca3;
+    font-family: 'Orbitron';
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.CorrectAnswerFeedback {
+    padding: 10px;
+    border-top: 1px dashed #333;
+    display: flex;
+    gap: 10px;
+    font-size: 0.8rem;
+}
+
+.FeedbackLabel { color: #666; }
+.FeedbackValue { color: #4ecca3; }

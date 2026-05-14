@@ -65,59 +65,85 @@ function HistoryRecord() {
 
     return (
         
-        <div className="GamePageContainer">
-            <NavBar/>
-            <div className="ProblemAnswerContainer">
-                <h2 className="QuestionNoHeader">Question {currIndex + 1}</h2>
-                <div className="ProblemTextSection">
-                    <div className="ProblemTextContainer">
-                        <span>{currentDisplayProblem?.question_text}</span>
-                    </div>
-                </div>
-                <div className="SwitchProblemButtonContainer">
-                    <button 
-                    disabled={currIndex === 0} 
-                    onClick={() => setCurrIndex(prev => prev - 1)}
-                    >
-                        Previous
-                    </button>
-                    
-                    <button 
-                        disabled={currIndex === snapShotContent.length - 1} 
-                        onClick={() => setCurrIndex(prev => prev + 1)}
-                    >
-                        Next
-                    </button>
-                </div>
-                
-                <div className="AnswerOptionContainer">
-                    {
-                        currentDisplayProblem?.question_type === "Multiple Choice" ?
-                        <div className="OptionsContainer">
-                            <div className={`OptionADivNoHover ${currentDisplayProblem.correct_answer.MC === "A" ? "Correct" : 'Wrong'} ${currentAnswerHistory === 'A' ? "Selected": ''}`} data-id="option-A">{currentDisplayProblem?.answer_options.A}</div>
-                            <div className={`OptionBDivNoHover ${currentDisplayProblem.correct_answer.MC === "B" ? "Correct" : 'Wrong'} ${currentAnswerHistory === 'B' ? "Selected": ''}`} data-id="option-B">{currentDisplayProblem?.answer_options.B}</div>
-                            <div className={`OptionCDivNoHover ${currentDisplayProblem.correct_answer.MC === "C" ? "Correct" : 'Wrong'} ${currentAnswerHistory === 'C' ? "Selected": ''}`} data-id="option-C">{currentDisplayProblem?.answer_options.C}</div>
-                            <div className={`OptionDDivNoHover ${currentDisplayProblem.correct_answer.MC === "D" ? "Correct" : 'Wrong'} ${currentAnswerHistory === 'D' ? "Selected": ''}`} data-id="option-D">{currentDisplayProblem?.answer_options.D}</div>
-                        </div> :
-                        <div className="BlankAnswerContainer">
-                            <form className="BlankFormContainer">
-                                <div className="InputSubmitContainer">
-                                    <div>
-                                        {
-                                            <input className="BlankAnswerInput" 
-                                                type="text"
-                                                readOnly={true}
-                                                defaultValue={currentAnswerHistory}
-                                            /> 
-                                        }
-                                        
-                                    </div>
-                                    <span className="BlankCorrectAnswer">{`Correct Answer: ${currentDisplayProblem?.correct_answer.Blanks}`}</span>
-                                </div>
-                            </form>
+        <div className="HistoryRecordPageContainer">
+            <NavBar />
+            
+            <div className="SimulationWrapper">
+                <div className="HistoryPageProblemAnswerContainer">
+                    <div className="AssessmentHeader">
+                        <div className="HeaderMain">
+                            <span className="LiveTag">LIVE ASSESSMENT</span>
+                            <h2 className="QuestionNoHeader">NODE {currIndex + 1}</h2>
                         </div>
-                    }
-                </div> 
+                        
+                        <div className="SwitchProblemButtonContainer">
+                            <button 
+                                className="NavButton"
+                                disabled={currIndex === 0} 
+                                onClick={() => setCurrIndex(prev => prev - 1)}
+                            >
+                                PREV NODE
+                            </button>
+                            <div className="NodeProgress">
+                                {currIndex + 1} / {snapShotContent.length}
+                            </div>
+                            <button 
+                                className="NavButton"
+                                disabled={currIndex === snapShotContent.length - 1} 
+                                onClick={() => setCurrIndex(prev => prev + 1)}
+                            >
+                                NEXT_NODE
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Problem Section: The Objective */}
+                    <div className="ProblemTextSection">
+                        <div className="PageHistoryProblemTextContainer">
+                            <div className="TextBracket left"></div>
+                            <span className="QuestionText">{currentDisplayProblem?.question_text}</span>
+                            <div className="TextBracket right"></div>
+                        </div>
+                    </div>
+                    
+                    {/* Answer Section: The Console */}
+                    <div className="HistoryPageAnswerOptionContainer">
+                        {currentDisplayProblem?.question_type === "Multiple Choice" ? (
+                            <div className="OptionsGrid">
+                                {['A', 'B', 'C', 'D'].map((key) => (
+                                    <div 
+                                        key={key}
+                                        className={`TacticalOption 
+                                            ${currentDisplayProblem.correct_answer.MC === key ? "is-correct" : 'is-wrong'} 
+                                            ${currentAnswerHistory === key ? "is-selected" : ''}`}
+                                    >
+                                        <span className="OptionID">{key}</span>
+                                        <span className="OptionContent">{currentDisplayProblem?.answer_options[key]}</span>
+                                        <div className="SelectionIndicator"></div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="HistoryPageBlankAnswerContainer">
+                                <div className="HistoryPageBlankFormContainer">
+                                    <div className="InputSubmitContainer">
+                                        <label className="HistoryPageInputLabel">INPUT RESPONSE</label>
+                                        <input 
+                                            className="HistoryPageBlankAnswerInput" 
+                                            type="text"
+                                            readOnly={true}
+                                            defaultValue={currentAnswerHistory}
+                                        /> 
+                                        <div className="CorrectAnswerFeedback">
+                                            <span className="FeedbackLabel">SYSTEM TRUTH:</span>
+                                            <span className="FeedbackValue">{currentDisplayProblem?.correct_answer.Blanks}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div> 
+                </div>
             </div>
         </div>
     )

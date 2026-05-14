@@ -1,7 +1,7 @@
 .HomePageContainer {
     min-height: 100vh;
     min-width: 100%;
-    background-color: #38343B;
+    background: #0a0a0a;
 }
 
 .problemSetCardsContainer {
@@ -60,9 +60,9 @@
     position: relative;
     width: 80px;
     height: 80px;
-    background: rgba(78, 204, 163, 0.05); /* Very faint green tint */
+    background: rgba(78, 204, 163, 0.05);
     border: 2px solid rgba(78, 204, 163, 0.3);
-    border-radius: 12px; /* Or use 50% for a circle, but 12px feels more "tech" */
+    border-radius: 12px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -91,11 +91,11 @@
     background: rgba(78, 204, 163, 0.15);
     border-color: #4ecca3;
     box-shadow: 0 0 30px rgba(78, 204, 163, 0.3);
-    transform: scale(1.1) rotate(90deg); /* Rotation adds a "mechanical" feel */
+    transform: scale(1.1) rotate(90deg);
 }
 
 .TerminalAddButton:hover .plus-icon {
-    transform: rotate(-90deg); /* Keeps the plus symbol vertical while frame rotates */
+    transform: rotate(-90deg);
     text-shadow: 0 0 10px #4ecca3;
 }
 

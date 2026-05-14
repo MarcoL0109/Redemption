@@ -65,7 +65,6 @@ function SignInPage() {
             </button>
 
             <div className="SignInBox">
-                {/* Title is now INSIDE the glass box */}
                 <h1 className="TitleText">REDEMPTION</h1>
                 <p className="SubtitleText">PROVE YOUR WORTH</p>
                 
