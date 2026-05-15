@@ -13,9 +13,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
     padding: 20px;
     padding-bottom: 5vh;
+    /* background-color: red; */
 }
 
 .HistoryPageProblemAnswerContainer {
@@ -82,11 +82,11 @@
 }
 
 /* 3. The Problem Display */
-.ProblemTextSection {
+.HistoryPageProblemTextSection {
     margin-bottom: 40px;
 }
 
-.PageHistoryProblemTextContainer {
+.HistoryPageProblemTextContainer {
     position: relative;
     padding: 30px;
     background: rgba(78, 204, 163, 0.02);

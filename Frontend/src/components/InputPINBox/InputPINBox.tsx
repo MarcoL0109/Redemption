@@ -20,6 +20,8 @@ function InputPinBox({username, userId}: InputPINProps) {
 
     const handleSearchRoom = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setDisplayRoomLocked(false);
+        setDisplayRoomNotFound(false);
         const check_room_exist = await fetch(`${ROOM_MANAGEMENT_API_URL}/checkRoomCodeExist`, {
             method: "POST",
             credentials: "include",
@@ -61,13 +63,13 @@ function InputPinBox({username, userId}: InputPINProps) {
                 </button>
 
                 <div className="ErrorContainer">
-                    {displayRoomNotFound && (
+                    {(displayRoomNotFound) && (
                         <div className="ErrorMessage anim-shake">
                             <span className="RoomNotFoundErrorMessage">ACCESS DENIED: Room Not Found</span>
                         </div>
                     )}
 
-                    {displayRoomLocked && (
+                    {(displayRoomLocked) && (
                         <div className="ErrorMessage anim-shake">
                             <span className="RoomNotFoundErrorMessage">SECURE LOCK: Room Restricted</span>
                         </div>

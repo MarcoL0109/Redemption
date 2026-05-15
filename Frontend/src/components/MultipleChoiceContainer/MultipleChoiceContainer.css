@@ -1,23 +1,106 @@
-
 .Options {
     display: flex;
-    align-items: center;
-    margin-bottom: 15px;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 10px;
+    
+    /* Tactical Glass Base */
+    background: rgba(10, 15, 20, 0.7);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    
+    /* The "Clip-Corner" look using Border-Image or Clip-Path */
+    border: 1px solid rgba(0, 255, 159, 0.15);
+    border-left: 4px solid rgba(0, 255, 159, 0.3); /* Tactical Accent Bar */
+    border-radius: 2px 15px 2px 15px; /* Angled aesthetic */
+    
+    transition: all 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
+/* Subtle scanline overlay effect */
+.Options::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.05) 0px,
+        rgba(0, 0, 0, 0.05) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+}
+
+/* Active "Locked-In" State */
+.Options:has(input:checked) {
+    background: rgba(0, 255, 159, 0.08);
+    border-color: #00ff9f;
+    border-left: 6px solid #00ff9f;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 159, 0.15),
+        inset 0 0 15px rgba(0, 255, 159, 0.05);
+}
+
+/* Tactical Radio Square */
+.Options input[type="radio"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid rgba(0, 255, 159, 0.4);
+    background: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    margin-top: 6px;
+    position: relative;
+    clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
+}
+
+.Options input[type="radio"]:checked {
+    background: #00ff9f;
+    box-shadow: 0 0 8px #00ff9f;
+}
+
+.Options input[type="radio"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px; height: 6px;
+    background: #0b0e14;
+}
+
+/* Label: The "Data Tag" */
 .OptionLabel {
-    padding-left: 10px;
-    font-family: 'Courier New', Courier, monospace;
     display: flex;
-    align-items: center;
-    font-size: 20px;
+    flex-direction: column;
+    width: 100%;
+    color: #00ff9f;
+    font-family: 'Share Tech Mono', 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.8;
 }
 
+/* The Input Area */
 .OptionText {
-    margin-left: 10px;
+    width: 100% !important;
+    background: transparent;
     border: none;
-    background-color: #373434;
-    opacity: 0.7;
-    color: white;
-    font-size: 17px;
+    color: #ffffff;
+    font-size: 1.05rem;
+    padding: 8px 0;
+    outline: none;
+    resize: none;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.5px;
+    caret-color: #00ff9f; /* Neon green cursor */
+}
+
+.OptionText::placeholder {
+    color: rgba(0, 255, 159, 0.2);
+    text-transform: none;
 }

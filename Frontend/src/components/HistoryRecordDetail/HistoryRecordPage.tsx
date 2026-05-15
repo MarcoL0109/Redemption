@@ -98,8 +98,8 @@ function HistoryRecord() {
                     </div>
 
                     {/* Problem Section: The Objective */}
-                    <div className="ProblemTextSection">
-                        <div className="PageHistoryProblemTextContainer">
+                    <div className="HistoryPageProblemTextSection">
+                        <div className="HistoryPageProblemTextContainer">
                             <div className="TextBracket left"></div>
                             <span className="QuestionText">{currentDisplayProblem?.question_text}</span>
                             <div className="TextBracket right"></div>
@@ -132,7 +132,7 @@ function HistoryRecord() {
                                             className="HistoryPageBlankAnswerInput" 
                                             type="text"
                                             readOnly={true}
-                                            defaultValue={currentAnswerHistory}
+                                            defaultValue={currentAnswerHistory === "TIMEOUT_NULL" ? "" : currentAnswerHistory}
                                         /> 
                                         <div className="CorrectAnswerFeedback">
                                             <span className="FeedbackLabel">SYSTEM TRUTH:</span>

@@ -328,8 +328,8 @@ function PendingStartRoom() {
                         This action is irreversible. Proceed with extraction?
                     </p>
                     <div className="overlay__buttons">
-                        <button className="confirmDelete neon-btn-red" onClick={handleLeaveRoom}>CONFIRM EXIT</button>
-                        <button className="cancelDelete" onClick={handleCloseOverlay}>ABORT EXIT</button>
+                        <button className="confirmDelete neon-btn-red" onClick={handleLeaveRoom}>EXIT</button>
+                        <button className="cancelDelete" onClick={handleCloseOverlay}>CANCEL</button>
                     </div>
                 </div>  
             </Overlays> 

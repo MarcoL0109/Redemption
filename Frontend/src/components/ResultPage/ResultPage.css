@@ -1,27 +1,76 @@
+
 .ResultPageContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    min-height: 100vh;
+    padding: 60px 20px;
+    background: radial-gradient(circle at center, #1a1f29 0%, #0b0e14 100%);
+    color: #e0e0e0;
+    text-align: center;
 }
 
-.BackToHomeButton {
-    width: 250px;
-    font-size: 25px;
-    background-color: #E3AB13;
-    border: none
-}
-
-.BackToHomeButton :hover {
-    background-color: #ffbc05;
-    border: none
-}
-
-.BackToHomeButtonContainer {
-    margin-top: 20px;;
+.ResultPageContainer h1 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 3.5rem;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    /* Neon Glow based on state */
+    color: #00ff9f;
+    text-shadow: 0 0 30px rgba(0, 255, 159, 0.4);
 }
 
 .SaveSuccessMessage {
-    padding-top: 15px;
-    color: rgb(62, 220, 62)
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid #00d4ff;
+    color: #00d4ff;
+    padding: 12px 25px;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    font-family: 'Share Tech Mono', monospace;
+    margin: 20px 0;
+    display: inline-block;
+    animation: slideUpFade 0.5s ease-out;
+}
+
+/* 3. Footer Button Container */
+.BackToHomeButtonContainer {
+    margin-top: 50px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.BackToHomeButton {
+    width: 100%;
+    background: transparent;
+    border: 2px solid #00ff9f;
+    color: #00ff9f;
+    padding: 20px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.BackToHomeButton:hover {
+    background: #00ff9f;
+    color: #0b0e14;
+    box-shadow: 0 0 30px rgba(0, 255, 159, 0.5);
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

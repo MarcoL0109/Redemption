@@ -42,8 +42,6 @@ function ResultPage() {
             <div className="BackToHomeButtonContainer">
                 <button className="BackToHomeButton" onClick={handleBackHome}>Back To Home</button>
             </div>
-            
-
         </div>
     )
 }

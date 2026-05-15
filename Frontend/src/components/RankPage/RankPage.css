@@ -1,13 +1,89 @@
+/* =========================================
+   RANK LIST: DATA FEED REDESIGN
+   ========================================= */
+.JoinerList {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0 12px; /* Creates the "Card" gap between rows */
+}
+
+/* 1. Header Styling */
+.JoinerList thead th {
+    color: #00ff9f;
+    font-family: 'Share Tech Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 15px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(0, 255, 159, 0.2);
+}
+
+/* 2. Row Styling (The "Tactical Card") */
+.rankListRow {
+    background: rgba(26, 31, 41, 0.6);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+/* Highlight the Current User */
 .rankListRow_self {
-    background-color: rgb(211, 206, 206);
+    background: rgba(0, 212, 255, 0.15) !important;
+    border-left: 4px solid #00d4ff;
+    box-shadow: inset 10px 0 20px -10px rgba(0, 212, 255, 0.5);
 }
 
-.rankListRow_self td:first-child {
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
+/* 3. Column Spacing */
+.JoinerList td {
+    padding: 20px 15px;
+    color: #ffffff;
+    font-size: 1.1rem;
+    vertical-align: middle;
 }
 
-.rankListRow_self td:last-child {
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
+/* 4. Medal Icons */
+.historyImage {
+    width: 35px;
+    height: 35px;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+}
+
+/* 5. Rank & Player Name Styling */
+.PlayerListRow_Norm {
+    font-family: 'Share Tech Mono', monospace;
+}
+
+/* Rank Number styling */
+td:nth-child(2) {
+    font-weight: bold;
+    color: #00ff9f;
+    font-size: 1.4rem;
+}
+
+/* 6. The "Kick Player" Tactical Button */
+.KickPlayerButton {
+    background: transparent;
+    color: #ff4d4d;
+    border: 1px solid rgba(255, 77, 77, 0.4);
+    padding: 8px 15px;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+}
+
+.KickPlayerButton:hover {
+    background: #ff4d4d;
+    color: #0b0e14;
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.4);
+}
+
+/* Hover effect for rows */
+.rankListRow:hover:not(.rankListRow_self) {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(5px);
 }

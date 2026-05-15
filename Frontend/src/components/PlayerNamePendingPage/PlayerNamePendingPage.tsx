@@ -23,16 +23,16 @@ function PlayerNamePendingPage() {
 
 
     return (
-        <div className="PlayerNameContainer">
+        <div className="BoxContainer">
             <h1 className="TitleText"><strong>REDEMPTION</strong></h1>
-            <div className="SignInBox">
+            <div className="NamePendingInputPINBoxDiv glass-panel">
                 <form className="PINForm" onSubmit={handleJoinRoom}>
                     <input className="RoomCodeInput" 
                             type="text"
                             placeholder="Name"
                             required
                             onChange={handleUsernameChange}/>
-                    <button className="ConfirmButton">
+                    <button className="NamePendingConfirmButton neon-btn-gold">
                         <strong>Join</strong>
                     </button>
                 </form>

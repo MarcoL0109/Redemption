@@ -590,7 +590,7 @@ function ProblemList() {
                                 <div className="append-line left"></div>
                                 <div className="append-content">
                                     <span className="plus-symbol">+</span>
-                                    <span className="append-text">APPEND NEW PROBLEM_NODE</span>
+                                    <span className="append-text">APPEND NEW PROBLEM NODE</span>
                                 </div>
                                 <div className="append-line right"></div>
                                 
@@ -602,7 +602,7 @@ function ProblemList() {
                 )
                 
                 :<div className="LoadingAnimationContainer">
-                    <Mosaic color="#d6af37" size="large"/>
+                    <Mosaic color="#4ecca3" size="large"/>
                 </div>
             }
             

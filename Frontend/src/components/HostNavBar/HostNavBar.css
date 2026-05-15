@@ -1,42 +1,99 @@
-.leaderboardClass {
-    width: 120px;
-    height: 120px;
-    margin-right: 25px;
-}
-
-.leaderboardClass :hover {
-    cursor: pointer;
-}
-
-.terminateRoomClass {
-    width: 90px;
-    height: 80px;
-}
-
-.terminateRoomClass :hover {
-    cursor: pointer;
-}
-
-.hostNavBarButton {
-    display: flex;
-    align-items: center;
+/* =========================================
+   ENHANCED HOST NAV BAR (LARGE TARGETS)
+   ========================================= */
+.hostNavBar {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    /* Remove padding-top so the dock truly hugs the top edge */
+    padding: 0 50px; 
+    box-sizing: border-box;
+    pointer-events: none; /* Allows clicks to pass through empty space to the game below */
 }
 
 .hostNavBarContainer {
     display: flex;
-    justify-content: end;
-    margin-right: 25px
+    justify-content: flex-end;
+    align-items: flex-start; /* Align dock to the top */
+    height: 100px; /* Taller container to accommodate larger buttons */
 }
 
-.hostNavBar {
-    background-color: #52514F;
+.hostNavBarButton {
+    pointer-events: auto; /* Re-enable clicks for the actual buttons */
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(10, 15, 20, 0.85); /* Slightly darker for better contrast */
+    backdrop-filter: blur(15px);
+    padding: 12px 25px;
+    border-radius: 0 0 20px 20px;
+    border: 2px solid rgba(0, 255, 159, 0.3);
+    border-top: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
-.terminateRoomClassContainer :hover {
+/* Base styling for Icon Containers (The "Hitbox") */
+.leaderboardClassContainer, 
+.terminateRoomClassContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Increased Hitbox Size */
+    width: 55px; 
+    height: 55px;
+    
+    border-radius: 8px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
 }
 
-.leaderboardClassContainer {
-    cursor: pointer;
+/* Increased Icon Size */
+.leaderboardClass, 
+.terminateRoomClass {
+    width: 32px; /* Scaled up from 24px */
+    height: 32px;
+    transition: transform 0.2s ease;
 }
 
+/* Hover States with Scaling */
+.leaderboardClassContainer:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: #00d4ff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    transform: translateY(3px);
+}
+
+.leaderboardClassContainer:hover .leaderboardClass {
+    transform: scale(1.1);
+}
+
+.terminateRoomClassContainer:hover {
+    background: rgba(255, 77, 77, 0.2);
+    border-color: #ff4d4d;
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.4);
+    transform: translateY(3px);
+}
+
+.terminateRoomClassContainer:hover .terminateRoomClass {
+    transform: scale(1.1);
+}
+
+/* Tactical Text Label */
+.hostNavBarButton::before {
+    content: "CONTROL PENEL";
+    color: #00ff9f;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem; /* Slightly larger */
+    letter-spacing: 2px;
+    margin-right: 15px;
+    border-right: 1px solid rgba(0, 255, 159, 0.3);
+    padding-right: 15px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+}

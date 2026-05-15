@@ -1,362 +1,355 @@
-.GamePageContainer {
-    display: flex;
-    flex-direction: column;
+/* =========================================
+   1. GLOBAL VIEWPORT RESET
+   ========================================= */
+
+
+/* =========================================
+   2. CORE LAYOUT CONTAINER
+   ========================================= */
+.ProblemAnswerContainer {
+    background-color: #0b0e14;
     height: 100vh;
     width: 100vw;
-    background-color: #38343B;
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
-}
-
-
-.CountDownContainer {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 75px;
-}
-
-
-.ProblemAnswerContainer {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    min-height: 0;
+    padding: 30px 50px;
+    box-sizing: border-box;
+    position: relative;
+    color: #e0e0e0;
+    
+    /* Tactical Background Grid */
+    background-image: 
+        linear-gradient(rgba(0, 255, 159, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 159, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
 }
 
-.ProblemTextSection {
-    flex: 2;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 30px;
-    min-height: 0;
-}
-
-.BlankCorrectAnswer {
-    margin-top: 25px;
-    color: black;
-}
-
-
-.AnswerOptionContainer {
-    flex: 1;
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 0;
-}
-
-
-.ProblemTextContainer {
-    font-size: 35px;
-    font-family: 'Courier New', Courier, monospace;
-}
-
-.OptionsContainer {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr; 
-    grid-template-rows: 1fr 1fr;
-    grid-gap: 5px;
-    padding: 5px;
-    color: black;
-}
-
-
-.CaseSensitiveNoti {
-    font-family: 'Courier New', Courier, monospace;
-}
-
-
-.OptionsContainer {
-    width: 100%;
-    height: 100%;
-    display:grid;
-    grid-template-columns: 50% 50%;
-    grid-row: auto auto;
-    grid-column-gap: 5px;
-    grid-row-gap: 5px;
-    justify-self: center;
-    align-self: center;
-}
-
-
-.OptionADiv_correct {
-    background-color: rgb(8, 238, 8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-.OptionADiv_wrong {
-    background-color: rgb(231, 73, 73);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-.OptionADiv_correct_selected {
-    background-color: rgb(8, 238, 8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    opacity: 0.5;
-}
-
-
-.OptionADiv_wrong_selected {
-    background-color: rgb(231, 73, 73);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    opacity: 0.5;
-}
-
-
-.OptionBDiv_correct_selected {
-    background-color: rgb(8, 238, 8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    opacity: 0.5;
-}
-
-
-.OptionBDiv_wrong_selected {
-    background-color: rgb(231, 73, 73);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    opacity: 0.5;
-}
-
-
-.OptionCDiv_correct_selected {
-    background-color: rgb(8, 238, 8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    opacity: 0.5;
-}
-
-
-.OptionCDiv_wrong_selected {
-    background-color: rgb(231, 73, 73);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    opacity: 0.5;
-}
-
-
-.OptionDDiv_correct_selected {
-    background-color: rgb(8, 238, 8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    opacity: 0.5;
-}
-
-
-.OptionDDiv_wrong_selected {
-    background-color: rgb(231, 73, 73);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    opacity: 0.5;
-}
-
-
-.OptionBDiv_correct {
-    background-color: rgb(8, 238, 8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-.OptionBDiv_wrong {
-    background-color: rgb(231, 73, 73);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-.OptionCDiv_correct {
-    background-color: rgb(8, 238, 8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-.OptionCDiv_wrong {
-    background-color: rgb(231, 73, 73);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-.OptionDDiv_correct {
-    background-color: rgb(8, 238, 8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-.OptionDDiv_wrong {
-    background-color: rgb(231, 73, 73);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-.OptionADiv {
-    background-color: rgb(235, 84, 84);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-.OptionADiv:hover {
-    background-color: rgb(237, 107, 107);
-    cursor: pointer;
-}
-
-
-.OptionBDiv {
-    background-color: rgb(20, 237, 24);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-.OptionBDiv:hover {
-    background-color: rgb(90, 226, 92);
-    cursor: pointer;
-}
-
-
-.OptionCDiv {
-    background-color: rgb(232, 185, 18);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-.OptionCDiv:hover {
-    background-color: rgb(230, 196, 71);
-    cursor: pointer;
-}
-
-
-.OptionDDiv {
-    background-color: rgb(49, 128, 238);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-
-
-.OptionDDiv:hover {
-    background-color: rgb(97, 156, 239);
-    cursor: pointer;
-}
-
-
+/* =========================================
+   3. PROGRESS BAR
+   ========================================= */
 .ProgressBarContainer {
-    width: 100%;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 10px deepskyblue);
+    flex-shrink: 0;
+}
+
+/* =========================================
+   4. DOMINANT QUESTION AREA (LARGE)
+   ========================================= */
+.ProblemTextSection {
+    flex-grow: 4; /* Takes up the majority of the top screen */
     display: flex;
-    flex-direction: column; 
-    align-items: center; 
+    align-items: center;
+    justify-content: flex-start;
+    background: linear-gradient(135deg, rgba(0, 255, 159, 0.05) 0%, transparent 100%);
+    border-left: 6px solid #00ff9f;
+    padding: 60px;
+    margin-bottom: 40px;
+    border-radius: 0 40px 40px 0;
+    box-shadow: inset 20px 0 30px -20px rgba(0, 255, 159, 0.2);
 }
 
-
-.ProgressBarContainer > div {
-    width: 95%;
-    max-width: 1000px;
+.ProblemTextContainer span {
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+    max-width: 90%;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
+/* =========================================
+   5. COMPACT ANSWER CONTAINER
+   ========================================= */
+.AnswerOptionContainer {
+    flex-grow: 1; /* Sits sleeker at the bottom */
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 35vh; /* Ensures it doesn't vanish on short screens */
+    display: flex;
+    flex-direction: column;
+}
 
-.BlankFormContainer {
+/* Multiple Choice Grid */
+.OptionsContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+    height: 100%;
+    width: 100%;
+}
+
+/* =========================================
+   6. THE TACTICAL BUTTONS (SCOPED)
+   ========================================= */
+.OptionsContainer > [class^="Option"] {
+    /* Tactical Glass Base */
+    background: rgba(26, 31, 41, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 255, 159, 0.2);
+    border-left: 4px solid rgba(0, 255, 159, 0.4);
+    border-radius: 4px 20px 4px 20px; /* Aggressive tactical cut */
+    
+    padding: 20px 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Left-aligned for a list feel */
+    font-size: 1.25rem;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover State - Focused Selection */
+.OptionsContainer > [class^="Option"]:hover:not([class*="_selected"]):not([class*="_correct"]):not([class*="_wrong"]) {
+    background: rgba(0, 255, 159, 0.12);
+    border-color: #00ff9f;
+    border-left-width: 15px;
+    transform: translateX(12px);
+    box-shadow: -10px 0 20px rgba(0, 255, 159, 0.1);
+}
+
+/* Logic State: Selected (Electric Blue) */
+.OptionsContainer > [class*="_selected"] {
+    border-color: #00d4ff !important;
+    border-left-color: #00d4ff !important;
+    background: rgba(0, 212, 255, 0.15) !important;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+/* Logic State: Correct (Neon Green) */
+.OptionsContainer > [class*="_correct"] {
+    border-color: #00ff9f !important;
+    border-left-color: #00ff9f !important;
+    background: rgba(0, 255, 159, 0.2) !important;
+    box-shadow: 0 0 25px rgba(0, 255, 159, 0.4);
+    color: #00ff9f;
+}
+
+/* Logic State: Wrong (Hazard Red) */
+.OptionsContainer > [class*="_wrong"] {
+    border-color: #ff4d4d !important;
+    border-left-color: #ff4d4d !important;
+    background: rgba(255, 77, 77, 0.15) !important;
+    opacity: 0.8;
+}
+
+/* =========================================
+   7. FILL IN THE BLANK THEME
+   ========================================= */
+.BlankAnswerContainer {
+    flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0 auto;
 }
-
 
 .InputSubmitContainer {
+    width: 100%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 25px;
 }
 
+.BlankAnswerInput {
+    width: 100%;
+    background: rgba(26, 31, 41, 0.9);
+    border: 2px solid rgba(0, 212, 255, 0.4);
+    padding: 30px;
+    border-radius: 4px;
+    color: white;
+    font-size: 2rem;
+    outline: none;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    transition: all 0.3s;
+}
+
+.BlankAnswerInput:focus {
+    border-color: #00d4ff;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
 
 .BlankAnswerSubmitButton {
-    margin-top: 15px;
-    width: 150px;
-    height: 50px;
-    font-family: 'Courier New', Courier, monospace;
+    background: #00ff9f;
+    color: #0b0e14;
+    border: none;
+    padding: 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    transition: all 0.2s;
 }
 
-
-.CatchUpSpan {
-    animation: fadeInOut 5s infinite;
-    font-family: 'Courier New', Courier, monospace;
+.BlankAnswerSubmitButton:hover:not(:disabled) {
+    filter: brightness(1.2);
+    box-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+    letter-spacing: 6px;
 }
 
-
-@keyframes fadeInOut {
-    0%, 100% {
-    opacity: 0;
-    }
-    50% {
-    opacity: 1;
-    }
+/* =========================================
+   8. RESPONSIVE ADJUSTMENTS
+   ========================================= */
+@media (max-width: 1024px) {
+    .ProblemTextContainer span { font-size: 2rem; }
+    .OptionsContainer > [class^="Option"] { font-size: 1.1rem; }
 }
 
-.RankListOverlay {
+@media (max-width: 768px) {
+    .ProblemAnswerContainer { padding: 20px; overflow-y: auto; }
+    .OptionsContainer { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .ProblemTextSection { padding: 30px; border-radius: 0 15px 15px 0; }
+}
+
+.LoadingAnimationContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 550px;
+    height: 100%; /* Or specific height */
+    width: 100%;
 }
 
-.overlay__buttons {
+.CatchUpSpan {
+    color: #00ff9f; /* Using your Neon Green */
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    max-width: 600px;
+    
+    /* Apply the animation */
+    animation: tacticalBreath 3s ease-in-out infinite;
+    
+    /* Optional: add a soft neon glow */
+    text-shadow: 0 0 10px rgba(0, 255, 159, 0.3);
+}
+
+@keyframes tacticalBreath {
+    0% {
+        opacity: 0.3;
+        transform: scale(0.98);
+        filter: blur(1px);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0px);
+        text-shadow: 0 0 20px rgba(0, 255, 159, 0.6);
+    }
+    100% {
+        opacity: 0.3;
+        transform: scale(0.98);
+        filter: blur(1px);
+    }
+}
+
+/* 1. Full Screen Overlay for Centering */
+.CountDownContainer {
+    position: fixed; /* Fixes it to the viewport */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
+    align-items: center;
+    background: rgba(11, 14, 20, 0.8); /* Darkens the background grid */
+    backdrop-filter: blur(10px); /* Blurs the game UI behind it */
+    z-index: 999; /* Ensures it is above the Nav Bar and Options */
+    pointer-events: none; /* Allows the game to load in the background */
 }
 
+/* 2. The Animated Number */
+.CountDownContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(11, 14, 20, 0.9);
+    backdrop-filter: blur(15px);
+    z-index: 999;
+}
 
+/* The Static Number */
+.CountDownContainer h1 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14rem;
+    color: #ffffff; /* White for clarity */
+    margin: 0;
+    z-index: 10;
+    text-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+}
+
+/* --- THE EFFECTS AROUND IT --- */
+
+/* 1. The Aiming Reticle (Outer Ring) */
+.CountDownContainer::before {
+    content: "";
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border: 2px dashed rgba(0, 255, 159, 0.3);
+    border-radius: 50%;
+    animation: rotateClockwise 10s linear infinite;
+}
+
+/* 2. The Data-Scanning Ring (Inner Solid Segments) */
+.CountDownContainer::after {
+    content: "";
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border: 4px solid transparent;
+    border-top: 4px solid #00ff9f;
+    border-bottom: 4px solid #00ff9f;
+    border-radius: 50%;
+    animation: rotateCounterClockwise 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* 3. Corner Brackets (HUD Brackets) */
+.CountDownContainer .brackets {
+    position: absolute;
+    width: 450px;
+    height: 300px;
+    border-left: 2px solid #00ff9f;
+    border-right: 2px solid #00ff9f;
+    pointer-events: none;
+}
+
+.CountDownContainer .brackets::before,
+.CountDownContainer .brackets::after {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 2px;
+    background: #00ff9f;
+}
+
+.CountDownContainer .brackets::before { top: 0; left: -2px; } /* Top Left */
+.CountDownContainer .brackets::after { bottom: 0; right: -2px; } /* Bottom Right */
+
+/* --- ANIMATIONS --- */
+@keyframes rotateClockwise {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes rotateCounterClockwise {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+}
