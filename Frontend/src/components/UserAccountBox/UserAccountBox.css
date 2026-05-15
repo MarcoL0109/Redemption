@@ -109,6 +109,7 @@
     cursor: pointer;
     font-weight: bold;
     transition: 0.2s;
+    margin-top: 5px;
 }
 
 .SignOutButton:hover {

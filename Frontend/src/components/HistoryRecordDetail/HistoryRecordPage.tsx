@@ -72,7 +72,7 @@ function HistoryRecord() {
                 <div className="HistoryPageProblemAnswerContainer">
                     <div className="AssessmentHeader">
                         <div className="HeaderMain">
-                            <span className="LiveTag">LIVE ASSESSMENT</span>
+                            <span className="LiveTag">ASSESSMENT HISTORY</span>
                             <h2 className="QuestionNoHeader">NODE {currIndex + 1}</h2>
                         </div>
                         
@@ -145,7 +145,7 @@ function HistoryRecord() {
                                             defaultValue={currentAnswerHistory === "TIMEOUT_NULL" ? "" : currentAnswerHistory}
                                         /> 
                                         <div className="CorrectAnswerFeedback">
-                                            <span className="FeedbackLabel">SYSTEM TRUTH:</span>
+                                            <span className="FeedbackLabel">CORRECT ANSWER:</span>
                                             <span className="FeedbackValue">{currentDisplayProblem?.correct_answer.Blanks}</span>
                                         </div>
                                     </div>

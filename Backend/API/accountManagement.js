@@ -37,7 +37,9 @@ router.post("/login", async (req, res) => {
         else {
             const userId = result[0].user_id;
             req.session.user_id = userId;
-            const fetchLastLoginDetailsQuery = `SELECT last_login, login_streak FROM user_info u JOIN user_stats us ON u.user_id = us.user_id WHERE u.user_id = ?`;
+            const fetchLastLoginDetailsQuery = `SELECT last_login, login_streak FROM user_info u
+                                                JOIN user_stats us ON u.user_id = us.user_id
+                                                WHERE u.user_id = ?`;
             const [loginInfo] = await db.query(fetchLastLoginDetailsQuery, [userId]);
             let newStreak = 0;
             if (loginInfo.length) {
@@ -62,10 +64,10 @@ router.post("/logout", (req, res) => {
     req.session.destroy(err => {
         if (err) {
             console.log(err);
-            res.status(500).json({message: "Internal Server Error"})
+            res.status(500).json({message: "Internal Server Error"});
         } else {
-            res.clearCookie("'connect.sid'");
-            res.status(200).json({message: "Logout Successfully"})
+            res.clearCookie("connect.sid");
+            res.status(200).json({message: "Logout Successfully"});
         }
     })
 })
@@ -90,11 +92,13 @@ router.post("/createUsers", async (req, res) => {
         const tomorrow = new Date(today.getTime() + 30 * 60 * 1000);
         const hashed_password = await bcrypt.hash(confirmPassword, 10);
         if (!update_user) {
-            const create_user_query = "INSERT INTO user_info (username, email, password, activated, activation_expiration_datetime) VALUES (?, ?, ?, ?, ?)";
+            const create_user_query = `INSERT INTO user_info
+                                        (username, email, password, activated, activation_expiration_datetime) VALUES (?, ?, ?, ?, ?)`;
             const inserted_user = await db.query(create_user_query, [username, email, hashed_password, 0, tomorrow]);
             new_user_id = inserted_user[0].insertId;
         } else {
-            const update_existing_user_query = "UPDATE user_info SET username = ?, password = ?, activation_expiration_datetime = ? WHERE email = ?";
+            const update_existing_user_query = `UPDATE user_info SET username = ?, password = ?, activation_expiration_datetime = ?
+                                                WHERE email = ?`;
             await db.query(update_existing_user_query, [username, hashed_password, tomorrow, email]);
         }
         
@@ -129,7 +133,8 @@ router.get("/activation", async (req, res) => {
     const encrypted_object_json = JSON.parse(encrypted_data_object.data)
     const decrypted_object = decrypt_object(encrypted_object_json, process.env.REACT_APP_ACTIVATION_ENCRYPTION_KEY);
 
-    const search_for_activation_record_query = "SELECT activation_record_id FROM activations WHERE user_id = ? AND activation_code = ? AND now() < expiration_datetime";
+    const search_for_activation_record_query = `SELECT activation_record_id FROM activations
+                                                WHERE user_id = ? AND activation_code = ? AND now() < expiration_datetime`;
     const [activation_record] = await db.query(search_for_activation_record_query, [decrypted_object.user_id, decrypted_object.key]);
 
     if (activation_record.length === 0) {
@@ -241,7 +246,9 @@ router.post("/ResetPassword", async (req, res) => {
 
 router.post("/getUserInfo", async (req, res) => {
     const { user_id } = req.body;
-    const [user_info] = await db.query("SELECT * FROM user_info uf JOIN user_stats us ON uf.user_id = us.user_id WHERE uf.user_id = ?", [user_id]);
+    const [user_info] = await db.query(`SELECT * FROM user_info uf
+                                        JOIN user_stats us ON uf.user_id = us.user_id
+                                        WHERE uf.user_id = ?`, [user_id]);
     return res.json({userData: user_info[0]})
 })
 

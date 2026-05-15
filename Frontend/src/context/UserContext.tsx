@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { HistoryCardProp, mapApiRecordToInterface} from '../components/HistoryPage/HistoryPage';
+
 
 interface UserData {
     username: string;
@@ -9,6 +11,8 @@ interface UserData {
     login_streak: number;
     highest_score: number;
     no_completed_quiz: number;
+    history_records: HistoryCardProp[];
+
 }
 
 interface UserContextType {
@@ -26,7 +30,8 @@ export const DEFAULT_USER: UserData = {
     user_icon: "" ,
     login_streak: 0,
     highest_score: -1,
-    no_completed_quiz: 0
+    no_completed_quiz: 0,
+    history_records: [],
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -38,6 +43,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const USER_API_URL = process.env.VITE_USER_API_URL;
     // @ts-ignore
     const UTILS_API_URL = process.env.VITE_UTILS_API_URL;
+    // @ts-ignore
+    const HISTORY_API_URL = process.env.VITE_HISTORY_MANAGEMENT_API_URL;
+
+    // const navigate = useNavigate();
 
     const logout = () => {
         setUserData(DEFAULT_USER);
@@ -52,7 +61,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const session_user_id = session_info_body.session.user_id || null
         if (!session_user_id) {
             setLoading(false);
-            return;
+            // navigate("/SignIn");
         }
         const get_user_data_response = await fetch(`${USER_API_URL}/getUserInfo`, {
             method: "POST",
@@ -62,10 +71,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             credentials: "include",
             body: JSON.stringify({user_id: session_user_id}),
         });
-
         const user_data_json = await get_user_data_response.json();
         const user_data_content = user_data_json.userData;
-
         let image_url = "";
         try {
             const response = await fetch(`${USER_API_URL}/getAvatarUrl/${user_data_content.user_id}`);
@@ -77,6 +84,19 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             console.error("Failed to load avatar", err);
         }
 
+        const recentJoinHistory = await fetch(`${HISTORY_API_URL}/getHistoryRecord`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({userId: session_user_id, limit: 10})
+        });
+        let historyRecordContent: HistoryCardProp[] = [];
+        if (recentJoinHistory.status === 200) {
+            const recentJoinHistoryJSON = await recentJoinHistory.json();
+            historyRecordContent = recentJoinHistoryJSON.historyRecords.map(mapApiRecordToInterface);
+        }
 
         setUserData({
             username: user_data_content.username,
@@ -86,8 +106,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             user_icon: image_url,
             login_streak: user_data_content.login_streak,
             highest_score: user_data_content.highest_score === null ? -1: user_data_content.highest_score,
-            no_completed_quiz: user_data_content.no_of_completed_quiz
-
+            no_completed_quiz: user_data_content.no_of_completed_quiz,
+            history_records: historyRecordContent
         })
         setLoading(false);
     }, []);

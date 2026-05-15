@@ -84,16 +84,23 @@ router.post("/fetchInsertProblemSetSnapShotId", async (req, res) => {
 
 
 router.post("/getHistoryRecord", async (req, res) => {
-    const {userId} = req.body;
-    const selectQuery = `SELECT join_history_id, host.username as Host, ps.problem_set_title as ProblemSetTitle, join_history_score,
+    const { userId, limit } = req.body;
+    let selectQuery = `SELECT join_history_id, host.username as Host, ps.problem_set_title as ProblemSetTitle, join_history_score,
                             join_history_game_start_datetime,
                             join_history_completness, join_history_snapshot_id
                             FROM join_history j 
                             JOIN user_info host ON j.join_history_hosted_by = host.user_id
                             JOIN problem_set_snapshots ps ON ps.snapshot_id = j.join_history_snapshot_id
-                            WHERE j.user_id = ?`;
+                            WHERE j.user_id = ?
+                            ORDER BY join_history_game_start_datetime DESC`;
+    
+    const queryParams = [userId];
+    if (limit && !isNaN(limit)) {
+        selectQuery += ` LIMIT ?`;
+        queryParams.push(parseInt(limit));
+    }
     try {
-        const historyRecords = await db.query(selectQuery, [userId]);
+        const historyRecords = await db.query(selectQuery, queryParams);
         res.status(200).json({historyRecords: historyRecords[0]});
     } catch (error) {
         console.error(error);

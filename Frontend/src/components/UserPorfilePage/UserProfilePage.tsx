@@ -7,6 +7,7 @@ import { useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Tick from "../../assets/tick.svg";
 import Trophy from "../../assets/trophy.svg";
+import HistoyCard from "../HistoryCards/HistoryCard";
 
 
 function UserProfilePage() {
@@ -24,7 +25,8 @@ function UserProfilePage() {
 
 
     useEffect(() => {
-        refreshUser()
+        refreshUser();
+        console.log(userData?.history_records);
     }, [])
 
 
@@ -82,11 +84,9 @@ function UserProfilePage() {
             <NavBar />
             
             <div className="DossierMainWrapper">
-                <div className="DossierContainer">
-                    
+                <div className="DossierContainer"> 
                     <div className="IdentityModule" onClick={handleIconClick}>
                         <div className="AvatarScanner">
-                            <div className="ScannerLine"></div>
                             <div className="ProfileUserAvatar">
                                 {userData?.user_icon !== "" ? (
                                     <img 
@@ -101,7 +101,6 @@ function UserProfilePage() {
                                     </div>
                                 )}
                             </div>
-                            <div className="AvatarOverlayText">UPDATE BIO LINK</div>
                         </div>
 
                         <input
@@ -148,7 +147,21 @@ function UserProfilePage() {
                                 <div className="LogPulse"></div>
                             </div>
                             <div className="LogContent">
-                                <div className="EmptyLog">NO RECENT ROOM JOINED</div>
+                                {
+                                    userData?.history_records && userData?.history_records.length > 0 ?
+                                    userData?.history_records.map((history) =>
+                                        <div key={history.recordId} className="HistoryListContainer">
+                                            <ul className="ProblemList">
+                                                <HistoyCard recordId={history.recordId}
+                                                            score={history.score} snapShotID={history.snapShotID}
+                                                            gameStartDatetime={history.gameStartDatetime} hostName={history.hostName}
+                                                            completness={history.completness} problemSetName={history.problemSetName}
+                                                        />
+                                                </ul>
+                                        </div>
+                                    ) :
+                                    <div className="EmptyLog">NO RECENT ROOM JOINED</div>
+                                }
                             </div>
                         </div>
                     </div>

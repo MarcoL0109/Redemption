@@ -17,6 +17,29 @@ export interface HistoryCardProp {
 }
 
 
+export const mapApiRecordToInterface = (apiData: any): HistoryCardProp => {
+    const dateObj = apiData.join_history_game_start_datetime instanceof Date 
+    ? apiData.join_history_game_start_datetime 
+    : new Date(apiData.join_history_game_start_datetime);
+
+    const dd = String(dateObj.getDate()).padStart(2, '0');
+    const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const yyyy = dateObj.getFullYear();
+    const hh = String(dateObj.getHours()).padStart(2, '0');
+    const min = String(dateObj.getMinutes()).padStart(2, '0');
+    const ss = String(dateObj.getSeconds()).padStart(2, '0');
+    return {
+        recordId: apiData.join_history_id,
+        hostName: apiData.Host || "Unknown Host",
+        score: apiData.join_history_score,
+        gameStartDatetime: `${dd}-${mm}-${yyyy} ${hh}:${min}:${ss}`,
+        completness: apiData.join_history_completness,
+        problemSetName: apiData.ProblemSetTitle,
+        snapShotID: apiData.join_history_snapshot_id
+    };
+};
+
+
 function HistoryPage() {
 
     // @ts-ignore
@@ -25,28 +48,6 @@ function HistoryPage() {
     const {userData} = useUser();
 
     if (!userData) return null;
-
-    const mapApiRecordToInterface = (apiData: any): HistoryCardProp => {
-        const dateObj = apiData.join_history_game_start_datetime instanceof Date 
-        ? apiData.join_history_game_start_datetime 
-        : new Date(apiData.join_history_game_start_datetime);
-
-        const dd = String(dateObj.getDate()).padStart(2, '0');
-        const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
-        const yyyy = dateObj.getFullYear();
-        const hh = String(dateObj.getHours()).padStart(2, '0');
-        const min = String(dateObj.getMinutes()).padStart(2, '0');
-        const ss = String(dateObj.getSeconds()).padStart(2, '0');
-        return {
-            recordId: apiData.join_history_id,
-            hostName: apiData.Host || "Unknown Host",
-            score: apiData.join_history_score,
-            gameStartDatetime: `${dd}-${mm}-${yyyy} ${hh}:${min}:${ss}`,
-            completness: apiData.join_history_completness,
-            problemSetName: apiData.ProblemSetTitle,
-            snapShotID: apiData.join_history_snapshot_id
-        };
-    };
 
 
     useEffect(() => {
@@ -76,11 +77,11 @@ function HistoryPage() {
                 historyRecords.map((history) =>
                     <div key={history.recordId} className="HistoryListContainer">
                         <ul className="ProblemList">
-                        <HistoyCard recordId={history.recordId}
-                                    score={history.score} snapShotID={history.snapShotID}
-                                    gameStartDatetime={history.gameStartDatetime} hostName={history.hostName}
-                                    completness={history.completness} problemSetName={history.problemSetName}
-                                />
+                            <HistoyCard recordId={history.recordId}
+                                        score={history.score} snapShotID={history.snapShotID}
+                                        gameStartDatetime={history.gameStartDatetime} hostName={history.hostName}
+                                        completness={history.completness} problemSetName={history.problemSetName}
+                                    />
                         </ul>
                     </div>
                 )

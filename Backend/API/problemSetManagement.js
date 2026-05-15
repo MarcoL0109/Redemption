@@ -33,10 +33,10 @@ router.post("/UpdateWriteTime", async (req, res) => {
     const now = new Date();
     const offset = now.getTimezoneOffset() * 60000;
     const localISOTime = (new Date(now - offset)).toISOString().slice(0, 19).replace('T', ' ');
-    const updateWritTimeQuery = `UPDATE problem_sets SET last_update_at = '${localISOTime}' WHERE problem_set_id = ${problem_set_id}`;
+    const updateWritTimeQuery = `UPDATE problem_sets SET last_update_at = '?' WHERE problem_set_id = ?`;
 
     try {
-        await db.query(updateWritTimeQuery);
+        await db.query(updateWritTimeQuery, [localISOTime, problem_set_id]);
         res.status(200).json({message: "Write Time Updated Successfully"});
     } catch (error) {
         console.log(error);
