@@ -110,18 +110,28 @@ function HistoryRecord() {
                     <div className="HistoryPageAnswerOptionContainer">
                         {currentDisplayProblem?.question_type === "Multiple Choice" ? (
                             <div className="OptionsGrid">
-                                {['A', 'B', 'C', 'D'].map((key) => (
-                                    <div 
-                                        key={key}
-                                        className={`TacticalOption 
-                                            ${currentDisplayProblem.correct_answer.MC === key ? "is-correct" : 'is-wrong'} 
-                                            ${currentAnswerHistory === key ? "is-selected" : ''}`}
-                                    >
-                                        <span className="OptionID">{key}</span>
-                                        <span className="OptionContent">{currentDisplayProblem?.answer_options[key]}</span>
-                                        <div className="SelectionIndicator"></div>
-                                    </div>
-                                ))}
+                                {['A', 'B', 'C', 'D'].map((key) => {
+                                    const isCorrect = currentDisplayProblem.correct_answer.MC === key;
+                                    const wasSelected = currentAnswerHistory === key;
+
+                                    return (
+                                        <div 
+                                            key={key}
+                                            className={`TacticalOption 
+                                                ${isCorrect ? "is-correct" : 'is-wrong'} 
+                                                ${wasSelected ? "is-selected" : ''}`}
+                                        >
+                                            <span className="OptionID">{key}</span>
+                                            <span className="OptionContent">{currentDisplayProblem?.answer_options[key]}</span>
+                                            
+                                            <div className="OptionStatusLabel">
+                                                {isCorrect ? "CORRECT ANSWER" : wasSelected ? "YOUR CHOICE" : ""}
+                                            </div>
+
+                                            <div className="SelectionIndicator"></div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         ) : (
                             <div className="HistoryPageBlankAnswerContainer">
