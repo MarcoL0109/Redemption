@@ -154,6 +154,7 @@
     background: #4ecca3;
     border-radius: 50%;
     animation: auth-pulse 1.5s infinite;
+    margin-right: 15px;
 }
 
 @keyframes scan {
@@ -174,4 +175,16 @@
 
 .DataLabel {
     margin-right: 20px;
+}
+
+.CalendarWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 25px;
+}
+
+.CalendarWrapper .dossier-calendar {
+  margin: 0 auto;
 }

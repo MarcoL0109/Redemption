@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import Tick from "../../assets/tick.svg";
 import Trophy from "../../assets/trophy.svg";
 import HistoyCard from "../HistoryCards/HistoryCard";
+import DateCalendarValue from "../LoginCalendar/LoginCalendar";
 
 
 function UserProfilePage() {
@@ -113,6 +114,10 @@ function UserProfilePage() {
                             <div className="UnitRank">RANK: OPERATIVE</div>
                             <div className="JoinDate">
                                 COMMISSIONED: {userData?.created_at ? userData.created_at.split('T')[0] : "INITIALIZING..."}
+                            </div>
+                            
+                            <div className="CalendarWrapper">
+                                <DateCalendarValue/>
                             </div>
                         </div>
                     </div>
