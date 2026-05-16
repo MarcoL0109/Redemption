@@ -59,10 +59,12 @@ function ResetPassword() {
                 "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({inputEmail, confirmedPassword})
+            body: JSON.stringify({inputEmail, confirmedPassword, validationCode})
         });
         if (resetPasswordStatus.status === 200) {
             nevagate("/SignIn");
+        } else {
+            nevagate("/ForgotPassword");
         }
     }
 

@@ -41,7 +41,7 @@ const UserAccountBox: React.FC<UserAccountBoxProps> = ({ onClose, user_data }) =
 
 
     const handleDirectHistoryPage = () => {
-        nevigate(`/HistoryPage/`);
+        nevigate(`/HistoryPage/${user_data.user_id}`);
     }
 
     const handleDirectUserProfile = () => {

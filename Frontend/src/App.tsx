@@ -21,29 +21,29 @@ import { UserProvider } from "./context/UserContext";
 
 function App() {
   return (
-    <UserProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<JoinRoom />} />
-            <Route path="/SignIn" element={<SignInPage />} />
-            <Route path="/SignUp" element={<SignUpPage/>} />
-            <Route path="/ActivationTempPage" element={<TempPageForActivation/>} />
-            <Route path="/ForgotPassword" element={<ForgotPasswordPage/>}/>
-            <Route path="/ValidateResetPasswordCode" element={<ValidateResetPasswordCode/>} />
-            <Route path="/ResetPassword" element={<ResetPassword/>} />
-            <Route path="/Home" element={<HomePage/>} />
-            <Route path="/ProblemList/:problem_set_id" element={<ProblemList/>} />
-            <Route path="/PendingStartRoom/:userId/:username/:roomId/:problem_set_id" element={<PendingStartRoom/>} />
-            <Route path="/PlayerNamePendingPage/:roomId" element={<PlayerNamePendingPage/>}/>
-            <Route path="/GamePage/:userId/:username/:roomId/:problem_set_id" element={<GamePage/>} />
-            <Route path="/ResultPage/:userId/:username/:roomId" element={<ResultPage/>} />
-            <Route path="/HistoryPage/" element={<HistoryPage/>} />
-            <Route path="/HistoryRecord/:recordId/:snapShotId" element={<HistoryRecord/>} />
-            <Route path="/UserProfilePage/:userId" element={<UserProfilePage/>} />
-          </Routes>
-        </BrowserRouter>
-    </UserProvider>
     
+        <BrowserRouter>
+          <UserProvider>
+            <Routes>
+              <Route path="/" element={<JoinRoom />} />
+              <Route path="/SignIn" element={<SignInPage />} />
+              <Route path="/SignUp" element={<SignUpPage/>} />
+              <Route path="/ActivationTempPage" element={<TempPageForActivation/>} />
+              <Route path="/ForgotPassword" element={<ForgotPasswordPage/>}/>
+              <Route path="/ValidateResetPasswordCode" element={<ValidateResetPasswordCode/>} />
+              <Route path="/ResetPassword" element={<ResetPassword/>} />
+              <Route path="/Home" element={<HomePage/>} />
+              <Route path="/ProblemList/:problem_set_id" element={<ProblemList/>} />
+              <Route path="/PendingStartRoom/:userId/:username/:roomId/:problem_set_id" element={<PendingStartRoom/>} />
+              <Route path="/PlayerNamePendingPage/:roomId" element={<PlayerNamePendingPage/>}/>
+              <Route path="/GamePage/:userId/:username/:roomId/:problem_set_id" element={<GamePage/>} />
+              <Route path="/ResultPage/:userId/:username/:roomId" element={<ResultPage/>} />
+              <Route path="/HistoryPage/:userId" element={<HistoryPage/>} />
+              <Route path="/HistoryRecord/:recordId/:snapShotId" element={<HistoryRecord/>} />
+              <Route path="/UserProfilePage/:userId" element={<UserProfilePage/>} />
+            </Routes>
+          </UserProvider>
+        </BrowserRouter>
   );
   
 }

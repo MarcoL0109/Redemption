@@ -272,7 +272,6 @@ module.exports = function(io, redisClient) {
             const userName = await redisClient.hGet(`${roomCode}-List`, clientSessionId);
             if (!isHost) {
                 socket.leave(roomSocketId);
-                io.to(roomSocketId).emit("log-leave-message", `${userName} has left the room`);
                 await redisClient.hDel(`${roomCode}-List`, clientSessionId);
                 await redisClient.hDel(`${roomCode}-Session-Socket`, clientSessionId);
                 const myPlayerIndex = await redisClient.hGet(`${roomCode}-Session-Player`, clientSessionId);

@@ -116,7 +116,6 @@ function PendingStartRoom() {
                 });
 
                 socket.on("room-closed", ({reason, message}) => {
-                    console.log(message);
                     if (reason === "Terminated") {
                         navigate("/", { state: {roomClosed: true, isHost: isHostRef.current} });
                     } else {
@@ -128,12 +127,7 @@ function PendingStartRoom() {
                     navigate(`/GamePage/${userId}/${username}/${roomId}/${problem_set_id}`);
                 })
 
-                socket.on("log-leave-message", (message) => {
-                    console.log(message);
-                })
-
                 socket.on("kick-player-message", (message) => {
-                    console.log(message);
                     navigate("/", { state: {kickMessage: true} });
                 })
 

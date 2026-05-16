@@ -116,7 +116,6 @@ function ValidateResetPasswordCode() {
                         </div>
                     </div>
 
-                    {/* Submit Button */}
                     <button 
                         type="submit" 
                         className="ValidateCodeButton" 

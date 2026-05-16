@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { HistoryCardProp, mapApiRecordToInterface} from '../components/HistoryPage/HistoryPage';
+import { useNavigate } from 'react-router-dom';
 
 
 interface UserData {
@@ -45,8 +46,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const UTILS_API_URL = process.env.VITE_UTILS_API_URL;
     // @ts-ignore
     const HISTORY_API_URL = process.env.VITE_HISTORY_MANAGEMENT_API_URL;
-
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const logout = () => {
         setUserData(DEFAULT_USER);
@@ -61,7 +61,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const session_user_id = session_info_body.session.user_id || null
         if (!session_user_id) {
             setLoading(false);
-            // navigate("/SignIn");
+            navigate("/SignIn");
+            return;
         }
         const get_user_data_response = await fetch(`${USER_API_URL}/getUserInfo`, {
             method: "POST",

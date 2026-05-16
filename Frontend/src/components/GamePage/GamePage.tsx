@@ -210,7 +210,6 @@ function GamePage() {
                 })
 
                 socket.on('send-save-status', ({responseCode}) => {
-                    console.log(`Received Response code: ${responseCode}`);
                     savedStatusRef.current = responseCode;
                 });
 

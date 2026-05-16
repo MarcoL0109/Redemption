@@ -12,14 +12,10 @@ import HistoyCard from "../HistoryCards/HistoryCard";
 
 function UserProfilePage() {
 
-    // A new table for storing user game stats: user_id, login streaks, highest score, 
-    //                                          total join count, number of quiz owned
-
     const {userData, refreshUser} = useUser();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const MAX_FILE_SIZE = 2 * 1024 * 1024;
     const {userId} = useParams()
-    const navigate = useNavigate();
     // @ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
 

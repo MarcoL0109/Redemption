@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
 import HistoyCard from "../HistoryCards/HistoryCard"
 import NavBar from "../NavBar/NavBar"
-import { useUser } from "../../context/UserContext"
 import "./HistoryPage.css"
+import { useParams } from "react-router-dom"
 
 
 export interface HistoryCardProp {
@@ -45,9 +44,7 @@ function HistoryPage() {
     // @ts-ignore
     const HISTORY_API_URL = process.env.VITE_HISTORY_MANAGEMENT_API_URL;
     const [historyRecords, setHistoryRecords] = useState<HistoryCardProp[]>([]);
-    const {userData} = useUser();
-
-    if (!userData) return null;
+    const {userId} = useParams()
 
 
     useEffect(() => {
@@ -58,7 +55,7 @@ function HistoryPage() {
                     "Content-Type": "application/json"
                 },
                 credentials: "include",
-                body: JSON.stringify({userId: userData.user_id})
+                body: JSON.stringify({userId: userId})
             })
             if (fetchHistoryResponse.status === 200) {
                 const historyRecordJson = await fetchHistoryResponse.json();
