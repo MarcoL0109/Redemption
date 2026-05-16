@@ -25,7 +25,6 @@
     padding: 30px;
     border-radius: 12px;
     text-align: center;
-    cursor: pointer;
     transition: 0.3s;
 }
 
@@ -50,7 +49,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Keeps the image inside the frame */
+    overflow: hidden;
+    cursor: pointer;
 }
 
 .AvatarImage {

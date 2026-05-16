@@ -180,7 +180,6 @@ router.post("/forgotPassword", async (req, res) => {
     expiration_date.setMinutes(expiration_date.getMinutes() + 10);
     reset_code = await generate_code();
     
-    // Use bcrypt to hash the token and use bcrypt compare to check instead of normal check
     const hashed_reset_code = await bcrypt.hash(reset_code, 10);
     const [existingCode] = await db.query(
         "SELECT id FROM password_resets WHERE email = ?",

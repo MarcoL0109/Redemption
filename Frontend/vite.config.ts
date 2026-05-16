@@ -10,5 +10,8 @@ export default defineConfig(({ mode }) => {
       'process.env': env,
     },
     plugins: [react()],
+    optimizeDeps: {
+      include: ['dayjs'], // 👈 Forces Vite to process DayJS immediately on startup
+    },
   };
 });

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./UserProfilePage.css";
 import {useUser} from "../../context/UserContext";
 import { useRef, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Tick from "../../assets/tick.svg";
 import Trophy from "../../assets/trophy.svg";
 import HistoyCard from "../HistoryCards/HistoryCard";
@@ -81,7 +81,7 @@ function UserProfilePage() {
             
             <div className="DossierMainWrapper">
                 <div className="DossierContainer"> 
-                    <div className="IdentityModule" onClick={handleIconClick}>
+                    <div className="IdentityModule">
                         <div className="AvatarScanner">
                             <div className="ProfileUserAvatar">
                                 {userData?.user_icon !== "" ? (
@@ -90,6 +90,7 @@ function UserProfilePage() {
                                         alt="User Avatar"
                                         className="AvatarImage"
                                         onError={refreshUser}
+                                        onClick={handleIconClick}
                                     />
                                 ) : (
                                     <div className="DefaultAvatarPlaceholder">
