@@ -24,8 +24,6 @@ services:
     ports:
       - "5500:5500"
       - "3000:3000"
-    env_file:
-      - .env
     environment:
       - REDIS_HOST=redis
       - NODE_ENV=development
