@@ -34,8 +34,8 @@ const UserAccountBox: React.FC<UserAccountBoxProps> = ({ onClose, user_data }) =
             credentials: "include",
         })
         if (logout_response.status === 200) {
+            nevigate("/SignIn");
             logout();
-            nevigate("/SignIn")
         }
     }
 

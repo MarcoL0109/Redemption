@@ -18,6 +18,7 @@ const s3Client = require("../models/s3Config").default;
 const { PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const {calculateStreak} = require("../utils/streakHelper");
+const daysjs = require("dayjs");
 
 
 async function formatDateToMySQL(date) {
@@ -57,6 +58,11 @@ router.post("/login", async (req, res) => {
                 await db.query(`INSERT INTO user_stats (user_id, login_streak) VALUES (?, ?)`, [userId, 1]);
             }
             await db.query(`UPDATE user_info SET last_login = UTC_TIMESTAMP() WHERE user_id = ?`, [userId]);
+            await db.query(
+                `INSERT IGNORE INTO user_logins (user_id, login_date) 
+                VALUES (?, DATE(UTC_TIMESTAMP()))`, 
+                [userId]
+            );
             return res.status(200).json({ message: "Login successfully", streak: newStreak });
         }
         } catch (error) {
@@ -312,6 +318,25 @@ router.get("/getAvatarUrl/:userId", async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 });
+
+
+router.get("/getLoginDates/:userId", async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const [rows] = await db.query(
+        `SELECT login_date FROM user_logins WHERE user_id = ?`, 
+        [userId]
+    );
+        const records = rows.length > 0 ? rows : [];
+        const formattedDateList = records.map(row => {
+            return daysjs(row.login_date).format('YYYY-MM-DD');
+        });
+        res.status(200).json({loginDates: formattedDateList});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: "Internal Server Error"});
+    }
+})
 
 
 module.exports = router;

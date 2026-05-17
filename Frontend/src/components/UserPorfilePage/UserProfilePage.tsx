@@ -3,12 +3,13 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./UserProfilePage.css";
 import {useUser} from "../../context/UserContext";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Tick from "../../assets/tick.svg";
 import Trophy from "../../assets/trophy.svg";
 import HistoyCard from "../HistoryCards/HistoryCard";
 import DateCalendarValue from "../LoginCalendar/LoginCalendar";
+import { CalendarProps } from "../LoginCalendar/LoginCalendar";
 
 
 function UserProfilePage() {
@@ -19,11 +20,27 @@ function UserProfilePage() {
     const {userId} = useParams()
     // @ts-ignore
     const USER_API_URL = process.env.VITE_USER_API_URL;
+    const [loginDates, setLoginDates] = useState<string[]>([]);
 
 
     useEffect(() => {
+        const fetchLoginDates = async () => {
+            const fetchLoginDatesResponse = await fetch(`${USER_API_URL}/getLoginDates/${userId}`, {
+                method: "GET",
+                credentials: "include",
+            });
+            
+            if (fetchLoginDatesResponse.ok) {
+                const loginDatsJSON = await fetchLoginDatesResponse.json();
+                const loginDates = loginDatsJSON.loginDates;
+                setLoginDates(loginDates || []);
+            }
+        }
         refreshUser();
-        console.log(userData?.history_records);
+        if (userId) {
+            fetchLoginDates();
+        }
+        
     }, [])
 
 
@@ -117,7 +134,7 @@ function UserProfilePage() {
                             </div>
                             
                             <div className="CalendarWrapper">
-                                <DateCalendarValue/>
+                                <DateCalendarValue loginDays={loginDates}/>
                             </div>
                         </div>
                     </div>
