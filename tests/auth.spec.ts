@@ -49,11 +49,11 @@ test.describe('Sign In Component Layout and Flow', () => {
     });
 
     // 2. Intercept the login endpoint
-    await page.route('**/users/login', async (route) => {
+    await page.route(url => url.href.includes('users/login'), async (route) => {
       if (route.request().method() === 'POST') {
-        console.log("Intercepting login request...");
+        // This will force it to stand out in your GitHub Actions logs!
+        console.log(">>>>>>>> EXPLICITLY INTERCEPTING LOGIN REQUEST <<<<<<<<");
         
-        // 💡 Wait here until the main test block tells us to proceed
         await networkLock;
         
         await route.fulfill({
@@ -65,6 +65,8 @@ test.describe('Sign In Component Layout and Flow', () => {
             user: { id: 1, email: 'agent.smith@matrix.io' }
           })
         });
+      } else {
+        await route.continue();
       }
     });
 
