@@ -41,6 +41,8 @@
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.8.0",
     "react-error-overlay": "^6.0.9"
   },
   "scripts": {
