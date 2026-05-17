@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # 1. The Frontend Service
+  # 1. Frontend
   frontend:
     build:
       context: .
@@ -16,7 +16,7 @@ services:
       - NODE_ENV=development
     command: npm run dev -- --host 0.0.0.0
 
-  # 2. The Backend Service
+  # 2. Backend Service
   backend:
     build:
       context: .
@@ -27,19 +27,34 @@ services:
     environment:
       - REDIS_HOST=redis
       - NODE_ENV=development
-      - REACT_APP_DATABASE_HOST=host.docker.internal
+      - REACT_APP_DATABASE_HOST=database_service
+      - DB_USER=root
+      - REACT_APP_DATABASE_PASSWORD=${REACT_APP_DATABASE_PASSWORD:-root_test_pass}
+      - REACT_APP_DATABASE_NAME=redemption_db
     volumes:
       - .:/app
       - /app/node_modules
       - /app/Backend/node_modules
     depends_on:
       - redis
+      - database_service
 
-  # 3. The Redis Service
+  # 3. Redis Service
   redis:
     image: "redis:alpine"
     ports:
       - "6379:6379"
+
+  # 4. The Isolated MySQL Database Container
+  database_service:
+    image: "mysql:8.0"
+    ports:
+      - "3307:3306" # Since you mapped this to 3307 locally, make sure your local Workbench connects to 3307!
+    environment:
+      - MYSQL_ROOT_PASSWORD=${REACT_APP_DATABASE_PASSWORD:-root_test_pass}
+      - MYSQL_DATABASE=redemption_db
+    volumes:
+      - db_data:/var/lib/mysql
 
 volumes:
   db_data:

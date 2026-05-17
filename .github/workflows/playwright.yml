@@ -17,10 +17,27 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+      
     - name: Compose container
+      env:
+        # This makes the secret available to docker-compose interpolation
+        REACT_APP_DATABASE_PASSWORD: ${{ secrets.REACT_APP_DATABASE_PASSWORD }}
       run: docker compose up -d
+
+    # 💡 FIX: Wait for MySQL to actually be ready before running tests
+    - name: Wait for Database Connection
+      run: |
+        echo "Waiting for database container to be healthy..."
+        until docker exec $(docker ps -q -f name=database) mysqladmin ping -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" --silent; do
+          echo "Database is still booting up... sleeping for 3 seconds"
+          sleep 3
+        done
+        echo "Database is fully online and matching schema state!"
+
+    # Now your end-to-end testing loop can hit the endpoints safely
     - name: Run Playwright tests
       run: npx playwright test
+      
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
