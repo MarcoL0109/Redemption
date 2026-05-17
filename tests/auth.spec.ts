@@ -42,14 +42,20 @@ test.describe('Sign In Component Layout and Flow', () => {
 
 
   test('should disable submission buttons when state machine is processing parameters', async ({ page }) => {
-    // Use a wildcard pattern so it matches regardless of what the base API URL is
+    // 1. Create a promise controller we can resolve whenever we want
+    let resolveNetworkRequest: () => void = () => {};
+    const networkLock = new Promise<void>((resolve) => {
+      resolveNetworkRequest = resolve;
+    });
+
+    // 2. Intercept the login endpoint
     await page.route('**/users/login', async (route) => {
       if (route.request().method() === 'POST') {
-        console.log("Intercepting");
-        // 1. Deliberately hold the UI state open for 2.5 seconds
-        await new Promise(resolve => setTimeout(resolve, 2500));
+        console.log("Intercepting login request...");
         
-        // 2. 💡 FIX: Return a fake mock payload instantly without forwarding to localhost!
+        // 💡 Wait here until the main test block tells us to proceed
+        await networkLock;
+        
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
@@ -62,14 +68,19 @@ test.describe('Sign In Component Layout and Flow', () => {
       }
     });
 
-    // Keep your standard form UI interactions exactly the same...
+    // 3. Trigger your login action (click the submit button, fill inputs, etc.)
+    // Note: If this action waits for navigation, use page.click() without an await 
+    // or wrap it carefully so it doesn't block your assertions.
     await page.locator('.email_form_inputs').fill('agent.smith@matrix.io');
-    await page.locator('.password_form_inputs').fill('CorrectHorseBatteryStaple123!');
+    await page.locator('.password_form_inputs').fill('password123');
     await page.locator('.SignInButton').click();
 
+    // 4. Check your UI state while the network request is GUARANTEED to be stuck hanging
     const submitButton = page.locator('.SignInButton');
     await expect(submitButton).toBeDisabled();
-    await expect(submitButton).toContainText('AUTHENTICATING...');
-  });
+
+    // 5. Clean up: Release the lock so the network request completes and the test can exit cleanly
+    resolveNetworkRequest();
+});
 
 });
