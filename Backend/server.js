@@ -60,7 +60,7 @@ async function startApp() {
 
     } catch (err) {
         console.error("❌ CRITICAL: Server failed to start:", err);
-        process.exit(1); // Tell Docker the container failed so it can restart
+        process.exit(1);
     }
 }
 

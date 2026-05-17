@@ -28,7 +28,6 @@ export default defineConfig({
   reporter: [['html'], ['list']],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 
-  /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',

@@ -2,6 +2,17 @@
    1. GLOBAL VIEWPORT RESET
    ========================================= */
 
+.GamePageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 5px 10px;
+    background: radial-gradient(circle at center, #1a1f29 0%, #0b0e14 100%);
+    color: #e0e0e0;
+    text-align: center;
+}
 
 /* =========================================
    2. CORE LAYOUT CONTAINER
