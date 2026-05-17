@@ -24,7 +24,7 @@ jobs:
     - name: Start Backend Services
       env:
         REACT_APP_DATABASE_PASSWORD: ${{ secrets.REACT_APP_DATABASE_PASSWORD }}
-      run: docker compose up -d database_service backend_service
+      run: docker compose up -d database_service backend
 
     # 💡 STEP 2: Wait for your database to finish initializing before continuing
     - name: Wait for Database Connection
