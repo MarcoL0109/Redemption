@@ -1,10 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 import path from 'path';
-import dotenv from 'dotenv';
 
 // 💡 Force Playwright to read your specific environment file
 // Adjust the path if your file is inside a subfolder like './frontend/.env'
-dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 /**
  * Read environment variables from file.
