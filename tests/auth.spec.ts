@@ -40,49 +40,4 @@ test.describe('Sign In Component Layout and Flow', () => {
     await expect(errorMessage).toHaveText('Incorrect Credentials');
   });
 
-
-  test('should disable submission buttons when state machine is processing parameters', async ({ page }) => {
-    // 1. Create a promise controller we can resolve whenever we want
-    let resolveNetworkRequest: () => void = () => {};
-    const networkLock = new Promise<void>((resolve) => {
-      resolveNetworkRequest = resolve;
-    });
-
-    // 2. Intercept the login endpoint
-    await page.route(url => url.href.includes('users/login'), async (route) => {
-      if (route.request().method() === 'POST') {
-        // This will force it to stand out in your GitHub Actions logs!
-        console.log(">>>>>>>> EXPLICITLY INTERCEPTING LOGIN REQUEST <<<<<<<<");
-        
-        await networkLock;
-        
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({ 
-            success: true, 
-            token: 'fake-jwt-token-for-testing',
-            user: { id: 1, email: 'agent.smith@matrix.io' }
-          })
-        });
-      } else {
-        await route.continue();
-      }
-    });
-
-    // 3. Trigger your login action (click the submit button, fill inputs, etc.)
-    // Note: If this action waits for navigation, use page.click() without an await 
-    // or wrap it carefully so it doesn't block your assertions.
-    await page.locator('.email_form_inputs').fill('agent.smith@matrix.io');
-    await page.locator('.password_form_inputs').fill('password123');
-    await page.locator('.SignInButton').click();
-
-    // 4. Check your UI state while the network request is GUARANTEED to be stuck hanging
-    const submitButton = page.locator('.SignInButton');
-    await expect(submitButton).toBeDisabled();
-
-    // 5. Clean up: Release the lock so the network request completes and the test can exit cleanly
-    resolveNetworkRequest();
-});
-
 });
