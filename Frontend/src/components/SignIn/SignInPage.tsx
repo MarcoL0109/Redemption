@@ -2,7 +2,7 @@ import './SignInPage.css';
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { useUser } from '../../context/UserContext';
-import Eye from "../../assets/eye.svg";
+import Eye from "../../assets/Eye.svg";
 import HiddenEye from "../../assets/HiddenEye.svg";
 
 
