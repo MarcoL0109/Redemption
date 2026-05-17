@@ -45,6 +45,7 @@ test.describe('Sign In Component Layout and Flow', () => {
     // Use a wildcard pattern so it matches regardless of what the base API URL is
     await page.route('**/users/login', async (route) => {
       if (route.request().method() === 'POST') {
+        console.log("Intercepting");
         // 1. Deliberately hold the UI state open for 2.5 seconds
         await new Promise(resolve => setTimeout(resolve, 2500));
         
