@@ -21,10 +21,10 @@ jobs:
     # 💡 STEP 1: Spin up ONLY your database and backend API containers.
     # Leave the frontend out of this command so port 5173 stays completely free.
     # Adjust "database" and "backend" to match your service names in docker-compose.yml
-    - name: Start Every Service
+    - name: Start Backend Services
       env:
         REACT_APP_DATABASE_PASSWORD: ${{ secrets.REACT_APP_DATABASE_PASSWORD }}
-      run: docker compose up -d
+      run: docker compose up -d database_service backend
 
     # 💡 STEP 2: Wait for your database to finish initializing before continuing
     - name: Wait for Database Connection
