@@ -17,27 +17,30 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-      
-    - name: Compose container
-      env:
-        # This makes the secret available to docker-compose interpolation
-        REACT_APP_DATABASE_PASSWORD: ${{ secrets.REACT_APP_DATABASE_PASSWORD }}
-      run: docker compose up -d
 
-    # 💡 FIX: Wait for MySQL to actually be ready before running tests
+    # 💡 STEP 1: Spin up ONLY your database and backend API containers.
+    # Leave the frontend out of this command so port 5173 stays completely free.
+    # Adjust "database" and "backend" to match your service names in docker-compose.yml
+    - name: Start Backend Services
+      env:
+        REACT_APP_DATABASE_PASSWORD: ${{ secrets.REACT_APP_DATABASE_PASSWORD }}
+      run: docker compose up -d database_service backend_service
+
+    # 💡 STEP 2: Wait for your database to finish initializing before continuing
     - name: Wait for Database Connection
       run: |
-        echo "Waiting for database container to be healthy..."
+        echo "Waiting for database container..."
         until docker exec $(docker ps -q -f name=database) mysqladmin ping -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" --silent; do
-          echo "Database is still booting up... sleeping for 3 seconds"
           sleep 3
         done
-        echo "Database is fully online and matching schema state!"
+        echo "Database is online!"
 
-    # Now your end-to-end testing loop can hit the endpoints safely
+    # 💡 STEP 3: Run Playwright tests.
+    # Playwright's config will see process.env.CI is true, execute 'npm run dev' 
+    # right here natively on the runner, and bind perfectly to port 5173.
     - name: Run Playwright tests
       run: npx playwright test
-      
+
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
