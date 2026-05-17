@@ -22,8 +22,8 @@ services:
       context: .
       dockerfile: Docker/backend.dev.dockerfile
     ports:
-      - "${REACT_APP_SERVER_PORT}:${REACT_APP_SERVER_PORT}"
-      - "${REACT_APP_SOCKET_SERVER_PORT}:${REACT_APP_SOCKET_SERVER_PORT}"
+      - "5500:5500"
+      - "3000:3000"
     env_file:
       - .env
     environment:
