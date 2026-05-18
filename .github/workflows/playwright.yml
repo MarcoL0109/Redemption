@@ -8,7 +8,6 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    container: ubuntu
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -100,4 +99,12 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+    
+    - name: Inspect Docker Container Logs on Failure
+      if: failure()  
+      run: |
+        echo "=========================================================="
+        echo "🐳 PRINTING ALL DOCKER CONTAINER LOGS 🐳"
+        echo "=========================================================="
+        docker compose logs
     
