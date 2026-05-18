@@ -75,7 +75,7 @@ CREATE TABLE `user_info` (
 
 LOCK TABLES `user_info` WRITE;
 /*!40000 ALTER TABLE `user_info` DISABLE KEYS */;
-INSERT INTO `user_info` VALUES (3,'Wingman','marcolau733@gmail.com','$2b$10$V3jtWwN9.pAENDFb4OWNLuiC3o8PKJ1wkNgV0B5WSjV84I/UG8p3G','2026-03-01 18:26:52',1,NULL,'profiles/User-3-Avatar.jpg','2026-05-16 20:03:08'),(4,'LOL','test@gmail.com','$2b$10$dEaeMbNKUdG.6GYHLsdK6e5B1xdfHNUMDV8c7aJw0lieWSQ7RKjlW','2026-03-04 20:56:35',1,NULL,'profiles/User-4-Avatar.jpg','2026-05-16 18:41:57'),(22,'Siu Hin','slau0048@student.monash.edu','$2b$10$NSG9dhS5FTto24HsgxUsjehUyUCoK61jaJKAVy0xR6fQqL1ax0d8K','2026-03-12 17:16:26',1,'2026-03-13 17:16:26',NULL,'2026-05-12 05:34:44');
+INSERT INTO `user_info` VALUES (3,'Wingman','marcolau733@gmail.com','$2b$10$kIoEQ04kMySUgLmU0ZXQg..OVvyaIVBx6ySgUBu4o5B3Ovl.HpwEy','2026-03-01 18:26:52',1,NULL,'profiles/User-3-Avatar.jpg','2026-05-16 20:03:08'),(4,'LOL','test@gmail.com','$2b$10$dEaeMbNKUdG.6GYHLsdK6e5B1xdfHNUMDV8c7aJw0lieWSQ7RKjlW','2026-03-04 20:56:35',1,NULL,'profiles/User-4-Avatar.jpg','2026-05-16 18:41:57'),(22,'Siu Hin','slau0048@student.monash.edu','$2b$10$NSG9dhS5FTto24HsgxUsjehUyUCoK61jaJKAVy0xR6fQqL1ax0d8K','2026-03-12 17:16:26',1,'2026-03-13 17:16:26',NULL,'2026-05-12 05:34:44');
 /*!40000 ALTER TABLE `user_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
