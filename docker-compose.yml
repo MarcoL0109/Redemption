@@ -54,7 +54,7 @@ services:
       - MYSQL_ROOT_PASSWORD=${REACT_APP_DATABASE_PASSWORD:-root_test_pass}
       - MYSQL_DATABASE=redemption_db
     volumes:
-      - ./init-db:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
 
 volumes:
   db_data:

@@ -34,6 +34,12 @@ jobs:
           sleep 3
         done
         echo "Database is online!"
+    
+    - name: Seed Database from Self-Contained Backup
+      run: |
+        echo "Injecting self-contained backup SQL script..."
+        docker exec -i $(docker ps -q -f name=database_service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db < ./init-db/sample_data.sql
+        echo "Backup database schema and data deployed!"
 
     # 💡 STEP 3: Run Playwright tests.
     # Playwright's config will see process.env.CI is true, execute 'npm run dev' 
