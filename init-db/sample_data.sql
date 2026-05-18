@@ -49,6 +49,41 @@ LOCK TABLES `activations` WRITE;
 /*!40000 ALTER TABLE `activations` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
+
+DROP TABLE IF EXISTS `user_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_info` (
+  `user_id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(225) DEFAULT NULL,
+  `create_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `activated` tinyint(1) DEFAULT NULL,
+  `activation_expiration_datetime` datetime DEFAULT NULL,
+  `user_icon` varchar(1024) DEFAULT NULL,
+  `last_login` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `unique_email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_info`
+--
+
+LOCK TABLES `user_info` WRITE;
+/*!40000 ALTER TABLE `user_info` DISABLE KEYS */;
+INSERT INTO `user_info` VALUES (3,'Wingman','marcolau733@gmail.com','$2b$10$V3jtWwN9.pAENDFb4OWNLuiC3o8PKJ1wkNgV0B5WSjV84I/UG8p3G','2026-03-01 18:26:52',1,NULL,'profiles/User-3-Avatar.jpg','2026-05-16 20:03:08'),(4,'LOL','test@gmail.com','$2b$10$dEaeMbNKUdG.6GYHLsdK6e5B1xdfHNUMDV8c7aJw0lieWSQ7RKjlW','2026-03-04 20:56:35',1,NULL,'profiles/User-4-Avatar.jpg','2026-05-16 18:41:57'),(22,'Siu Hin','slau0048@student.monash.edu','$2b$10$NSG9dhS5FTto24HsgxUsjehUyUCoK61jaJKAVy0xR6fQqL1ax0d8K','2026-03-12 17:16:26',1,'2026-03-13 17:16:26',NULL,'2026-05-12 05:34:44');
+/*!40000 ALTER TABLE `user_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+
+
+
+
 --
 -- Table structure for table `join_history`
 --
@@ -134,13 +169,6 @@ CREATE TABLE `problem_set_snapshots` (
 --
 -- Dumping data for table `problem_set_snapshots`
 --
-
-LOCK TABLES `user_info` WRITE;
-/*!40000 ALTER TABLE `user_info` DISABLE KEYS */;
-INSERT INTO `user_info` VALUES (3,'Wingman','marcolau733@gmail.com','$2b$10$V3jtWwN9.pAENDFb4OWNLuiC3o8PKJ1wkNgV0B5WSjV84I/UG8p3G','2026-03-01 18:26:52',1,NULL,'profiles/User-3-Avatar.jpg','2026-05-16 20:03:08'),(4,'LOL','test@gmail.com','$2b$10$dEaeMbNKUdG.6GYHLsdK6e5B1xdfHNUMDV8c7aJw0lieWSQ7RKjlW','2026-03-04 20:56:35',1,NULL,'profiles/User-4-Avatar.jpg','2026-05-16 18:41:57'),(22,'Siu Hin','slau0048@student.monash.edu','$2b$10$NSG9dhS5FTto24HsgxUsjehUyUCoK61jaJKAVy0xR6fQqL1ax0d8K','2026-03-12 17:16:26',1,'2026-03-13 17:16:26',NULL,'2026-05-12 05:34:44');
-/*!40000 ALTER TABLE `user_info` ENABLE KEYS */;
-UNLOCK TABLES;
-
 
 LOCK TABLES `problem_set_snapshots` WRITE;
 /*!40000 ALTER TABLE `problem_set_snapshots` DISABLE KEYS */;
@@ -277,27 +305,6 @@ UNLOCK TABLES;
 -- Table structure for table `user_info`
 --
 
-DROP TABLE IF EXISTS `user_info`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_info` (
-  `user_id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(225) DEFAULT NULL,
-  `create_date` datetime DEFAULT CURRENT_TIMESTAMP,
-  `activated` tinyint(1) DEFAULT NULL,
-  `activation_expiration_datetime` datetime DEFAULT NULL,
-  `user_icon` varchar(1024) DEFAULT NULL,
-  `last_login` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`user_id`),
-  UNIQUE KEY `unique_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_info`
---
 
 --
 -- Table structure for table `user_logins`
