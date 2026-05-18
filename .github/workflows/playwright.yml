@@ -63,7 +63,9 @@ jobs:
         echo "Verifying injected tables in redemption_db:"
         echo "----------------------------------------"
         docker exec $(docker ps -q -f name=database_service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db -e "SHOW TABLES;"
-    
+      
+    - name: Check Running Containers
+      run: docker ps
 
     - name: Wait and Echo Backend Response
       run: |
