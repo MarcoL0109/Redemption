@@ -8,6 +8,7 @@ import UserIcon from '../../assets/user_icon.svg';
 import CogIcon from '../../assets/setting_icon.svg'
 import CollectionIcon from '../../assets/collections.svg'
 import HistoryIcon from '../../assets/history_icon.svg'
+import { API_ROUTES } from "../../utils/api_routes";
 
 
 
@@ -19,14 +20,12 @@ interface UserAccountBoxProps {
 const UserAccountBox: React.FC<UserAccountBoxProps> = ({ onClose, user_data }) => {
     const ref = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState<boolean>(false);
-    // @ts-ignore
-    const USER_API_URL = process.env.VITE_USER_API_URL;
     const nevigate = useNavigate();
     const { logout } = useUser();
 
 
     const handleLogOut = async () => {
-        const logout_response = await fetch(`${USER_API_URL}/logout`, {
+        const logout_response = await fetch(`${API_ROUTES.USERS}/logout`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

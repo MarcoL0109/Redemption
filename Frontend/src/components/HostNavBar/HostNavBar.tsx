@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import LeaderBoardIcon from "../../assets/leaderboard.svg";
 import TerminateRoomIcon from "../../assets/exit_door.svg"
 import "./HostNavBar.css";

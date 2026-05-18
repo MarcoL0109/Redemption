@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import "./SignupPage.css"
 import React, { useState } from 'react';
 import { FourSquare } from 'react-loading-indicators';
+import { API_ROUTES } from '../../utils/api_routes'; 
 
 
 
@@ -17,8 +18,6 @@ function SignUpPage() {
     const [displayLoading, setDisplayLoading] = useState<boolean>(false);
     const [displayErrorMessage, setDisplayErrorMessage] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    // @ts-ignore
-    const USER_API_URL = process.env.VITE_USER_API_URL;
 
 
     const handleInputPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +45,7 @@ function SignUpPage() {
         if (isSubmitting) return;
         setIsSubmitting(true);
         try {
-            const createUserStatus = await fetch(`${USER_API_URL}/createUsers`, {
+            const createUserStatus = await fetch(`${API_ROUTES.USERS}/createUsers`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',

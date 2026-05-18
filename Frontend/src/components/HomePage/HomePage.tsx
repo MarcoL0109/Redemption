@@ -53,7 +53,6 @@ function HomePage() {
     const [potentialDeleteList, setPotentialDeleteList] = useState<number[]>([]);
     const [clearToggle, setClearToggle] = useState<number>(0);
     const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
-    const location = useLocation();
 
 
     const fetch_problem_sets = async (session_user_id: number) => {

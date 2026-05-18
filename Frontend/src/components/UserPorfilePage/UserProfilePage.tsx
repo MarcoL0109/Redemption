@@ -9,7 +9,7 @@ import Tick from "../../assets/tick.svg";
 import Trophy from "../../assets/trophy.svg";
 import HistoyCard from "../HistoryCards/HistoryCard";
 import DateCalendarValue from "../LoginCalendar/LoginCalendar";
-import { CalendarProps } from "../LoginCalendar/LoginCalendar";
+import { API_ROUTES } from "../../utils/api_routes";
 
 
 function UserProfilePage() {
@@ -18,14 +18,12 @@ function UserProfilePage() {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const MAX_FILE_SIZE = 2 * 1024 * 1024;
     const {userId} = useParams()
-    // @ts-ignore
-    const USER_API_URL = process.env.VITE_USER_API_URL;
     const [loginDates, setLoginDates] = useState<string[]>([]);
 
 
     useEffect(() => {
         const fetchLoginDates = async () => {
-            const fetchLoginDatesResponse = await fetch(`${USER_API_URL}/getLoginDates/${userId}`, {
+            const fetchLoginDatesResponse = await fetch(`${API_ROUTES.USERS}/getLoginDates/${userId}`, {
                 method: "GET",
                 credentials: "include",
             });
@@ -62,7 +60,7 @@ function UserProfilePage() {
 
 
     const uploadAvatarImage = async (file: File) => {
-        const signedImageURL = await fetch(`${USER_API_URL}/getNewAvatarImageURL`, {
+        const signedImageURL = await fetch(`${API_ROUTES.USERS}/getNewAvatarImageURL`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -80,7 +78,7 @@ function UserProfilePage() {
                 },
                 body: file
             });
-            await fetch(`${USER_API_URL}/saveAvatarKey`, {
+            await fetch(`${API_ROUTES.USERS}/saveAvatarKey`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

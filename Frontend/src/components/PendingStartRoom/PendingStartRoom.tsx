@@ -3,14 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import Overlays from "../Overlays/Overlay";
 import "./PendingStartRoon.css";
-
-/**
- * TODO
- * Make the leave room / terminate room function
- * Make a kick player function for the host as well
- * 
- * 
- */
+import { API_ROUTES } from "../../utils/api_routes";
 
 
 
@@ -18,12 +11,7 @@ function PendingStartRoom() {
 
     //@ts-ignore
     const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_SERVER_URL as string;
-    //@ts-ignore
-    const ROOM_API_URL = process.env.VITE_ROOM_MANAGEMENT_API_URL as string;
-    //@ts-ignore
-    const UTILS_API_URL = process.env.VITE_UTILS_API_URL as string;
     const socketRef = useRef<Socket | null>(null);
-    // Even though user_id is not used in here, but is a good component to identify participant is a logged in user or not
     const {userId, username, roomId, problem_set_id} = useParams();
     const [playerList, setPlayerList] = useState<string[]>([]);
     const [isHost, setIsHost] = useState<boolean>(false);
@@ -41,7 +29,7 @@ function PendingStartRoom() {
 
 
     const handleStoreRoomCodeRedis = async (socket_id: any, session: string) => {
-        const store_socket_id_redis = await fetch(`${ROOM_API_URL}/storeRoomCodeSocketId`, {
+        const store_socket_id_redis = await fetch(`${API_ROUTES.ROOMS}/storeRoomCodeSocketId`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -57,7 +45,7 @@ function PendingStartRoom() {
 
 
     const handleSetRoomHost = async (room_code: string, session_id: string) => {
-        const check_is_host_repsonse = await fetch(`${ROOM_API_URL}/getRoomHost`, {
+        const check_is_host_repsonse = await fetch(`${API_ROUTES.ROOMS}/getRoomHost`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -74,7 +62,7 @@ function PendingStartRoom() {
 
 
     const getRoomSocketId = async (room_code: string) => {
-        const get_socket_id_response = await fetch(`${ROOM_API_URL}/getRoomSocketID`, {
+        const get_socket_id_response = await fetch(`${API_ROUTES.ROOMS}/getRoomSocketID`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -92,7 +80,7 @@ function PendingStartRoom() {
 
 
     const getSessionID = async () => {
-        const getSessionInfoRepsonse = await fetch(`${UTILS_API_URL}/SessionInfo`, {
+        const getSessionInfoRepsonse = await fetch(`${API_ROUTES.UTILS}/SessionInfo`, {
             method: "GET",
             credentials: "include"
         })

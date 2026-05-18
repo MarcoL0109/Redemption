@@ -8,6 +8,7 @@ import RankPage from "../RankPage/RankPage";
 import {RankPageProps} from "../RankPage/RankPage";
 import HostNavBar from "../HostNavBar/HostNavBar";
 import Overlays from "../Overlays/Overlay";
+import { API_ROUTES } from "../../utils/api_routes";
 
 
 function GamePage() {
@@ -16,10 +17,6 @@ function GamePage() {
     const savedStatusRef = useRef(-1);
     //@ts-ignore
     const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_SERVER_URL as string;
-    //@ts-ignore
-    const ROOM_API_URL = process.env.VITE_ROOM_MANAGEMENT_API_URL as string;
-    //@ts-ignore
-    const UTILS_API_URL = process.env.VITE_UTILS_API_URL as string;
     const navigate = useNavigate();
     const {userId, username, roomId, problem_set_id} = useParams();
     const [isHost, setIsHost] = useState<boolean>(false);
@@ -60,7 +57,7 @@ function GamePage() {
 
 
     const getRoomSocketId = async (room_code: string) => {
-        const get_socket_id_response = await fetch(`${ROOM_API_URL}/getRoomSocketID`, {
+        const get_socket_id_response = await fetch(`${API_ROUTES.ROOMS}/getRoomSocketID`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -78,7 +75,7 @@ function GamePage() {
 
 
     const handleStoreRoomCodeRedis = async (socket_id: any, session: string) => {
-        const store_socket_id_redis = await fetch(`${ROOM_API_URL}/storeRoomCodeSocketId`, {
+        const store_socket_id_redis = await fetch(`${API_ROUTES.ROOMS}/storeRoomCodeSocketId`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -94,7 +91,7 @@ function GamePage() {
 
 
     const handleSetRoomHost = async (room_code: string, session_id: string) => {
-        const check_is_host_repsonse = await fetch(`${ROOM_API_URL}/getRoomHost`, {
+        const check_is_host_repsonse = await fetch(`${API_ROUTES.ROOMS}/getRoomHost`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -111,7 +108,7 @@ function GamePage() {
 
 
     const getSessionID = async () => {
-        const getSessionInfoRepsonse = await fetch(`${UTILS_API_URL}/SessionInfo`, {
+        const getSessionInfoRepsonse = await fetch(`${API_ROUTES.UTILS}/SessionInfo`, {
             method: "GET",
             credentials: "include"
         })
@@ -128,7 +125,7 @@ function GamePage() {
         socketRef.current = socket;
 
         (async () => {
-            const roomExist = await fetch(`${ROOM_API_URL}/checkRoomCodeExist`, {
+            const roomExist = await fetch(`${API_ROUTES.ROOMS}/checkRoomCodeExist`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

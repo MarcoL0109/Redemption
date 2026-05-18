@@ -1,6 +1,7 @@
 import "./InputPINBox.css"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
+import { API_ROUTES } from "../../utils/api_routes";
 
 
 interface InputPINProps {
@@ -14,15 +15,13 @@ function InputPinBox({username, userId}: InputPINProps) {
     const [roomCode, setRoomCode] = useState<string>("");
     const [displayRoomNotFound, setDisplayRoomNotFound] = useState<boolean>(false);
     const [displayRoomLocked, setDisplayRoomLocked] = useState<boolean>(false);
-    //@ts-ignore
-    const ROOM_MANAGEMENT_API_URL = process.env.VITE_ROOM_MANAGEMENT_API_URL;
 
-
+    
     const handleSearchRoom = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setDisplayRoomLocked(false);
         setDisplayRoomNotFound(false);
-        const check_room_exist = await fetch(`${ROOM_MANAGEMENT_API_URL}/checkRoomCodeExist`, {
+        const check_room_exist = await fetch(`${API_ROUTES.ROOMS}/checkRoomCodeExist`, {
             method: "POST",
             credentials: "include",
             headers: {

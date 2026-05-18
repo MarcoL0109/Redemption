@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import React, { useState, useEffect } from "react";
+import { API_ROUTES } from "../../utils/api_routes";
 import "./ValidateCode.css"
 
 
@@ -13,15 +14,13 @@ function ValidateResetPasswordCode() {
     const [inputValidationCode, setInputValidationCode] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [countDown, setCountDown] = useState<number>(60);
-    // @ts-ignore
-    const USER_API_URL = process.env.VITE_USER_API_URL;
 
 
     const handleValidateCode = async (email: string, validationCode: string) => {
         if (isSubmitting) return;
         setIsSubmitting(true);
         try {
-            const validateResult = await fetch(`${USER_API_URL}/ValidateCode`, {
+            const validateResult = await fetch(`${API_ROUTES.USERS}/ValidateCode`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -65,7 +64,7 @@ function ValidateResetPasswordCode() {
 
     const handleResend = async () => {
         if (countDown === 0) {
-            const resendCodeResponse = await fetch(`${USER_API_URL}/forgotPassword`, {
+            const resendCodeResponse = await fetch(`${API_ROUTES.USERS}/forgotPassword`, {
                 method: "POST",
                 headers: {
                 'Content-Type': 'application/json',

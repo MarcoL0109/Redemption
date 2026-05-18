@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./ForgotPasswordPage.css";
 import { FourSquare } from 'react-loading-indicators';
+import { API_ROUTES } from '../../utils/api_routes';
 
 
 function ForgotPasswordPage() {
@@ -10,11 +11,9 @@ function ForgotPasswordPage() {
     const [inputEmail, setInputEmail] = useState<string>("");
     const [userAccountNotFound, setuserAccountNotFound] = useState<boolean>(false);
     const [displayLoading, setDisplayLoading] = useState<boolean>(false);
-    // @ts-ignore
-    const USER_API_URL = process.env.VITE_USER_API_URL;
 
     const handleForgotPassword = async (email: string) => {
-        const resetPassword = await fetch(`${USER_API_URL}/forgotPassword`, {
+        const resetPassword = await fetch(`${API_ROUTES.USERS}/forgotPassword`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

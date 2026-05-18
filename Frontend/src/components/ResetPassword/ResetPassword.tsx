@@ -1,6 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./ResetPassword.css"
+import { API_ROUTES } from "../../utils/api_routes";
+
 
 function ResetPassword() {
 
@@ -10,8 +12,6 @@ function ResetPassword() {
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [inputPassword, setInputPassword] = useState<string>("");
     const [diffPassword, setDiffPassword] = useState<boolean>(false);
-    // @ts-ignore
-    const USER_API_URL = process.env.VITE_USER_API_URL;
 
     
     useEffect(() => {
@@ -38,7 +38,7 @@ function ResetPassword() {
 
 
     const handleValidateCode = async (email: string, validationCode: string) => {
-        const validateCodeStatus = await fetch(`${USER_API_URL}/ValidateCode`, {
+        const validateCodeStatus = await fetch(`${API_ROUTES.USERS}/ValidateCode`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ function ResetPassword() {
 
 
     const handleResetPassword = async (inputEmail: string, confirmedPassword: string) => {
-        const resetPasswordStatus = await fetch(`${USER_API_URL}/ResetPassword`, {
+        const resetPasswordStatus = await fetch(`${API_ROUTES.USERS}/ResetPassword`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

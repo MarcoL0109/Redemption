@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import NavBar from "../NavBar/NavBar";
 import "./HistoryRecordPage.css"
+import { API_ROUTES } from "../../utils/api_routes";
 
 
 interface HistoryRecords {
@@ -19,15 +20,13 @@ function HistoryRecord() {
     const [snapShotContent, setSnapShotContent] = useState<HistoryRecords[]>([]);
     const [currIndex, setCurrIndex] = useState<number>(0);
     const [answerHistory, setAnswerHistory] = useState<string[]>([]);
-    // @ts-ignore
-    const HISTORY_API_URL = process.env.VITE_HISTORY_MANAGEMENT_API_URL;
     const currentDisplayProblem = snapShotContent[currIndex];
     const currentAnswerHistory = answerHistory[currIndex];
 
 
     useEffect(() => {
         const fetchSnapShots = async () => {
-            const fetchSnapShotResponse = await fetch(`${HISTORY_API_URL}/getSnapShotContent`, {
+            const fetchSnapShotResponse = await fetch(`${API_ROUTES.HISTORY}/getSnapShotContent`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -43,7 +42,7 @@ function HistoryRecord() {
         }
 
         const fetchAnswerHistory = async () => {
-            const fetchAnswerHistoryResponse = await fetch(`${HISTORY_API_URL}/getAnswerHistory`, {
+            const fetchAnswerHistoryResponse = await fetch(`${API_ROUTES.HISTORY}/getAnswerHistory`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

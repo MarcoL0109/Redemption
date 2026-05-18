@@ -3,6 +3,7 @@ import HistoyCard from "../HistoryCards/HistoryCard"
 import NavBar from "../NavBar/NavBar"
 import "./HistoryPage.css"
 import { useParams } from "react-router-dom"
+import { API_ROUTES } from "../../utils/api_routes"
 
 
 export interface HistoryCardProp {
@@ -41,15 +42,13 @@ export const mapApiRecordToInterface = (apiData: any): HistoryCardProp => {
 
 function HistoryPage() {
 
-    // @ts-ignore
-    const HISTORY_API_URL = process.env.VITE_HISTORY_MANAGEMENT_API_URL;
     const [historyRecords, setHistoryRecords] = useState<HistoryCardProp[]>([]);
     const {userId} = useParams()
 
 
     useEffect(() => {
         const fetchHistoryRecords = async () => {
-            const fetchHistoryResponse = await fetch(`${HISTORY_API_URL}/getHistoryRecord`, {
+            const fetchHistoryResponse = await fetch(`${API_ROUTES.HISTORY}/getHistoryRecord`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

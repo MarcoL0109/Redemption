@@ -6,7 +6,8 @@ import "./ProblemList.css";
 import NavBar from "../NavBar/NavBar";
 import Overlays from "../Overlays/Overlay";
 import Sortable from "../SortableList/SortableList";
-import { Mosaic, Commet } from "react-loading-indicators";
+import { Mosaic } from "react-loading-indicators";
+import { API_ROUTES } from "../../utils/api_routes";
 
 
 export interface Problem {
@@ -62,14 +63,6 @@ function ProblemList() {
     const params = useParams<{ problem_set_id?: string }>();
     const problem_set_id_string = params?.problem_set_id ?? "0";
     const problem_set_id = parseInt(problem_set_id_string, 10);
-    //@ts-ignore
-    const PROBLEM_SET_API_URL = process.env.VITE_PROBLEM_SETS_API_URL as string;
-    //@ts-ignore
-    const UTILS_API_URL = process.env.VITE_UTILS_API_URL as string;
-    //@ts-ignore
-    const USER_API_URL = process.env.VITE_USER_API_URL as string;
-    //@ts-ignore
-    const ROOM_API_URL = process.env.VITE_ROOM_MANAGEMENT_API_URL as string;
     const navigate = useNavigate();
 
     const [displayError, setDisplayError] = useState<boolean>(false);
@@ -99,7 +92,7 @@ function ProblemList() {
 
     const fetch_problem_list = async () => {
         setIsLoaded(false);
-        const fetch_problem_list_response = await fetch(`${PROBLEM_SET_API_URL}/getProblems`, {
+        const fetch_problem_list_response = await fetch(`${API_ROUTES.PROBLEM_SETS}/getProblems`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -130,7 +123,7 @@ function ProblemList() {
 
     useEffect(() => {
         const fetch_user_data_from_session = async () => {
-            const fetch_session_info_response = await fetch(`${UTILS_API_URL}/SessionInfo`, {
+            const fetch_session_info_response = await fetch(`${API_ROUTES.UTILS}/SessionInfo`, {
                 method: "GET",
                 credentials: "include"
             });
@@ -140,7 +133,7 @@ function ProblemList() {
                 if (fetched_user_id === null) {
                     navigate("/SignIn");
                 }
-                const get_user_data_response = await fetch(`${USER_API_URL}/getUserInfo`, {
+                const get_user_data_response = await fetch(`${API_ROUTES.USERS}/getUserInfo`, {
                     method: "POST",
                     headers: {
                         "Content-type": "application/json"
@@ -150,14 +143,7 @@ function ProblemList() {
                 });
                 const user_data_json = await get_user_data_response.json();
                 const user_data_content = user_data_json.userData;
-                let image_url = "";
-                if (user_data_content && user_data_content.user_icon !== null) {
-                    const arrayBuffer = new Uint8Array(user_data_content.user_icon.data);
-                    const image_blob = new Blob([arrayBuffer], { type: 'image/jpg' });
-                    image_url = URL.createObjectURL(image_blob);
-                }
                 if (user_data_content) {
-                    user_data_content.user_icon = image_url;
                     setUserData(user_data_content);
                     setIsLoaded(true);
                 }  
@@ -324,7 +310,7 @@ function ProblemList() {
                 objectForAPICall[key] = modifiedProblems[key];
             }
         }
-        const update_problems_response = await fetch(`${PROBLEM_SET_API_URL}/SaveUpdatedProblems`, {
+        const update_problems_response = await fetch(`${API_ROUTES.PROBLEM_SETS}/SaveUpdatedProblems`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
@@ -342,7 +328,7 @@ function ProblemList() {
 
 
     const handleSaveDelete = async () => {
-        const delete_response = await fetch(`${PROBLEM_SET_API_URL}/DeleteProblems`, {
+        const delete_response = await fetch(`${API_ROUTES.PROBLEM_SETS}/DeleteProblems`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -389,7 +375,7 @@ function ProblemList() {
 
 
     const handleSaveAddedProblems = async () => {
-        const insert_problem_repsonse = await fetch(`${PROBLEM_SET_API_URL}/CreateNewProblem`, {
+        const insert_problem_repsonse = await fetch(`${API_ROUTES.PROBLEM_SETS}/CreateNewProblem`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -407,7 +393,7 @@ function ProblemList() {
 
 
     const handleUpdateLastWriteTime = async () => {
-        const updateResponse = await fetch(`${PROBLEM_SET_API_URL}/UpdateWriteTime`, {
+        const updateResponse = await fetch(`${API_ROUTES.PROBLEM_SETS}/UpdateWriteTime`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -458,7 +444,7 @@ function ProblemList() {
 
 
     const handleStartRoom = async () => {
-        const get_room_code = await fetch(`${ROOM_API_URL}/getRoomCode`, {
+        const get_room_code = await fetch(`${API_ROUTES.ROOMS}/getRoomCode`, {
             method: "GET",
             credentials: "include",
         })
