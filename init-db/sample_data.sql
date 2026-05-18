@@ -135,6 +135,13 @@ CREATE TABLE `problem_set_snapshots` (
 -- Dumping data for table `problem_set_snapshots`
 --
 
+LOCK TABLES `user_info` WRITE;
+/*!40000 ALTER TABLE `user_info` DISABLE KEYS */;
+INSERT INTO `user_info` VALUES (3,'Wingman','marcolau733@gmail.com','$2b$10$V3jtWwN9.pAENDFb4OWNLuiC3o8PKJ1wkNgV0B5WSjV84I/UG8p3G','2026-03-01 18:26:52',1,NULL,'profiles/User-3-Avatar.jpg','2026-05-16 20:03:08'),(4,'LOL','test@gmail.com','$2b$10$dEaeMbNKUdG.6GYHLsdK6e5B1xdfHNUMDV8c7aJw0lieWSQ7RKjlW','2026-03-04 20:56:35',1,NULL,'profiles/User-4-Avatar.jpg','2026-05-16 18:41:57'),(22,'Siu Hin','slau0048@student.monash.edu','$2b$10$NSG9dhS5FTto24HsgxUsjehUyUCoK61jaJKAVy0xR6fQqL1ax0d8K','2026-03-12 17:16:26',1,'2026-03-13 17:16:26',NULL,'2026-05-12 05:34:44');
+/*!40000 ALTER TABLE `user_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 LOCK TABLES `problem_set_snapshots` WRITE;
 /*!40000 ALTER TABLE `problem_set_snapshots` DISABLE KEYS */;
 INSERT INTO `problem_set_snapshots` VALUES (2,'b55b6f13a98e6b2f7af7ede59c3ffab6f699cfb8c684a82e218d006e19d7f898','Second trsting problem set longer title finally should work now 1','2026-05-07 14:36:48'),(3,'565cd1298cb3eb2d4ceb6cdc2d72c6efe4495abc6d460b83b0cb54395f960c72','New Problem Shit Bro','2026-05-07 14:48:40'),(4,'ba94c049c472c66a157c700fa3c716e37087ba84d4064ffb62ad961c890243c8','New Problem Shit Bro','2026-05-07 15:31:26'),(5,'07b013bacea13cbc18c5ce088936cf6e4d8b0b6cf046456f4376055e58166256','New Problem Shit Bro','2026-05-07 15:32:53'),(6,'e5740071a3eed82f29fcd1141b3a09405b30aad27e9acd6ba44f3d525822a218','New Problem Shit Bro','2026-05-07 15:35:11'),(7,'645d80a15641537befe5682f2dc1bf7e8513224a716cf44a102a84fec8175233','Test for wings','2026-05-08 13:51:25'),(8,'d2949320fa25b003f5c0899ea3ca7382d1af2577139ba458d1db4a82b3e5c9b3','Test for wings','2026-05-14 16:15:45'),(9,'0c4232c2d93af55c1e68cb6347526c874c8242b1ae77bb145bf8df7682e78f4f','Test for wings','2026-05-15 11:48:33'),(10,'b15683d39cc3ee1f6434cedd23134982bdef4ed17aee14b337ba0c3cb64d9fe6','Test for wings','2026-05-15 11:54:32'),(11,'89e6b2b05eff94abd3320175961a80f1295c40fea74b1e8058da959f2a372b48','Second trsting problem set longer title finally should work now 1','2026-05-15 12:09:15');
@@ -291,12 +298,6 @@ CREATE TABLE `user_info` (
 --
 -- Dumping data for table `user_info`
 --
-
-LOCK TABLES `user_info` WRITE;
-/*!40000 ALTER TABLE `user_info` DISABLE KEYS */;
-INSERT INTO `user_info` VALUES (3,'Wingman','marcolau733@gmail.com','$2b$10$V3jtWwN9.pAENDFb4OWNLuiC3o8PKJ1wkNgV0B5WSjV84I/UG8p3G','2026-03-01 18:26:52',1,NULL,'profiles/User-3-Avatar.jpg','2026-05-16 20:03:08'),(4,'LOL','test@gmail.com','$2b$10$dEaeMbNKUdG.6GYHLsdK6e5B1xdfHNUMDV8c7aJw0lieWSQ7RKjlW','2026-03-04 20:56:35',1,NULL,'profiles/User-4-Avatar.jpg','2026-05-16 18:41:57'),(22,'Siu Hin','slau0048@student.monash.edu','$2b$10$NSG9dhS5FTto24HsgxUsjehUyUCoK61jaJKAVy0xR6fQqL1ax0d8K','2026-03-12 17:16:26',1,'2026-03-13 17:16:26',NULL,'2026-05-12 05:34:44');
-/*!40000 ALTER TABLE `user_info` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `user_logins`
