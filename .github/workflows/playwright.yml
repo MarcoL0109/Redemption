@@ -60,7 +60,7 @@ jobs:
         echo "----------------------------------------"
         echo "Verifying injected tables in redemption_db:"
         echo "----------------------------------------"
-        docker exec $(docker ps -q -f name=database_service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db -e "SELECT * FROM user_info;"
+        docker exec $(docker ps -q -f name=database_service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db -e "SELECT email, password, LENGTH(password) FROM user_info WHERE email='marcolau733@gmail.com';"
       
     - name: Generate and Log Bcrypt Hash
       run: |
