@@ -48,4 +48,13 @@ test.describe('Sign In Component Layout and Flow', () => {
     await expect(page).toHaveURL(/.*\/Home/);
   })
 
+  test('should display shaking error message due to account not activated', async ({ page }) => {
+    await page.locator('.email_form_inputs').fill('test@gmail.com');
+    await page.locator('.password_form_inputs').fill('1234');
+    await page.locator('.SignInButton').click();
+    const errorMessage = page.locator('.ErrorMessage.anim-shake');
+    await expect(errorMessage).toBeVisible();
+    await expect(errorMessage).toHaveText('Account Not Activated');
+  })
+
 });

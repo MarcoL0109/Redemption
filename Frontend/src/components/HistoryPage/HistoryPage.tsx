@@ -70,6 +70,7 @@ function HistoryPage() {
         <div className="HomePageContainer">
             <NavBar/>
             {
+                historyRecords.length > 0 ?
                 historyRecords.map((history) =>
                     <div key={history.recordId} className="HistoryListContainer">
                         <ul className="ProblemList">
@@ -80,7 +81,12 @@ function HistoryPage() {
                                     />
                         </ul>
                     </div>
-                )
+                ) :
+                <div className="CreateFirstProblemTextMessageContainer">
+                    <div className="HistTechnicalStatusIndicator YellowStatus">[ NO RECORD FOUND ]</div>
+                    <h2 className="HistCreateFirstProblemTextMessage">No session history detected_</h2>
+                    <p className="HistCreateFirstProblemSubTextMessage">Your past rooms and performance metrics will populate here once initialization occurs.</p>
+                </div>
             }
         </div>            
     )

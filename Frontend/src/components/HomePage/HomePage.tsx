@@ -321,7 +321,9 @@ function HomePage() {
             {
                 (isloaded && problemSets.length == 0) &&
                 <div className="CreateFirstProblemTextMessageContainer">
-                    <h2 className="CreateFirstProblemTextMessage">Create your first Problem Set Now!!</h2>
+                    <div className="TechnicalStatusIndicator">[ SYSTEM READY ]</div>
+                    <h2 className="CreateFirstProblemTextMessage">Create your first problem set now</h2>
+                    <p className="CreateFirstProblemSubTextMessage">Initialize a new problem list to start a room.</p>
                 </div>
             }
 

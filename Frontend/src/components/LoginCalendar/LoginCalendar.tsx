@@ -11,8 +11,8 @@ export interface CalendarProps {
 }
 
 export default function CustomColorCalendar({ loginDays = [] }: CalendarProps) {
-  const activeLogs = loginDays.length > 0 ? loginDays : ['2026-05-01', '2026-05-12', '2026-05-17'];
-  const [selectedDate, setSelectedDate] = React.useState<Dayjs | null>(dayjs('2026-05-17'));
+  const activeLogs = loginDays.length > 0 ? loginDays : [];
+  const [selectedDate, setSelectedDate] = React.useState<Dayjs | null>(dayjs());
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
