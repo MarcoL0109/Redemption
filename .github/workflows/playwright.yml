@@ -30,7 +30,7 @@ jobs:
     - name: Wait for Database Connection
       run: |
         echo "Waiting for database container..."
-        until docker exec $(docker ps -q -f name=database) mysqladmin ping -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" --silent; do
+        until docker exec $(docker ps -q -f name=database_service) mysqladmin ping -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" --silent; do
           sleep 3
         done
         echo "Database is online!"
