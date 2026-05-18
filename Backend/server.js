@@ -44,7 +44,7 @@ async function startApp() {
 
         // 5. API Routes
         app.use("/api/users", userAPIs);
-        app.use("/utils/", utilAPIs);
+        app.use("/utils", utilAPIs);
         app.use("/api/problemsets", problemSetsAPIs);
         app.use("/api/rooms", roomManagementAPI);
         app.use("/api/history", historyManagementAPI);
