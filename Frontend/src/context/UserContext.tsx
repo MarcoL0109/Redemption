@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { HistoryCardProp, mapApiRecordToInterface} from '../components/HistoryPage/HistoryPage';
 import { useNavigate } from 'react-router-dom';
+import { API_ROUTES } from '../utils/api_routes';
 
 
 interface UserData {
@@ -40,12 +41,6 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [userData, setUserData] = useState<UserData>(DEFAULT_USER);
     const [loading, setLoading] = useState(true);
-    // @ts-ignore
-    const USER_API_URL = process.env.VITE_USER_API_URL;
-    // @ts-ignore
-    const UTILS_API_URL = process.env.VITE_UTILS_API_URL;
-    // @ts-ignore
-    const HISTORY_API_URL = process.env.VITE_HISTORY_MANAGEMENT_API_URL;
     const navigate = useNavigate();
 
     const logout = () => {
@@ -53,7 +48,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const fetchUser = useCallback(async () => {
-        const getSessionInfoRepsonse = await fetch(`${UTILS_API_URL}/SessionInfo`, {
+        const getSessionInfoRepsonse = await fetch(`${API_ROUTES.UTILS}/SessionInfo`, {
             method: "GET",
             credentials: "include"
         })
@@ -64,7 +59,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             navigate("/SignIn");
             return;
         }
-        const get_user_data_response = await fetch(`${USER_API_URL}/getUserInfo`, {
+        const get_user_data_response = await fetch(`${API_ROUTES.USERS}/getUserInfo`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
@@ -76,7 +71,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const user_data_content = user_data_json.userData;
         let image_url = "";
         try {
-            const response = await fetch(`${USER_API_URL}/getAvatarUrl/${user_data_content.user_id}`);
+            const response = await fetch(`${API_ROUTES.USERS}/getAvatarUrl/${user_data_content.user_id}`);
             if (response.ok) {
                 const data = await response.json();
                 image_url = data.imageUrl;
@@ -85,7 +80,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             console.error("Failed to load avatar", err);
         }
 
-        const recentJoinHistory = await fetch(`${HISTORY_API_URL}/getHistoryRecord`, {
+        const recentJoinHistory = await fetch(`${API_ROUTES.HISTORY}/getHistoryRecord`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
