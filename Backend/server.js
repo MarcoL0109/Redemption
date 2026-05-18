@@ -53,7 +53,7 @@ async function startApp() {
             res.sendFile(path.join(distPath, 'index.html'));
         });
 
-        const PORT = parseInt(process.env.REACT_APP_SERVER_PORT) || 5500;
+        const PORT = 5500;
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`🚀 Server is listening on port ${PORT}`);
         });
