@@ -24,7 +24,21 @@ jobs:
     - name: Start Backend Services
       env:
         REACT_APP_DATABASE_PASSWORD: ${{ secrets.REACT_APP_DATABASE_PASSWORD }}
-      run: docker compose up -d database_service backend
+      run: docker compose up -d database_service redis
+    
+    - name: Wait for Redis Connection
+      run: |
+        echo "Waiting for Redis container..."
+        # Uses redis-cli ping inside the container until it returns 'PONG'
+        until docker exec $(docker ps -q -f name=redis_service) redis-cli ping | grep -q "PONG"; do
+          echo "Redis is booting up... sleeping for 2 seconds"
+          sleep 2
+        done
+        echo "Redis is online!"
+
+    # 4. Now that DB and Redis are 100% ready, spin up your backend application safely
+    - name: Start Backend API Service
+      run: docker compose up -d backend
 
     # 💡 STEP 2: Wait for your database to finish initializing before continuing
     - name: Wait for Database Connection
@@ -46,7 +60,7 @@ jobs:
         echo "----------------------------------------"
         echo "Verifying injected tables in redemption_db:"
         echo "----------------------------------------"
-        docker exec $(docker ps -q -f name=database_service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db -e "SELECT * FROM user_info;"
+        docker exec $(docker ps -q -f name=database_service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db -e "SHOW TABLES;"
 
     # 💡 STEP 3: Run Playwright tests.
     # Playwright's config will see process.env.CI is true, execute 'npm run dev' 
