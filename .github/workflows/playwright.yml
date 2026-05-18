@@ -39,6 +39,8 @@ jobs:
     # 4. Now that DB and Redis are 100% ready, spin up your backend application safely
     - name: Start Backend API Service
       run: docker compose up -d backend
+      env:
+        REACT_APP_SESSION_SECRET: ${{ secrets.REACT_APP_SESSION_SECRET }}
 
     # 💡 STEP 2: Wait for your database to finish initializing before continuing
     - name: Wait for Database Connection
