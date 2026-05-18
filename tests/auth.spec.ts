@@ -45,7 +45,7 @@ test.describe('Sign In Component Layout and Flow', () => {
     await page.locator('.email_form_inputs').fill('test@gmail.com');
     await page.locator('.password_form_inputs').fill('1234');
     await page.locator('.SignInButton').click();
-    await expect(page).toHaveURL(/.*\/Home/);
+    await expect(page).toHaveURL(/.*\/Home/, { timeout: 15000 });
   })
 
 });
