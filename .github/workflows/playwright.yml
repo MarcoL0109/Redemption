@@ -29,6 +29,8 @@ jobs:
     # 💡 STEP 2: Wait for your database to finish initializing before continuing
     - name: Wait for Database Connection
       run: |
+        echo "Giving MySQL a moment to create its socket file..."
+          sleep 15  # 💡 Add a hard pause right here
         echo "Waiting for database container..."
         until docker exec $(docker ps -q -f name=database_service) mysqladmin ping -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" --silent; do
           sleep 3
