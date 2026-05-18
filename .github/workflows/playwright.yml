@@ -30,7 +30,7 @@ jobs:
       run: |
         echo "Waiting for Redis container..."
         # Uses redis-cli ping inside the container until it returns 'PONG'
-        until docker exec $(docker ps -q -f name=redis_service) redis-cli ping | grep -q "PONG"; do
+        until docker exec $(docker ps -q -f name=redis) redis-cli ping | grep -q "PONG"; do
           echo "Redis is booting up... sleeping for 2 seconds"
           sleep 2
         done
