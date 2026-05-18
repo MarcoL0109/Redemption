@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useUser } from '../../context/UserContext';
 import Eye from "../../assets/Eye.svg";
 import HiddenEye from "../../assets/HiddenEye.svg";
+import {API_ROUTES}  from "../../utils/api_routes";
 
 
 function SignInPage() {
@@ -17,14 +18,13 @@ function SignInPage() {
     const [hidden, setHidden] = useState<boolean>(true);
     const { refreshUser } = useUser();
     //@ts-ignore
-    const USER_API_URL = process.env.VITE_USER_API_URL;
 
 
     const HandleSignIn = async (email: string, password: string) => {
         if (isSubmitting) return;
         setIsSubmitting(true);
         try {
-            const login_status = await fetch(`${USER_API_URL}/login`, {
+            const login_status = await fetch(`${API_ROUTES.USERS}/login`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
