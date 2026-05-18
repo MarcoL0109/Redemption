@@ -6,6 +6,7 @@ import { Mosaic } from 'react-loading-indicators';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
+import { API_ROUTES } from "../../utils/api_routes";
 
 
 export interface ProblemSetModificationMap {
@@ -28,12 +29,6 @@ interface ProblemSet {
 function HomePage() {
 
     const navigate = useNavigate();
-    // @ts-ignore
-    const UTILS_API_URL = process.env.VITE_UTILS_API_URL;
-    // @ts-ignore
-    const USER_API_URL = process.env.VITE_USER_API_URL;
-    // @ts-ignore
-    const PROBLEM_SET_API_URL = process.env.VITE_PROBLEM_SETS_API_URL;
     const { userData, loading } = useUser();
     const [problemSets, setProblemSets] = useState<ProblemSet[]>([
         {
@@ -59,11 +54,10 @@ function HomePage() {
     const [clearToggle, setClearToggle] = useState<number>(0);
     const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
     const location = useLocation();
-    const [streak, setStreak] = useState(location.state?.streak || 0);
 
 
     const fetch_problem_sets = async (session_user_id: number) => {
-        const fecth_problem_set_response = await fetch(`${PROBLEM_SET_API_URL}/getProblemSets`, {
+        const fecth_problem_set_response = await fetch(`${API_ROUTES.PROBLEM_SETS}/getProblemSets`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -80,7 +74,7 @@ function HomePage() {
 
     useEffect(() => {
         const checkUserValidation = async () => {
-            const getSessionInfoRepsonse = await fetch(`${UTILS_API_URL}/SessionInfo`, {
+            const getSessionInfoRepsonse = await fetch(`${API_ROUTES.UTILS}/SessionInfo`, {
                 method: "GET",
                 credentials: "include"
             })
@@ -109,7 +103,7 @@ function HomePage() {
 
 
     const handleSaveUpdate = async () => {
-        const update_problem_set_status = await fetch(`${PROBLEM_SET_API_URL}/UpdateProblemSets`, {
+        const update_problem_set_status = await fetch(`${API_ROUTES.PROBLEM_SETS}/UpdateProblemSets`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -127,7 +121,7 @@ function HomePage() {
 
 
     const handleSaveCreate = async () => {
-        const create_problem_set_status = await fetch(`${PROBLEM_SET_API_URL}/CreateNewProblemSet`, {
+        const create_problem_set_status = await fetch(`${API_ROUTES.PROBLEM_SETS}/CreateNewProblemSet`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -145,7 +139,7 @@ function HomePage() {
 
 
     const handleSaveDelete = async () => {
-        const delete_problems_response = await fetch(`${PROBLEM_SET_API_URL}/DeleteProblemSets`, {
+        const delete_problems_response = await fetch(`${API_ROUTES.PROBLEM_SETS}/DeleteProblemSets`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

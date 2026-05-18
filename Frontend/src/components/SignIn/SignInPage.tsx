@@ -17,9 +17,8 @@ function SignInPage() {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [hidden, setHidden] = useState<boolean>(true);
     const { refreshUser } = useUser();
-    //@ts-ignore
 
-
+    
     const HandleSignIn = async (email: string, password: string) => {
         if (isSubmitting) return;
         setIsSubmitting(true);
