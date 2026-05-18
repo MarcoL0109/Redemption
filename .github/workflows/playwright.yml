@@ -64,27 +64,6 @@ jobs:
         echo "----------------------------------------"
         docker exec $(docker ps -q -f name=database_service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db -e "SHOW TABLES;"
       
-    - name: Check Running Containers
-      run: docker ps
-
-    - name: Wait and Echo Backend Response
-      run: |
-        echo "=========================================================="
-        echo "📡 PINGING BACKEND ON PORT 5500... 📡"
-        echo "=========================================================="
-        
-        # Give the container up to 30 seconds to wake up and respond
-        timeout 30s bash -c 'until curl -s http://localhost:5500/utils/SessionInfo > /dev/null; do sleep 1; done' || true
-        
-        echo ""
-        echo "👉 Raw HTTP Status Code:"
-        curl -s -o /dev/null -w "%{http_code}" http://localhost:5500/utils/SessionInfo
-        
-        echo ""
-        echo "👉 Raw Response Body Payload:"
-        curl -s http://localhost:5500/utils/SessionInfo
-        echo ""
-        echo "=========================================================="
 
     # 💡 STEP 3: Run Playwright tests.
     # Playwright's config will see process.env.CI is true, execute 'npm run dev' 
