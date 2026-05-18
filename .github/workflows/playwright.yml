@@ -78,10 +78,26 @@ jobs:
     # right here natively on the runner, and bind perfectly to port 5173.
     - name: Run Playwright tests
       run: npx playwright test
+    
+    # 💡 ADD THIS STEP HERE: This will print the container logs to your screen
+    - name: Debug Container Logs on Failure
+      if: always()  # This ensures it runs even if the tests fail
+      run: |
+        echo "=========================================================="
+        echo "🔥 BACKEND APPLICATION LOGS 🔥"
+        echo "=========================================================="
+        docker compose logs backend
+        
+        echo "=========================================================="
+        echo "🍃 REDIS CONTAINER LOGS 🍃"
+        echo "=========================================================="
+        docker compose logs redis_service
 
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
+    - name: Upload Playwright Report Artifact
+      if: failure()
+      uses: actions/upload-artifact@v4
       with:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+    
