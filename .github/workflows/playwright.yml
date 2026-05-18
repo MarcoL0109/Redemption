@@ -41,6 +41,7 @@ jobs:
       run: docker compose up -d backend
       env:
         REACT_APP_SESSION_SECRET: ${{ secrets.REACT_APP_SESSION_SECRET }}
+        VITE_USER_API_URL: ${{ secrets.VITE_USER_API_URL }}
 
     # 💡 STEP 2: Wait for your database to finish initializing before continuing
     - name: Wait for Database Connection
@@ -62,36 +63,13 @@ jobs:
         echo "----------------------------------------"
         echo "Verifying injected tables in redemption_db:"
         echo "----------------------------------------"
-        docker exec $(docker ps -q -f name=database_service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db -e "SELECT email, password, LENGTH(password) FROM user_info WHERE email='marcolau733@gmail.com';"
-      
-    - name: Generate and Log Bcrypt Hash
-      run: |
-        echo "--------------------------------------------------"
-        echo "Generating fresh bcrypt hash for '6609lau0093':"
-        echo "--------------------------------------------------"
-        # This executes a tiny Node snippet using the project's node_modules
-        node -e "console.log(require('bcrypt').hashSync('6609lau0093', 10))"
-        echo "--------------------------------------------------"
+        docker exec $(docker ps -q -f name=database_service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db -e "SHOW TABLES;"
 
     # 💡 STEP 3: Run Playwright tests.
     # Playwright's config will see process.env.CI is true, execute 'npm run dev' 
     # right here natively on the runner, and bind perfectly to port 5173.
     - name: Run Playwright tests
       run: npx playwright test
-    
-    # 💡 ADD THIS STEP HERE: This will print the container logs to your screen
-    - name: Debug Container Logs on Failure
-      if: always()  # This ensures it runs even if the tests fail
-      run: |
-        echo "=========================================================="
-        echo "🔥 BACKEND APPLICATION LOGS 🔥"
-        echo "=========================================================="
-        docker compose logs backend
-        
-        echo "=========================================================="
-        echo "🍃 REDIS CONTAINER LOGS 🍃"
-        echo "=========================================================="
-        docker compose logs redis_service
 
     - name: Upload Playwright Report Artifact
       if: failure()
