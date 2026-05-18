@@ -42,8 +42,8 @@ test.describe('Sign In Component Layout and Flow', () => {
 
 
   test("should direct users that are successfully login to the homepage", async ({ page }) => {
-    await page.locator('.email_form_inputs').fill('marcolau733@gmail.com');
-    await page.locator('.password_form_inputs').fill('6609lau0093');
+    await page.locator('.email_form_inputs').fill('test@gmail.com');
+    await page.locator('.password_form_inputs').fill('1234');
     await page.locator('.SignInButton').click();
     await expect(page).toHaveURL(/.*\/Home/);
   })
