@@ -3,7 +3,7 @@ import HistoyCard from "../HistoryCards/HistoryCard"
 import NavBar from "../NavBar/NavBar"
 import "./HistoryPage.css"
 import { useParams } from "react-router-dom"
-import { API_ROUTES } from "../../utils/api_routes"
+import { API_ROUTES } from "../../../utils/api_routes"
 
 
 export interface HistoryCardProp {

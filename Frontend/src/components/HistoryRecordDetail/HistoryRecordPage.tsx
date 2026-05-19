@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import NavBar from "../NavBar/NavBar";
 import "./HistoryRecordPage.css"
-import { API_ROUTES } from "../../utils/api_routes";
+import { API_ROUTES } from "../../../utils/api_routes";
 
 
 interface HistoryRecords {

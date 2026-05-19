@@ -1,6 +1,6 @@
 const {constructPlayerList, constructRankingList, constructPlayerOrder} = require("../utils/gameUtils");
+const API_PREFIX = require("../../utils/api_routes.json");
 const {activeRoomProblems, problemStartTime} = require("../utils/gameStates")
-const ROOM_API_URL = process.env.VITE_ROOM_MANAGEMENT_API_URL;
 
 
 module.exports = function(io, redisClient) {
@@ -31,10 +31,11 @@ module.exports = function(io, redisClient) {
             io.to(roomSocketId).emit("returned-player-list", player_list_names);
             targetSocket.leave(roomSocketId);
             try {
-                const updateKickStatus = await fetch(`${ROOM_API_URL}/updateCompletness`, {
+                const updateKickStatus = await fetch(`http://backend:5500${API_PREFIX.ROOMS}/updateCompletness`, {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "X-Internal-Service-Key": process.env.RECAT_APP_INTERNAL_SECRET_KEY
                     },
                     credentials: "include",
                     body: JSON.stringify({roomCode: roomCode, completness: 2, userId: playerUserId})
@@ -44,7 +45,6 @@ module.exports = function(io, redisClient) {
                 console.error(error);
                 const responseJSON = await updateKickStatus.json();
                 const responseSummary = responseJSON.result;
-                console.log(responseSummary);
             }
         },
 

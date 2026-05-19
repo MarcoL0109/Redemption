@@ -11,6 +11,7 @@ router.post("/getProblemSets", async (req, res) => {
         const [problem_sets] = await db.query(fetch_problemset_query, [user_id]);
         return res.status(200).json({problem_sets: problem_sets});
     } catch (error) {
+        console.log(error);
         res.status(500).json({message: "Internal Server Error"});
     }
 })
@@ -33,7 +34,7 @@ router.post("/UpdateWriteTime", async (req, res) => {
     const now = new Date();
     const offset = now.getTimezoneOffset() * 60000;
     const localISOTime = (new Date(now - offset)).toISOString().slice(0, 19).replace('T', ' ');
-    const updateWritTimeQuery = `UPDATE problem_sets SET last_update_at = '?' WHERE problem_set_id = ?`;
+    const updateWritTimeQuery = `UPDATE problem_sets SET last_update_at = ? WHERE problem_set_id = ?`;
 
     try {
         await db.query(updateWritTimeQuery, [localISOTime, problem_set_id]);

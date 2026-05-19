@@ -3,10 +3,10 @@ import NavBar from "../NavBar/NavBar";
 import ProblemSetCard from "../ProblemSetCard/ProblemSetCard";
 import Overlays from "../Overlays/Overlay";
 import { Mosaic } from 'react-loading-indicators';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
-import { API_ROUTES } from "../../utils/api_routes";
+import { API_ROUTES } from "../../../utils/api_routes";
 
 
 export interface ProblemSetModificationMap {
@@ -29,7 +29,7 @@ interface ProblemSet {
 function HomePage() {
 
     const navigate = useNavigate();
-    const { userData, loading } = useUser();
+    const { userData, loading, refreshUser } = useUser();
     const [problemSets, setProblemSets] = useState<ProblemSet[]>([
         {
         problem_set_id: -1, problem_set_title: "", problem_set_description: "", 
@@ -85,6 +85,7 @@ function HomePage() {
                 await fetch_problem_sets(session_user_id);
             }
         }
+        refreshUser();
         checkUserValidation();
     }, []);
 

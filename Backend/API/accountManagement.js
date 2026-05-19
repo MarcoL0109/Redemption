@@ -19,6 +19,9 @@ const { PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const {calculateStreak} = require("../utils/streakHelper");
 const daysjs = require("dayjs");
+const jwt = require("jsonwebtoken");
+const { strictAuth } = require("../middleware/authMiddleware");
+const API_PREFIX = require("../../utils/api_routes.json");
 
 
 async function formatDateToMySQL(date) {
@@ -43,7 +46,7 @@ router.post("/login", async (req, res) => {
         else if (!is_activated) {return res.status(400).json({message: "Account Not Activated"})}
         else {
             const userId = result[0].user_id;
-            req.session.user_id = userId;
+            // req.session.user_id = userId;
             const fetchLastLoginDetailsQuery = `SELECT last_login, login_streak FROM user_info u
                                                 JOIN user_stats us ON u.user_id = us.user_id
                                                 WHERE u.user_id = ?`;
@@ -63,6 +66,21 @@ router.post("/login", async (req, res) => {
                 VALUES (?, DATE(UTC_TIMESTAMP()))`, 
                 [userId]
             );
+
+            const token = jwt.sign(
+                {user_id: userId},
+                process.env.REACT_APP_SESSION_SECRET,
+                { expiresIn: "24h" }
+            );
+
+            res.cookie('authToken', token, {
+                path: '/',
+                httpOnly: true, // 🔒 Crucial! Blocks JavaScript from stealing the token via XSS
+                signed: true,   // 🛡️ Integrates with your server.js cookie-parser secret
+                sameSite: 'lax', // Safe for local development port sharing
+                secure: false,
+                maxAge: 24 * 60 * 60 * 1000 // 24-hour expiration window
+            });
             return res.status(200).json({ message: "Login successfully", streak: newStreak });
         }
         } catch (error) {
@@ -73,15 +91,26 @@ router.post("/login", async (req, res) => {
 
 
 router.post("/logout", (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            console.log(err);
-            res.status(500).json({message: "Internal Server Error"});
-        } else {
-            res.clearCookie("connect.sid");
-            res.status(200).json({message: "Logout Successfully"});
-        }
-    })
+    res.clearCookie('authToken', {
+        path: '/',
+        httpOnly: true,
+        signed: true,
+        sameSite: 'lax',
+        secure: false,
+    });
+
+    if (req.session) {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error("Session destruction failed:", err);
+            }
+        });
+    }
+
+    return res.status(200).json({
+        status: "SUCCESS",
+        message: "Sign out successful. Cookie destroyed_"
+    });
 })
 
 
@@ -118,7 +147,7 @@ router.post("/createUsers", async (req, res) => {
         const activation_data = {user_id: new_user_id, key: validationKey}
         const encrypted_object = encrypt_object(activation_data, process.env.REACT_APP_ACTIVATION_ENCRYPTION_KEY);
         const encrypt_object_for_url = encodeURIComponent(JSON.stringify(encrypted_object));
-        const activation_url = `${process.env.VITE_USER_API_URL}/activation?data=${encrypt_object_for_url}`;
+        const activation_url = `${API_PREFIX.USERS}/activation?data=${encrypt_object_for_url}`;
         const insert_activation_record_query = "INSERT INTO activations (user_id, activation_code, expiration_datetime) VALUES (?, ?, ?)";
         await db.query(insert_activation_record_query, [new_user_id, validationKey, tomorrow]);
         const mailOptaion = {
@@ -336,6 +365,11 @@ router.get("/getLoginDates/:userId", async (req, res) => {
         console.error(error);
         res.status(500).json({message: "Internal Server Error"});
     }
+})
+
+
+router.get("/Verify", strictAuth, async (req, res) => {
+    return res.status(200).json({ status: "AUTHENTICATED" });
 })
 
 

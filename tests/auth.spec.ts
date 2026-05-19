@@ -11,10 +11,8 @@ test.describe('Sign In Component Layout and Flow', () => {
   test('should render all form elements correctly on load', async ({ page }) => {
     await expect(page.locator('.TitleText')).toHaveText('REDEMPTION');
     await expect(page.locator('.SubtitleText')).toHaveText('PROVE YOUR WORTH');
-
     await expect(page.locator('.email_form_inputs')).toBeVisible();
     await expect(page.locator('.password_form_inputs')).toBeVisible();
-    
     await expect(page.locator('.SignInButton')).toHaveText('SIGN IN');
     await expect(page.locator('.HomeButton')).toContainText('Join Room');
   });
@@ -48,6 +46,7 @@ test.describe('Sign In Component Layout and Flow', () => {
     await expect(page).toHaveURL(/.*\/Home/);
   })
 
+  // This account is indeed disabled in the sample data -> loading script is set to 0 for this account
   test('should display shaking error message due to account not activated', async ({ page }) => {
     await page.locator('.email_form_inputs').fill('test@gmail.com');
     await page.locator('.password_form_inputs').fill('1234');

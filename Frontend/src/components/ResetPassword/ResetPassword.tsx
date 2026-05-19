@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./ResetPassword.css"
-import { API_ROUTES } from "../../utils/api_routes";
+import { API_ROUTES } from "../../../utils/api_routes";
 
 
 function ResetPassword() {

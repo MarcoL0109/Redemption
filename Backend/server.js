@@ -8,6 +8,9 @@ const { redisClient } = require("./utils/redis.js");
 const { RedisStore } = require("connect-redis");
 const cookie_parser = require("cookie-parser");
 
+// 💡 IMPORT YOUR NEW JWT MIDDLEWARE GUARD HERE
+const { strictAuth, passiveAuth } = require('./middleware/authMiddleware.js'); 
+
 // APIs
 const userAPIs = require('./API/accountManagement.js');
 const utilAPIs = require('./utils/utils.js');
@@ -17,7 +20,6 @@ const historyManagementAPI = require('./API/historyManagement.js');
 
 const app = express();
 
-// 1. Create a startup function
 async function startApp() {
     try {
         if (!redisClient.isOpen) {
@@ -26,9 +28,13 @@ async function startApp() {
         }
         console.log("✅ Redis Connected.");
 
-        app.use(cookie_parser("Secret Cookie"));
-        app.use(cors({ credentials: true, origin: true }));
+        app.use(cookie_parser(process.env.REACT_APP_SESSION_SECRET));
         app.use(express.json());
+
+        app.use(cors({ 
+            credentials: true, 
+            origin: true,
+        }));
 
         app.use(sessions({
             secret: process.env.REACT_APP_SESSION_SECRET,
@@ -38,16 +44,16 @@ async function startApp() {
             cookie: { maxAge: 180 * 60 * 1000 }
         }));
 
-        // 4. Static Files
         const distPath = path.join(__dirname, '/../Frontend/dist');
         app.use(express.static(distPath));
 
-        // 5. API Routes
+        
         app.use("/api/users", userAPIs);
-        app.use("/utils", utilAPIs);
-        app.use("/api/problemsets", problemSetsAPIs);
-        app.use("/api/rooms", roomManagementAPI);
-        app.use("/api/history", historyManagementAPI);
+        // This needs to be tested to see whether non login user can use room APIs
+        app.use("/api/rooms", passiveAuth, roomManagementAPI);
+        app.use("/utils", passiveAuth, utilAPIs);
+        app.use("/api/problemsets", strictAuth, problemSetsAPIs);
+        app.use("/api/history", strictAuth, historyManagementAPI);
 
         app.get('/', (req, res) => {
             res.sendFile(path.join(distPath, 'index.html'));

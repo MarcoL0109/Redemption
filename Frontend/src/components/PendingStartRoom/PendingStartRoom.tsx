@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import Overlays from "../Overlays/Overlay";
 import "./PendingStartRoon.css";
-import { API_ROUTES } from "../../utils/api_routes";
+import { API_ROUTES } from "../../../utils/api_routes";
 
 
 
@@ -85,7 +85,7 @@ function PendingStartRoom() {
             credentials: "include"
         })
         const session_info_body = await getSessionInfoRepsonse.json();
-        return session_info_body.sessionID;
+        return session_info_body.session.sessionID;
     }
 
 

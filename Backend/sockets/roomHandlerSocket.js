@@ -3,10 +3,9 @@ const ROOM_CODE_EXPIRATION_TIME = 7200;
 const ROOM_SHADOW_KEYS_EXPIRAION_TIME = 7500;
 const {activeRoomProblems, problemStartTime} = require("../utils/gameStates")
 const {constructPlayerList, constructRankingList, constructPlayerOrder} = require("../utils/gameUtils");
-const PROBLEM_SET_API_URL = process.env.VITE_PROBLEM_SETS_API_URL;
-const ROOM_API_URL = process.env.VITE_ROOM_MANAGEMENT_API_URL;
-const HISTORY_API_URL = process.env.VITE_HISTORY_MANAGEMENT_API_URL;
+const API_PREFIX = require("../../utils/api_routes.json");
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 
 
 
@@ -38,9 +37,12 @@ module.exports = function(io, redisClient) {
 
     async function streamProblems(problemSetId, roomCode) {
         const roomSocketId = await redisClient.hGet(roomCode, "SocketId");
-        const fetch_problem_list_response = await fetch(`${PROBLEM_SET_API_URL}/getProblems`, {
+        const fetch_problem_list_response = await fetch(`http://backend:5500${API_PREFIX.PROBLEM_SETS}/getProblems`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                    "Content-Type": "application/json", 
+                    "X-Internal-Service-Key": process.env.RECAT_APP_INTERNAL_SECRET_KEY
+                },
             credentials: "include",
             body: JSON.stringify({ problem_set_id: problemSetId }),
         });
@@ -109,10 +111,11 @@ module.exports = function(io, redisClient) {
             } else {
 
                 try {
-                    const updateScoreAnswerHistory = await fetch(`${HISTORY_API_URL}/insertAnswerHistoryScore`, {
+                    const updateScoreAnswerHistory = await fetch(`http://backend:5500${API_PREFIX.HISTORY}/insertAnswerHistoryScore`, {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            "X-Internal-Service-Key": process.env.RECAT_APP_INTERNAL_SECRET_KEY
                         },
                         credentials: "include",
                         body: JSON.stringify({roomCode: roomCode})
@@ -168,10 +171,11 @@ module.exports = function(io, redisClient) {
         const loggedInUser = await redisClient.hVals(`${roomCode}-Session-UserId`);
         if (loggedInUser.length > 0) {
              try {
-                const insertHistoryRecord = await fetch(`${HISTORY_API_URL}/insertJoinHistoryInfo`, {
+                const insertHistoryRecord = await fetch(`http://backend:5500${API_PREFIX.HISTORY}/insertJoinHistoryInfo`, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
+                        "X-Internal-Service-Key": process.env.RECAT_APP_INTERNAL_SECRET_KEY
                     }, credentials: "include",
                     body: JSON.stringify({roomCode: roomCode, userIds: loggedInUser})
                 })
@@ -190,10 +194,11 @@ module.exports = function(io, redisClient) {
 
     const storeProblemSnapshots = async (roomCode) => {
         try {
-            const snapShotResponse = await fetch(`${HISTORY_API_URL}/fetchInsertProblemSetSnapShotId`, {
+            const snapShotResponse = await fetch(`http://backend:5500${API_PREFIX.HISTORY}/fetchInsertProblemSetSnapShotId`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
+                    "X-Internal-Service-Key": process.env.RECAT_APP_INTERNAL_SECRET_KEY
                 }, credentials: "include",
                 body: JSON.stringify({roomCode: roomCode})
             })
@@ -291,10 +296,11 @@ module.exports = function(io, redisClient) {
                 io.in(roomSocketId).socketsLeave(roomSocketId);
                 try {
                     const problemSetId = await redisClient.hGet(roomCode, "ProblemSetId");
-                    const updateKickStatus = await fetch(`${HISTORY_API_URL}/updateCompletness`, {
+                    const updateKickStatus = await fetch(`http://backend:5500${API_PREFIX.HISTORY}/updateCompletness`, {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            "X-Internal-Service-Key": process.env.RECAT_APP_INTERNAL_SECRET_KEY
                         },
                         credentials: "include",
                         body: JSON.stringify({roomCode: roomCode, completness: 3, userId: null})

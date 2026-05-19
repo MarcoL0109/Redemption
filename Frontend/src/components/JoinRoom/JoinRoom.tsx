@@ -22,7 +22,7 @@ function JoinRoom() {
   const { userData, loading } = useUser();
 
 
-  useEffect(() => {
+    useEffect(() => {
         if (closeRoom && !isHost) {
             setIsClosedRoomOverlayOpen(true);
         } else if (kickState) {

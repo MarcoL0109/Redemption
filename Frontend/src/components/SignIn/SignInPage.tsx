@@ -1,10 +1,10 @@
 import './SignInPage.css';
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
-import { useUser } from '../../context/UserContext';
 import Eye from "../../assets/Eye.svg";
 import HiddenEye from "../../assets/HiddenEye.svg";
-import {API_ROUTES}  from "../../utils/api_routes";
+import {API_ROUTES}  from "../../../utils/api_routes";
+import { useUser } from '../../context/UserContext'; // Import your helper hook
 
 
 function SignInPage() {
@@ -17,6 +17,7 @@ function SignInPage() {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [hidden, setHidden] = useState<boolean>(true);
     const { refreshUser } = useUser();
+    
 
     
     const HandleSignIn = async (email: string, password: string) => {
@@ -34,9 +35,9 @@ function SignInPage() {
             setincorrectLoginInfo(login_status.status === 401 || login_status.status === 404);
             setNotActivated(login_status.status === 400);
             if (login_status.status === 200) {
-                refreshUser();
                 const data = await login_status.json();
                 const streak = data.streak;
+                refreshUser();
                 navigate("/Home", { state: { streak: streak } });
             }
             setIsSubmitting(false);

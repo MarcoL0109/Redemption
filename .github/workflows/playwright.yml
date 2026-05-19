@@ -18,12 +18,13 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
 
-    # 💡 STEP 1: Spin up ONLY your database and backend API containers.
+    # STEP 1: Spin up ONLY your database and backend API containers.
     - name: Start Database Services
       env:
         REACT_APP_DATABASE_PASSWORD: ${{ secrets.REACT_APP_DATABASE_PASSWORD }}
       run: docker compose up -d database_service redis
     
+    # STEP 2: Ensure Redis runs before the backend service run
     - name: Wait for Redis Connection
       run: |
         echo "Waiting for Redis container..."
@@ -34,14 +35,14 @@ jobs:
         done
         echo "Redis is online!"
 
-    # 4. Now that DB and Redis are 100% ready, spin up your backend application safely
+    # STEP 3: Start the Backend API Service
     - name: Start Backend API Service
       run: docker compose up -d backend
       env:
         REACT_APP_SESSION_SECRET: ${{ secrets.REACT_APP_SESSION_SECRET }}
         REACT_APP_DATABASE_PASSWORD: ${{ secrets.REACT_APP_DATABASE_PASSWORD || 'root_test_pass' }}
 
-    # 💡 STEP 2: Wait for your database to finish initializing before continuing
+    # STEP 4: Ensure the MySQL Database websocket is established before starting anything
     - name: Wait for Database Connection
       run: |
         echo "Giving MySQL a moment to create its socket file..."
@@ -52,6 +53,7 @@ jobs:
         done
         echo "Database is online!"
     
+    # STEP 5: Load and run the SQL script to create smaple data to the database service
     - name: Seed Database from Self-Contained Backup
       run: |
         echo "Injecting self-contained backup SQL script..."
@@ -63,13 +65,11 @@ jobs:
         echo "----------------------------------------"
         docker exec $(docker ps -q -f name=database_service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db -e "SHOW TABLES;"
       
-
-    # 💡 STEP 3: Run Playwright tests.
-    # Playwright's config will see process.env.CI is true, execute 'npm run dev' 
-    # right here natively on the runner, and bind perfectly to port 5173.
+    # STEP 4: Run Playwright tests
     - name: Run Playwright tests
       run: npx playwright test
 
+    # STEP 5: Upload the trace files, screenshots and network states into an upload link for download in inspect when failed
     - name: Upload Playwright Report Artifact
       if: failure()
       uses: actions/upload-artifact@v4
@@ -78,6 +78,7 @@ jobs:
         path: playwright-report/
         retention-days: 30
     
+    # STEP 6: Log out all the docker log if the tests failed for inspecting errors
     - name: Inspect Docker Container Logs on Failure
       if: failure()  
       run: |

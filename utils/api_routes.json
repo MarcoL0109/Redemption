@@ -1,0 +1,7 @@
+{
+  "USERS": "/api/users",
+  "UTILS": "/utils",
+  "PROBLEM_SETS": "/api/problemsets",
+  "ROOMS": "/api/rooms",
+  "HISTORY": "/api/history"
+}

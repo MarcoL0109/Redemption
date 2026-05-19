@@ -7,7 +7,7 @@ import NavBar from "../NavBar/NavBar";
 import Overlays from "../Overlays/Overlay";
 import Sortable from "../SortableList/SortableList";
 import { Mosaic } from "react-loading-indicators";
-import { API_ROUTES } from "../../utils/api_routes";
+import { API_ROUTES } from "../../../utils/api_routes";
 
 
 export interface Problem {

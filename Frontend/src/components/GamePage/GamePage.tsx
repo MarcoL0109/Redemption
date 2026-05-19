@@ -8,7 +8,7 @@ import RankPage from "../RankPage/RankPage";
 import {RankPageProps} from "../RankPage/RankPage";
 import HostNavBar from "../HostNavBar/HostNavBar";
 import Overlays from "../Overlays/Overlay";
-import { API_ROUTES } from "../../utils/api_routes";
+import { API_ROUTES } from "../../../utils/api_routes";
 
 
 function GamePage() {
@@ -113,7 +113,7 @@ function GamePage() {
             credentials: "include"
         })
         const session_info_body = await getSessionInfoRepsonse.json();
-        return session_info_body.sessionID;
+        return session_info_body.session.sessionID;
     }
 
 

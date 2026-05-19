@@ -9,7 +9,7 @@ import Tick from "../../assets/tick.svg";
 import Trophy from "../../assets/trophy.svg";
 import HistoyCard from "../HistoryCards/HistoryCard";
 import DateCalendarValue from "../LoginCalendar/LoginCalendar";
-import { API_ROUTES } from "../../utils/api_routes";
+import { API_ROUTES } from "../../../utils/api_routes";
 
 
 function UserProfilePage() {

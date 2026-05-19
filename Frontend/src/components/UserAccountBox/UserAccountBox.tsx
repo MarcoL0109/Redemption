@@ -8,7 +8,7 @@ import UserIcon from '../../assets/user_icon.svg';
 import CogIcon from '../../assets/setting_icon.svg'
 import CollectionIcon from '../../assets/collections.svg'
 import HistoryIcon from '../../assets/history_icon.svg'
-import { API_ROUTES } from "../../utils/api_routes";
+import { API_ROUTES } from "../../../utils/api_routes";
 
 
 

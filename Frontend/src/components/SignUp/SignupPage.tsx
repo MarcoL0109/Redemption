@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import "./SignupPage.css"
 import React, { useState } from 'react';
 import { FourSquare } from 'react-loading-indicators';
-import { API_ROUTES } from '../../utils/api_routes'; 
+import { API_ROUTES } from '../../../utils/api_routes'; 
 
 
 

@@ -6,8 +6,14 @@ const db = require('../models/db')
 
 
 router.get("/SessionInfo", (req, res) => {
-    return res.json({session: req.session, sessionID: req.sessionID})
-})
+    return res.json({
+        status: "SUCCESS",
+        session: {
+            user_id: req.user?.user_id || null,
+            sessionID: req.sessionID
+        }
+    });
+});
 
 
 module.exports = router;

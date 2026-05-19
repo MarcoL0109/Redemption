@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./ForgotPasswordPage.css";
 import { FourSquare } from 'react-loading-indicators';
-import { API_ROUTES } from '../../utils/api_routes';
+import { API_ROUTES } from '../../../utils/api_routes';
 
 
 function ForgotPasswordPage() {

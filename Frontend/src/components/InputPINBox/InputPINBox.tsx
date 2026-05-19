@@ -1,7 +1,7 @@
 import "./InputPINBox.css"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
-import { API_ROUTES } from "../../utils/api_routes";
+import { API_ROUTES } from "../../../utils/api_routes";
 
 
 interface InputPINProps {
