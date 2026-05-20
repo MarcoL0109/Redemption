@@ -14,13 +14,13 @@ function ResetPassword() {
     const [diffPassword, setDiffPassword] = useState<boolean>(false);
 
     
-    useEffect(() => {
-        if (!validationCode) {
-            nevagate("/ForgotPassword");
-        } else {
-            handleValidateCode(inputEmail, validationCode);
-        }
-    }, [location.state]);
+    // useEffect(() => {
+    //     if (!validationCode) {
+    //         nevagate("/ForgotPassword");
+    //     } else {
+    //         handleValidateCode(inputEmail, validationCode);
+    //     }
+    // }, [location.state]);
 
 
     const handleInputPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,19 +37,19 @@ function ResetPassword() {
     };
 
 
-    const handleValidateCode = async (email: string, validationCode: string) => {
-        const validateCodeStatus = await fetch(`${API_ROUTES.USERS}/ValidateCode`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: "include",
-            body: JSON.stringify({email, validationCode})
-        });
-        if (validateCodeStatus.status === 401) {
-            nevagate("/ForgotPassword");
-        }
-    }
+    // const handleValidateCode = async (email: string, validationCode: string) => {
+    //     const validateCodeStatus = await fetch(`${API_ROUTES.USERS}/ValidateCode`, {
+    //         method: "POST",
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         credentials: "include",
+    //         body: JSON.stringify({email, validationCode})
+    //     });
+    //     if (validateCodeStatus.status === 401) {
+    //         nevagate("/ForgotPassword");
+    //     }
+    // }
 
 
     const handleResetPassword = async (inputEmail: string, confirmedPassword: string) => {

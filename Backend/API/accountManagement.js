@@ -21,6 +21,7 @@ const {calculateStreak} = require("../utils/streakHelper");
 const daysjs = require("dayjs");
 const jwt = require("jsonwebtoken");
 const { strictAuth } = require("../middleware/authMiddleware");
+const validateResetToken = require("../middleware/authResetMiddleware");
 const API_PREFIX = require("../../utils/api_routes.json");
 
 
@@ -46,7 +47,6 @@ router.post("/login", async (req, res) => {
         else if (!is_activated) {return res.status(400).json({message: "Account Not Activated"})}
         else {
             const userId = result[0].user_id;
-            // req.session.user_id = userId;
             const fetchLastLoginDetailsQuery = `SELECT last_login, login_streak FROM user_info u
                                                 JOIN user_stats us ON u.user_id = us.user_id
                                                 WHERE u.user_id = ?`;
@@ -240,18 +240,31 @@ router.post("/forgotPassword", async (req, res) => {
         text: content
     }
 
+    const token = jwt.sign(
+            {email: email, purpose: "Password Reset"},
+            process.env.REACT_APP_SESSION_SECRET,
+            { expiresIn: "10m" }
+        );
+
+    res.cookie('resetToken', token, {
+        path: '/',
+        httpOnly: true,
+        signed: true,
+        sameSite: 'lax',
+        secure: false,
+        maxAge: 24 * 60 * 60 * 1000
+    });
+
     transport.sendMail(mailOptaion, function(error, info) {
         if (error) {
             return res.status(500).json({ message: "Send Mail error" });
         }
-        else {
-            return res.status(200).json({ message: "Email sent successfully" });
-        }
+        return res.status(200).json({ message: "Email sent successfully" });
     });
 })
 
 
-router.post("/ValidateCode", async (req, res) => {
+router.post("/ValidateCode", validateResetToken, async (req, res) => {
     const { email, validationCode } = req.body;
     const [ result ] = await db.query("SELECT validation_code FROM password_resets WHERE email = ? AND expiration > ?", [email, await formatDateToMySQL(new Date())]);
 
@@ -262,7 +275,7 @@ router.post("/ValidateCode", async (req, res) => {
 })
 
 
-router.post("/ResetPassword", async (req, res) => {
+router.post("/ResetPassword", validateResetToken, async (req, res) => {
     const { inputEmail, confirmedPassword, validationCode } = req.body;
     const hashed_password = await bcrypt.hash(confirmedPassword, 10);
     try {
@@ -276,6 +289,13 @@ router.post("/ResetPassword", async (req, res) => {
         }
         await db.query("UPDATE user_info SET password = ? WHERE email = ?", [hashed_password, inputEmail]);
         await db.query(`DELETE FROM password_resets WHERE email = ?`, [inputEmail]);
+        res.clearCookie('resetToken', {
+            path: '/',
+            httpOnly: true,
+            signed: true,
+            sameSite: 'lax',
+            secure: false,
+        });
         return res.status(200).json({message: "Password updated successfully"});
     } catch (error) {
         console.log(error);
@@ -373,4 +393,7 @@ router.get("/Verify", strictAuth, async (req, res) => {
 })
 
 
+router.get("/VerifyTemp", validateResetToken, async (req, res) => {
+    return res.status(200).json({ status: "AUTHENTICATED" });
+})
 module.exports = router;

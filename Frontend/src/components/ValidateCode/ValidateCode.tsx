@@ -49,11 +49,11 @@ function ValidateResetPasswordCode() {
     }, [countDown]);
 
 
-    useEffect(() => {
-        if (location.state === null) {
-            navigate('/ForgotPassword');
-        }
-    }, [location.state]);
+    // useEffect(() => {
+    //     if (location.state === null) {
+    //         navigate('/ForgotPassword');
+    //     }
+    // }, [location.state]);
 
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

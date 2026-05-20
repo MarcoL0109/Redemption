@@ -18,6 +18,7 @@ import HistoryRecord from "./components/HistoryRecordDetail/HistoryRecordPage";
 import UserProfilePage from "./components/UserPorfilePage/UserProfilePage";
 import { UserProvider } from "./context/UserContext";
 import ProtectedLayers from "./components/ProtectedLayers/ProtectedLayers";
+import ProtectResetLayers from "./components/ProtectedLayers/ProtectResetLayers";
 
 
 function App() {
@@ -31,13 +32,15 @@ function App() {
           <Route path="/SignUp" element={<SignUpPage />} />
           <Route path="/ActivationTempPage" element={<TempPageForActivation />} />
           <Route path="/ForgotPassword" element={<ForgotPasswordPage />} />
-          <Route path="/ValidateResetPasswordCode" element={<ValidateResetPasswordCode />} />
-          <Route path="/ResetPassword" element={<ResetPassword />} />
           <Route path="/PlayerNamePendingPage/:roomId" element={<PlayerNamePendingPage />} />
           <Route path="/PendingStartRoom/:userId/:username/:roomId/:problem_set_id" element={<PendingStartRoom />} />
           <Route path="/GamePage/:userId/:username/:roomId/:problem_set_id" element={<GamePage />} />
           <Route path="/ResultPage/:userId/:username/:roomId" element={<ResultPage />} />
-
+          {/* TEMP PROTECTED ROUTES */}
+          <Route element={<ProtectResetLayers />}>
+            <Route path="/ValidateResetPasswordCode" element={<ValidateResetPasswordCode />} />
+            <Route path="/ResetPassword" element={<ResetPassword />} />
+          </Route>
           {/* PROTECTED ROUTES (Automatically Wrapped in UserProvider) */}
           <Route element={<ProtectedLayers />}>
             <Route path="/Home" element={<HomePage />} />
