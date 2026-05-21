@@ -41,8 +41,8 @@ module.exports = function(io, redisClient) {
             method: "POST",
             headers: { 
                     "Content-Type": "application/json", 
-                    "X-Internal-Service-Key": process.env.RECAT_APP_INTERNAL_SECRET_KEY
-                },
+                    "X-Internal-Service-Key": process.env.REACT_APP_INTERNAL_SECRET_KEY
+                    },
             credentials: "include",
             body: JSON.stringify({ problem_set_id: problemSetId }),
         });

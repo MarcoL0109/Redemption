@@ -46,12 +46,11 @@ async function startApp() {
 
         const distPath = path.join(__dirname, '/../Frontend/dist');
         app.use(express.static(distPath));
-
         
         app.use("/api/users", userAPIs);
+        app.use("/utils", utilAPIs);
         // This needs to be tested to see whether non login user can use room APIs
         app.use("/api/rooms", passiveAuth, roomManagementAPI);
-        app.use("/utils", utilAPIs);
         app.use("/api/problemsets", strictAuth, problemSetsAPIs);
         app.use("/api/history", strictAuth, historyManagementAPI);
 

@@ -5,6 +5,7 @@ const fs = require('fs');
 const db = require('../models/db');
 const { passiveAuth } = require('../middleware/authMiddleware');
 const validateResetToken = require('../middleware/authResetMiddleware');
+const validateRoomToken = require("../middleware/authRoomMiddleware");
 
 
 router.get("/SessionInfo", passiveAuth, (req, res) => {
@@ -23,6 +24,16 @@ router.get("/ResetsessionInfo", validateResetToken, (req, res) => {
         status: "SUCCESS",
         session: {
             email: req.resetEmail || null,
+            sessionID: req.sessionID
+        }
+    });
+});
+
+
+router.get("/RoomSessionInfo", validateRoomToken, (req, res) => {
+    return res.json({
+        status: "SUCCESS",
+        session: {
             sessionID: req.sessionID
         }
     });

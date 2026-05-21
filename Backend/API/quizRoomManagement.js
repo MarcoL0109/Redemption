@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {redisClient, subscriber} = require("../utils/redis");
 const db = require('../models/db');
+const jwt = require("jsonwebtoken");
 const ROOM_SHADOW_KEYS_EXPIRAION_TIME = 7500;
 
 
@@ -64,6 +65,19 @@ router.post("/checkRoomCodeExist", async (req, res) => {
     } else {
         const isLocked = await redisClient.hGet(roomCode, "IsLocked");
         if (isLocked === "0") {
+            const token = jwt.sign(
+                {roomCode: roomCode, purpose: "Room Entering Validation"},
+                process.env.REACT_APP_ROOM_JWT_SECRET,
+                { expiresIn: "2H" }
+            );
+            res.cookie('roomToken', token, {
+                path: '/',
+                httpOnly: true,
+                signed: true,
+                sameSite: 'lax',
+                secure: false,
+                maxAge: 24 * 60 * 60 * 1000
+            });
             res.status(200).json({message: "Room Found"});
         } else {
             res.status(401).json({message: "Room is Locked by the Host"});

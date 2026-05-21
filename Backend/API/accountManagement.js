@@ -240,7 +240,7 @@ router.post("/forgotPassword", async (req, res) => {
 
     const token = jwt.sign(
         {email: email, purpose: "Password Reset"},
-        process.env.REACT_APP_SESSION_SECRET,
+        process.env.REACT_APP_RESET_PASSWORD_JWT_SECRET,
         { expiresIn: "10m" }
     );
 
@@ -386,4 +386,9 @@ router.get("/Verify", strictAuth, async (req, res) => {
 router.get("/VerifyTemp", validateResetToken, async (req, res) => {
     return res.status(200).json({ status: "AUTHENTICATED" });
 })
+
+router.get("/VerifyRoom", async (req, res) => {
+    return res.status(200).json({ status: "AUTHENTICATED" });
+})
+
 module.exports = router;

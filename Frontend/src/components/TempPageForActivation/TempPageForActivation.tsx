@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./TempPageForActivation.css";
-import icon from "../../../public/icon.svg"
+import icon from "../../assets/icon.svg";
 
 
 function TempPageForActivation() {
