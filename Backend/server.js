@@ -51,7 +51,7 @@ async function startApp() {
         app.use("/api/users", userAPIs);
         // This needs to be tested to see whether non login user can use room APIs
         app.use("/api/rooms", passiveAuth, roomManagementAPI);
-        app.use("/utils", passiveAuth, utilAPIs);
+        app.use("/utils", utilAPIs);
         app.use("/api/problemsets", strictAuth, problemSetsAPIs);
         app.use("/api/history", strictAuth, historyManagementAPI);
 

@@ -6,21 +6,27 @@ import { API_ROUTES } from "../../../utils/api_routes";
 
 function ResetPassword() {
 
-    const location = useLocation();
     const nevagate = useNavigate();
-    const { inputEmail, validationCode } = location.state || {};
+    const [inputEmail, setInputEmail] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [inputPassword, setInputPassword] = useState<string>("");
     const [diffPassword, setDiffPassword] = useState<boolean>(false);
 
     
-    // useEffect(() => {
-    //     if (!validationCode) {
-    //         nevagate("/ForgotPassword");
-    //     } else {
-    //         handleValidateCode(inputEmail, validationCode);
-    //     }
-    // }, [location.state]);
+    useEffect(() => {
+        const getSessionInfo = async () => {
+            const sessionResponse = await fetch(`${API_ROUTES.UTILS}/ResetsessionInfo`, {
+                method: 'GET',
+                credentials: "include"
+            });
+            if (sessionResponse.ok) {
+                const sessionJSON = await sessionResponse.json();
+                const sessionEmail = sessionJSON.session.email;
+                setInputEmail(sessionEmail);
+            }
+        };
+        getSessionInfo();
+    }, [])
 
 
     const handleInputPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,21 +43,6 @@ function ResetPassword() {
     };
 
 
-    // const handleValidateCode = async (email: string, validationCode: string) => {
-    //     const validateCodeStatus = await fetch(`${API_ROUTES.USERS}/ValidateCode`, {
-    //         method: "POST",
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         credentials: "include",
-    //         body: JSON.stringify({email, validationCode})
-    //     });
-    //     if (validateCodeStatus.status === 401) {
-    //         nevagate("/ForgotPassword");
-    //     }
-    // }
-
-
     const handleResetPassword = async (inputEmail: string, confirmedPassword: string) => {
         const resetPasswordStatus = await fetch(`${API_ROUTES.USERS}/ResetPassword`, {
             method: "POST",
@@ -59,7 +50,7 @@ function ResetPassword() {
                 "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({inputEmail, confirmedPassword, validationCode})
+            body: JSON.stringify({inputEmail, confirmedPassword})
         });
         if (resetPasswordStatus.status === 200) {
             nevagate("/SignIn");

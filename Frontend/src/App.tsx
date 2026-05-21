@@ -36,7 +36,7 @@ function App() {
           <Route path="/PendingStartRoom/:userId/:username/:roomId/:problem_set_id" element={<PendingStartRoom />} />
           <Route path="/GamePage/:userId/:username/:roomId/:problem_set_id" element={<GamePage />} />
           <Route path="/ResultPage/:userId/:username/:roomId" element={<ResultPage />} />
-          {/* TEMP PROTECTED ROUTES */}
+          {/* PROTECT PASSWORD RESET PAGES */}
           <Route element={<ProtectResetLayers />}>
             <Route path="/ValidateResetPasswordCode" element={<ValidateResetPasswordCode />} />
             <Route path="/ResetPassword" element={<ResetPassword />} />

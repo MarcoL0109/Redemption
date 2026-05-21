@@ -7,13 +7,37 @@ import "./ValidateCode.css"
 
 function ValidateResetPasswordCode() {
 
-    const location = useLocation();
     const navigate = useNavigate();
-    const { inputEmail } = location.state || {};
     const [incorrectCode, setIncorrectCode] = useState<boolean>(false);
     const [inputValidationCode, setInputValidationCode] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [countDown, setCountDown] = useState<number>(60);
+    const [inputEmail, setInputEmail] = useState<string>("");
+
+
+    useEffect(() => {
+        if (countDown === 0) return;
+        const intervalId = setInterval(() => {
+            setCountDown(prevCountdown => prevCountdown - 1);
+        }, 1000);
+        return () => clearInterval(intervalId);
+    }, [countDown]);
+
+
+    useEffect(() => {
+        const getSessionInfo = async () => {
+            const sessionResponse = await fetch(`${API_ROUTES.UTILS}/ResetsessionInfo`, {
+                method: 'GET',
+                credentials: "include"
+            });
+            if (sessionResponse.ok) {
+                const sessionJSON = await sessionResponse.json();
+                const sessionEmail = sessionJSON.session.email;
+                setInputEmail(sessionEmail);
+            }
+        };
+        getSessionInfo();
+    }, [])
 
 
     const handleValidateCode = async (email: string, validationCode: string) => {
@@ -30,30 +54,14 @@ function ValidateResetPasswordCode() {
             });
             setIncorrectCode(validateResult.status === 401);
             if (validateResult.status === 200) {
-                navigate("/ResetPassword", { state: { inputEmail, validationCode } });
+                navigate("/ResetPassword");
             }
             setIsSubmitting(false);
         } catch (error) {
             setIsSubmitting(false);
             console.error(error);
         }
-        
     }
-
-    useEffect(() => {
-        if (countDown === 0) return;
-        const intervalId = setInterval(() => {
-            setCountDown(prevCountdown => prevCountdown - 1);
-        }, 1000);
-        return () => clearInterval(intervalId);
-    }, [countDown]);
-
-
-    // useEffect(() => {
-    //     if (location.state === null) {
-    //         navigate('/ForgotPassword');
-    //     }
-    // }, [location.state]);
 
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

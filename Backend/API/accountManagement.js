@@ -241,10 +241,10 @@ router.post("/forgotPassword", async (req, res) => {
     }
 
     const token = jwt.sign(
-            {email: email, purpose: "Password Reset"},
-            process.env.REACT_APP_SESSION_SECRET,
-            { expiresIn: "10m" }
-        );
+        {email: email, purpose: "Password Reset"},
+        process.env.REACT_APP_SESSION_SECRET,
+        { expiresIn: "10m" }
+    );
 
     res.cookie('resetToken', token, {
         path: '/',
@@ -271,24 +271,16 @@ router.post("/ValidateCode", validateResetToken, async (req, res) => {
     if (result.length === 0 || !await bcrypt.compare(validationCode, result[0].validation_code)) {
         return res.status(401).json({ message: "The Validation Code is Wrong/Expired" });
     }
+    await db.query(`DELETE FROM password_resets WHERE email = ?`, [email]);
     return res.status(200).json({ message: "Correct Validation Code" });
 })
 
 
 router.post("/ResetPassword", validateResetToken, async (req, res) => {
-    const { inputEmail, confirmedPassword, validationCode } = req.body;
+    const { inputEmail, confirmedPassword } = req.body;
     const hashed_password = await bcrypt.hash(confirmedPassword, 10);
     try {
-        const [valid] = await db.query(
-            "SELECT validation_code FROM password_resets WHERE email = ? AND expiration > ?", 
-            [inputEmail, await formatDateToMySQL(new Date())]
-        );
-
-        if (valid.length === 0 || !await bcrypt.compare(validationCode, valid[0].validation_code)) {
-            return res.status(401).json({ message: "Unauthorized: Reset session expired or invalid." });
-        }
         await db.query("UPDATE user_info SET password = ? WHERE email = ?", [hashed_password, inputEmail]);
-        await db.query(`DELETE FROM password_resets WHERE email = ?`, [inputEmail]);
         res.clearCookie('resetToken', {
             path: '/',
             httpOnly: true,

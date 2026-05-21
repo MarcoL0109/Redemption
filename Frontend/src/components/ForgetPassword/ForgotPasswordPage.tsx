@@ -27,7 +27,7 @@ function ForgotPasswordPage() {
         }
         
         if (resetPassword.status === 200) {
-            navigate("/ValidateResetPasswordCode", { state: { inputEmail } });
+            navigate("/ValidateResetPasswordCode");
         }
     }
 
