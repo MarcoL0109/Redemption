@@ -118,7 +118,7 @@ function ValidateResetPasswordCode() {
                                 onClick={handleResend} 
                                 className={`resend_tag ${countDown > 0 ? 'disabled' : 'active'}`}
                             >
-                                {countDown > 0 ? `Resend in ${countDown}s` : 'REQUEST NEW KEY'}
+                                {countDown > 0 ? `Resend in ${countDown}s` : 'RESEND CODE'}
                             </a>
                         </div>
                     </div>

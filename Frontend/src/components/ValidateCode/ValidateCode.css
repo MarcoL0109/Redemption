@@ -100,8 +100,8 @@
     transition: 0.3s;
 }
 
-.resend_tag.active { color: #00a3ff; } /* Your new tactical blue */
-.resend_tag.disabled { color: #444; cursor: not-allowed; }
+.resend_tag.active { color: #00a3ff; }
+.resend_tag.disabled { color: #807e7e; cursor: not-allowed; }
 
 /* 4. Validate Button */
 .ValidateCodeButton {

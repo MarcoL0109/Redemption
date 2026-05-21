@@ -32,6 +32,7 @@ function App() {
           <Route path="/SignUp" element={<SignUpPage />} />
           <Route path="/ActivationTempPage" element={<TempPageForActivation />} />
           <Route path="/ForgotPassword" element={<ForgotPasswordPage />} />
+          {/* Need a middle ware to protect the game page components as well */}
           <Route path="/PlayerNamePendingPage/:roomId" element={<PlayerNamePendingPage />} />
           <Route path="/PendingStartRoom/:userId/:username/:roomId/:problem_set_id" element={<PendingStartRoom />} />
           <Route path="/GamePage/:userId/:username/:roomId/:problem_set_id" element={<GamePage />} />

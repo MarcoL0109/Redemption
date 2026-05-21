@@ -17,7 +17,8 @@ const transport = nodemailer.createTransport({
 const s3Client = require("../models/s3Config").default;
 const { PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-const {calculateStreak} = require("../utils/streakHelper");
+const { calculateStreak } = require("../utils/streakHelper");
+const { getValidationCodeTemplate, getAccountActivationEmailTemplate } = require("../utils/emailTemplates");
 const daysjs = require("dayjs");
 const jwt = require("jsonwebtoken");
 const { strictAuth } = require("../middleware/authMiddleware");
@@ -75,11 +76,11 @@ router.post("/login", async (req, res) => {
 
             res.cookie('authToken', token, {
                 path: '/',
-                httpOnly: true, // 🔒 Crucial! Blocks JavaScript from stealing the token via XSS
-                signed: true,   // 🛡️ Integrates with your server.js cookie-parser secret
-                sameSite: 'lax', // Safe for local development port sharing
+                httpOnly: true,
+                signed: true,
+                sameSite: 'lax',
                 secure: false,
-                maxAge: 24 * 60 * 60 * 1000 // 24-hour expiration window
+                maxAge: 24 * 60 * 60 * 1000
             });
             return res.status(200).json({ message: "Login successfully", streak: newStreak });
         }
@@ -150,15 +151,12 @@ router.post("/createUsers", async (req, res) => {
         const activation_url = `${API_PREFIX.USERS}/activation?data=${encrypt_object_for_url}`;
         const insert_activation_record_query = "INSERT INTO activations (user_id, activation_code, expiration_datetime) VALUES (?, ?, ?)";
         await db.query(insert_activation_record_query, [new_user_id, validationKey, tomorrow]);
+        const emailTemplate = getAccountActivationEmailTemplate(activation_url);
         const mailOptaion = {
             from: 'marcolau733@gmail.com',
             to: email,
             subject: 'Activating new registered account',
-            html: `
-                <h1>Account Activation</h1>
-                <p>Click the following link to activate your account. This link will be expired after 1 hour</p>
-                <a href="${activation_url}">Click here</a>
-            `
+            html: emailTemplate
         }
         await transport.sendMail(mailOptaion);
         return res.status(200).json({ message: "User created successfully" })
@@ -232,12 +230,12 @@ router.post("/forgotPassword", async (req, res) => {
         await db.query(insert_password_reset_record_query, [email, expiration_date, hashed_reset_code]);
     }
 
-    const content = `Hi ${username}.\nYour code for restting your password is ${reset_code}\nValidation code is valid within 10 minutes`;
+    const emailTemplate = getValidationCodeTemplate(reset_code);
     const mailOptaion = {
         from: 'marcolau733@gmail.com',
         to: email,
         subject: 'Validation code for restting password',
-        text: content
+        html: emailTemplate
     }
 
     const token = jwt.sign(
