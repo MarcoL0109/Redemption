@@ -12,7 +12,7 @@ function ResetPassword() {
     const [inputPassword, setInputPassword] = useState<string>("");
     const [diffPassword, setDiffPassword] = useState<boolean>(false);
 
-    
+
     useEffect(() => {
         const getSessionInfo = async () => {
             const sessionResponse = await fetch(`${API_ROUTES.UTILS}/ResetsessionInfo`, {
@@ -53,7 +53,7 @@ function ResetPassword() {
             body: JSON.stringify({inputEmail, confirmedPassword})
         });
         if (resetPasswordStatus.status === 200) {
-            nevagate("/SignIn");
+            nevagate("/SignIn", { state: {passwordResetSuccess: true} });
         } else {
             nevagate("/ForgotPassword");
         }

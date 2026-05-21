@@ -1,0 +1,111 @@
+.notification-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #0b0f19; /* Deep terminal midnight blue */
+    color: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.notification-card {
+    max-width: 480px;
+    width: 100%;
+    background-color: #111827; /* Rich charcoal card background */
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    padding: 40px 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+}
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background-color: rgba(37, 99, 235, 0.1); /* Subtle blue tint */
+    border: 1px solid rgba(37, 99, 235, 0.3);
+    border-radius: 6px;
+    margin-bottom: 24px;
+    color: #3b82f6;
+    font-size: 20px;
+}
+
+.notification-card h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #f8fafc;
+    line-height: 1.4;
+    margin: 0 0 16px 0;
+    letter-spacing: -0.01em;
+}
+
+.notification-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #9ca3af;
+    margin: 0 0 12px 0;
+}
+
+.security-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-family: 'Courier New', Courier, monospace;
+    color: #f59e0b; /* Amber hazard indicator */
+    background-color: rgba(245, 158, 11, 0.05);
+    border: 1px solid rgba(245, 158, 11, 0.15);
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 32px;
+}
+
+.security-notice span:first-child {
+    font-size: 14px;
+}
+
+.status-footer {
+    border-top: 1px solid #1f2937;
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.routing-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pulse-indicator {
+    width: 6px;
+    height: 6px;
+    background-color: #10b981; /* Operational active green */
+    border-radius: 50%;
+    display: inline-block;
+    animation: terminal-pulse 1.5s infinite ease-in-out;
+}
+
+.countdown-badge {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: #3b82f6;
+    background-color: rgba(59, 130, 246, 0.1);
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+@keyframes terminal-pulse {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
+}

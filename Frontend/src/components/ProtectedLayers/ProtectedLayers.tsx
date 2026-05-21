@@ -22,7 +22,6 @@ const ProtectedLayers = () => {
                 setLoading(false);
             }
         };
-
         verifySession();
     }, []);
 

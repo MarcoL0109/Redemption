@@ -1,25 +1,33 @@
 import './SignInPage.css';
-import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import Eye from "../../assets/Eye.svg";
 import HiddenEye from "../../assets/HiddenEye.svg";
 import {API_ROUTES}  from "../../../utils/api_routes";
-import { useUser } from '../../context/UserContext'; // Import your helper hook
+import { useUser } from '../../context/UserContext';
 
 
 function SignInPage() {
 
+    const navigate = useNavigate()
+    const location = useLocation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate()
     const [incorrectLoginInfo, setincorrectLoginInfo] = useState<boolean>(false);
     const [notActivated, setNotActivated] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [hidden, setHidden] = useState<boolean>(true);
     const { refreshUser } = useUser();
+    const passwordResetSuccess = location.state?.passwordResetSuccess;
+
+
+    useEffect(() => {
+        if (passwordResetSuccess) {
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [passwordResetSuccess, navigate, location.pathname]);
     
 
-    
     const HandleSignIn = async (email: string, password: string) => {
         if (isSubmitting) return;
         setIsSubmitting(true);
@@ -92,6 +100,12 @@ function SignInPage() {
 
                     {incorrectLoginInfo && <div className="ErrorMessage anim-shake">Incorrect Credentials</div>}
                     {notActivated && <div className="ErrorMessage anim-shake">Account Not Activated</div>}
+                    {passwordResetSuccess && (
+                        <div className="success-banner">
+                            <span className="status-dot"></span>
+                            <span>STATUS OK: Password updated successfully</span>
+                        </div>
+                    )}
 
                     <button type="submit" className="SignInButton" disabled={isSubmitting}>
                         <strong>{isSubmitting ? "AUTHENTICATING..." : "SIGN IN"}</strong>
