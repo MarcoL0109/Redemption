@@ -56,4 +56,9 @@ test.describe('Sign In Component Layout and Flow', () => {
     await expect(errorMessage).toHaveText('Account Not Activated');
   })
 
+  test('should reject user from going to the homepage before signing in', async ({ page }) => {
+    await page.goto('/Home');
+    await expect(page).toHaveURL(/.*\/SignIn/);
+  })
+
 });
