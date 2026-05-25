@@ -24,4 +24,19 @@ test.describe('The test should cover all the operation that could be done in hom
         await page.locator('.ActionButton:has-text("History")').click();
         await expect(page).toHaveURL(/.*\/HistoryPage/);
     })
+
+
+    test("should sign user out when user clicked the sign out button (should not be able to navigate back via URL", async ({ page }) => {
+        await page.locator('.UserIconCircle').click();
+        await page.locator('.SignOutButton:has-text("Sign Out")').click();
+        await expect(page).toHaveURL(/.*\/SignIn/);
+        await page.goto('/Home');
+        await expect(page).toHaveURL(/.*\/SignIn/);
+    })
+
+
+    test("should direct user to the problem list page when clicking the problem card at the homepage", async ({ page }) => {
+        await page.getByTestId('problem-set-card-12').click();
+        await expect(page).toHaveURL(/.*\/ProblemList/);
+    })
 })

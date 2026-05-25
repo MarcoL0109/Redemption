@@ -73,7 +73,7 @@ function HistoryPage() {
                 historyRecords.length > 0 ?
                 historyRecords.map((history) =>
                     <div key={history.recordId} className="HistoryListContainer">
-                        <ul className="ProblemList">
+                        <ul className="ProblemList" data-testid={`history-card-${history.recordId}`}>
                             <HistoyCard recordId={history.recordId}
                                         score={history.score} snapShotID={history.snapShotID}
                                         gameStartDatetime={history.gameStartDatetime} hostName={history.hostName}

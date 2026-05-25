@@ -15,7 +15,8 @@ function HistoyCard({recordId, hostName, score, gameStartDatetime, completness, 
     const navigate = useNavigate();
 
     const handleViewHistoryDetail = () => {
-        navigate(`/HistoryRecord/${recordId}/${snapShotID}`);
+        if (completness === "Completed")
+            navigate(`/HistoryRecord/${recordId}/${snapShotID}`);
     }
 
 

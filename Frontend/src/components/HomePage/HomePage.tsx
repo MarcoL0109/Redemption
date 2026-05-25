@@ -333,7 +333,7 @@ function HomePage() {
                 <div className="problemSetCardsContainer">
                     {
                     problemSets.map(problem_set => (
-                        <div key={problem_set.problem_set_id}>
+                        <div key={problem_set.problem_set_id} data-testid={`problem-set-card-${problem_set.problem_set_id}`}>
                             <ProblemSetCard problem_set={problem_set} editMode={editMode} deleteMode={deleteMode} is_temp={problem_set.is_temp ?? false}
                             handleChange={handleProblemSetChange}
                             handleAddPotentialDeleteProblems={handleAddPotentialDelete}
