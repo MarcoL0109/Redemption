@@ -28,7 +28,7 @@ async function startApp() {
         }
         console.log("✅ Redis Connected.");
 
-        app.use(cookie_parser(process.env.REACT_APP_SESSION_SECRET));
+        app.use(cookie_parser(process.env.SESSION_SECRET));
         app.use(express.json());
 
         app.use(cors({ 
@@ -37,7 +37,7 @@ async function startApp() {
         }));
 
         app.use(sessions({
-            secret: process.env.REACT_APP_SESSION_SECRET,
+            secret: process.env.SESSION_SECRET,
             store: new RedisStore({ client: redisClient }),
             resave: false,
             saveUninitialized: true,

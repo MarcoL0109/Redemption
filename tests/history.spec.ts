@@ -24,7 +24,5 @@ test.describe('The test should cover all the operation that could be done in his
         await page.getByTestId('history-card-58').click();
         await expect(page).toHaveURL(/.*\/HistoryPage/);
     })
-
-
     
 })

@@ -91,7 +91,7 @@ function HistoryRecord() {
                                 disabled={currIndex === snapShotContent.length - 1} 
                                 onClick={() => setCurrIndex(prev => prev + 1)}
                             >
-                                NEXT_NODE
+                                NEXT NODE
                             </button>
                         </div>
                     </div>

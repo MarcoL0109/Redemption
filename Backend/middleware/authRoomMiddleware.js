@@ -11,7 +11,7 @@ const validateRoomToken = (req, res, next) => {
     }
 
     try {
-        const decode = jwt.decode(token, process.env.REACT_APP_ROOM_JWT_SECRET);
+        const decode = jwt.decode(token, process.env.ROOM_JWT_SECRET);
         next();
     } catch (error) {
         return res.status(403).json({ 

@@ -31,7 +31,7 @@ services:
       - REACT_APP_DATABASE_USER=root 
       - REACT_APP_DATABASE_PASSWORD=${REACT_APP_DATABASE_PASSWORD:-root_test_pass}
       - REACT_APP_DATABASE_NAME=redemption_db
-      - REACT_APP_SESSION_SECRET=${REACT_APP_SESSION_SECRET}
+      - SESSION_SECRET=${SESSION_SECRET}
     volumes:
       - .:/app
       - /app/node_modules

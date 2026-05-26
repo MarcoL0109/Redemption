@@ -4,7 +4,7 @@ const crypto = require('crypto');
 function encrypt_object(object, key) {
     const plainText = JSON.stringify(object);
     const iv = crypto.randomBytes(16);
-    const cipher = crypto.createCipheriv(process.env.REACT_APP_ENCRYPTION_ALGORITHM, Buffer.from(key, 'hex'), iv);
+    const cipher = crypto.createCipheriv(process.env.ENCRYPTION_ALGORITHM, Buffer.from(key, 'hex'), iv);
     let encrypted = cipher.update(plainText, 'utf8', 'hex');
     encrypted += cipher.final('hex');
     const authTag = cipher.getAuthTag();
@@ -19,7 +19,7 @@ function encrypt_object(object, key) {
 
 function decrypt_object(encrypted_object, key) {
     const decipher = crypto.createDecipheriv(
-        process.env.REACT_APP_ENCRYPTION_ALGORITHM,
+        process.env.ENCRYPTION_ALGORITHM,
         Buffer.from(key, 'hex'),
         Buffer.from(encrypted_object.iv, 'hex')
     );

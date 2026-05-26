@@ -168,7 +168,7 @@ function UserProfilePage() {
                                     userData?.history_records && userData?.history_records.length > 0 ?
                                     userData?.history_records.map((history) =>
                                         <div key={history.recordId} className="HistoryListContainer">
-                                            <ul className="ProblemList">
+                                            <ul className="ProblemList" data-testid={`history-card-${history.recordId}`}>
                                                 <HistoyCard recordId={history.recordId}
                                                             score={history.score} snapShotID={history.snapShotID}
                                                             gameStartDatetime={history.gameStartDatetime} hostName={history.hostName}

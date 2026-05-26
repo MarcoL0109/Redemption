@@ -70,7 +70,7 @@ router.post("/login", async (req, res) => {
 
             const token = jwt.sign(
                 {user_id: userId},
-                process.env.REACT_APP_SESSION_SECRET,
+                process.env.SESSION_SECRET,
                 { expiresIn: "24h" }
             );
 
@@ -146,7 +146,7 @@ router.post("/createUsers", async (req, res) => {
         
         const validationKey = uuidv4();
         const activation_data = {user_id: new_user_id, key: validationKey}
-        const encrypted_object = encrypt_object(activation_data, process.env.REACT_APP_ACTIVATION_ENCRYPTION_KEY);
+        const encrypted_object = encrypt_object(activation_data, process.env.ACTIVATION_ENCRYPTION_KEY);
         const encrypt_object_for_url = encodeURIComponent(JSON.stringify(encrypted_object));
         const activation_url = `${API_PREFIX.USERS}/activation?data=${encrypt_object_for_url}`;
         const insert_activation_record_query = "INSERT INTO activations (user_id, activation_code, expiration_datetime) VALUES (?, ?, ?)";
@@ -170,7 +170,7 @@ router.post("/createUsers", async (req, res) => {
 router.get("/activation", async (req, res) => {
     const encrypted_data_object = req.query;
     const encrypted_object_json = JSON.parse(encrypted_data_object.data)
-    const decrypted_object = decrypt_object(encrypted_object_json, process.env.REACT_APP_ACTIVATION_ENCRYPTION_KEY);
+    const decrypted_object = decrypt_object(encrypted_object_json, process.env.ACTIVATION_ENCRYPTION_KEY);
 
     const search_for_activation_record_query = `SELECT activation_record_id FROM activations
                                                 WHERE user_id = ? AND activation_code = ? AND now() < expiration_datetime`;
@@ -240,7 +240,7 @@ router.post("/forgotPassword", async (req, res) => {
 
     const token = jwt.sign(
         {email: email, purpose: "Password Reset"},
-        process.env.REACT_APP_RESET_PASSWORD_JWT_SECRET,
+        process.env.RESET_PASSWORD_JWT_SECRET,
         { expiresIn: "10m" }
     );
 
@@ -307,7 +307,7 @@ router.post("/getNewAvatarImageURL", async (req, res) => {
     const {userId, fileType} = req.body;
     const key = `profiles/User-${userId}-Avatar.jpg`;
     const command = new PutObjectCommand({
-        Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
         Key: key,
         ContentType: fileType,
     });
@@ -346,7 +346,7 @@ router.get("/getAvatarUrl/:userId", async (req, res) => {
         }
         const s3Key = rows[0].user_icon;
         const command = new GetObjectCommand({
-            Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
             Key: s3Key,
         });
         const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });

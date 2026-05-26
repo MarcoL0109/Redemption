@@ -67,7 +67,7 @@ router.post("/checkRoomCodeExist", async (req, res) => {
         if (isLocked === "0") {
             const token = jwt.sign(
                 {roomCode: roomCode, purpose: "Room Entering Validation"},
-                process.env.REACT_APP_ROOM_JWT_SECRET,
+                process.env.ROOM_JWT_SECRET,
                 { expiresIn: "2H" }
             );
             res.cookie('roomToken', token, {

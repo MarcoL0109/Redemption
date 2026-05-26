@@ -11,7 +11,7 @@ const validateResetToken = (req, res, next) => {
         });
     }
     try {
-        const decoded = jwt.verify(tempToken, process.env.REACT_APP_RESET_PASSWORD_JWT_SECRET);
+        const decoded = jwt.verify(tempToken, process.env.RESET_PASSWORD_JWT_SECRET);
         if (decoded.purpose !== "Password Reset") {
             return res.status(403).json({ status: "ERROR", message: "Invalid session token purpose." });
         }
