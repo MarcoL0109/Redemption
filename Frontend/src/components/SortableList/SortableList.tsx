@@ -16,10 +16,11 @@ function Sortable({ id, index, question_text, question_type, sequence_no, answer
         ProblemsChange:( id: number, change: UpdatedValues, is_temp: boolean) => void,
         RemoveProblemChange: (id: number, attribute: keyof UpdatedValues) => void,
         PotentialDelete: (id: number) => void, RevertCount: number}) {
-    const [mode, setMode] = useState<string>("Multiple Choice");
+    const [mode, setMode] = useState<string>(question_type);
     const [selectedOption, setSelectedOption] = useState<string>("");
     const [blankAnswer, setBlankAnswer] = useState<string>("");
     const [isCaseSensitive, setIsCaseSensitive] = useState<number>(0);
+    const [questionText, setQuestionText] = useState<string>(question_text);
     const [timeAllow, setTimeAllow] = useState<number>(10);
     const [currentAnswerOptions, setCurrentAnswerOptions] = useState(answer_options);
     const [currentCorrectAnswer, setCurrentCorrectAnswer] = useState(correct_answer);
@@ -29,11 +30,13 @@ function Sortable({ id, index, question_text, question_type, sequence_no, answer
 
 
     useEffect(() => {
+        // We need to add missing fields in here so that when user click the revert button, we do not just revert some parts within the problem content
         setMode(question_type);
         setSelectedOption(correct_answer.MC);
         setBlankAnswer(correct_answer.Blanks);
         setIsCaseSensitive(case_sensitive);
         setTimeAllow(time_allowed_in_seconds);
+        setQuestionText(question_text);
     }, [RevertCount]);
 
 
@@ -121,6 +124,7 @@ function Sortable({ id, index, question_text, question_type, sequence_no, answer
 
     const handleQuestionTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const new_question_text = event.target.value;
+        setQuestionText(new_question_text);
         ProblemsChange(id, {"question_text": new_question_text}, is_temp);
         if (new_question_text === question_text) {
             RemoveProblemChange(id, "question_text");
@@ -167,7 +171,7 @@ function Sortable({ id, index, question_text, question_type, sequence_no, answer
                     <div className="TextAreaContainer">
                         <TextareaAutosize 
                             className="QuestionTextArea terminal-input" 
-                            defaultValue={question_text}
+                            value={questionText}
                             placeholder="[INPUT QUESTION DATA]"
                             minRows={1}
                             maxRows={8}
@@ -207,7 +211,7 @@ function Sortable({ id, index, question_text, question_type, sequence_no, answer
                                             id={`CaseSensitiveMode ${id}`}
                                         />
                                         <label className="CaseSensitiveModeLabel" htmlFor={`CaseSensitiveMode ${id}`}>
-                                            AA [MATCH_CASE]
+                                            AA [MATCH CASE]
                                         </label>
                                     </div>
                                 </div>
