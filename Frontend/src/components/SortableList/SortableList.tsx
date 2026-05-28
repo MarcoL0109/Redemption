@@ -26,7 +26,7 @@ function Sortable({ id, index, question_text, question_type, sequence_no, answer
     const [currentCorrectAnswer, setCurrentCorrectAnswer] = useState(correct_answer);
     const time_range = [5, 10, 15, 20, 25, 30];
     const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: String(id)});
-    const style = {transition, transform: CSS.Transform.toString(transform),}
+    const style = {transition, transform: CSS.Transform.toString(transform)}
 
 
     useEffect(() => {
@@ -37,6 +37,7 @@ function Sortable({ id, index, question_text, question_type, sequence_no, answer
         setIsCaseSensitive(case_sensitive);
         setTimeAllow(time_allowed_in_seconds);
         setQuestionText(question_text);
+        setCurrentAnswerOptions(answer_options);
     }, [RevertCount]);
 
 
@@ -69,6 +70,7 @@ function Sortable({ id, index, question_text, question_type, sequence_no, answer
             }
         }, is_temp)
     };
+
 
     const handleCorrectBlankAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const correctBlankAnswer = event.target.value;
@@ -185,7 +187,7 @@ function Sortable({ id, index, question_text, question_type, sequence_no, answer
                                         key={label}
                                         problem_id={id}
                                         option_label={label}
-                                        option_text={answer_options[label]}
+                                        option_text={currentAnswerOptions[label]}
                                         selectedOption={selectedOption}
                                         onChange={handleOptionChange}
                                         onTextChange={(event) => handleOptionTextChange(event, label)}

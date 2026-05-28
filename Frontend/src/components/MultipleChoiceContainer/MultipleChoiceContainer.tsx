@@ -38,7 +38,7 @@ const MultipleChoiceContainer: React.FC<MultipleChoiceContainerProps> = ({
                             minRows={1}
                             maxRows={8}
                             cols={60}
-                            defaultValue={option_text}
+                            value={option_text}
                             onChange={onTextChange}
                         />
                     </label>
