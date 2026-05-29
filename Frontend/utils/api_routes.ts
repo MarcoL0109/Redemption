@@ -2,7 +2,7 @@
 import API_PREFIXES from "../../utils/api_routes.json"
 
 
-const BASE_URL = "http://127.0.0.1:62181";
+const BASE_URL = "http://localhost:5500";
 
 export const API_ROUTES = {
     USERS: `${BASE_URL}${API_PREFIXES.USERS}`,
