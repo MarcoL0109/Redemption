@@ -22,7 +22,7 @@ jobs:
     - name: Start Database Services
       env:
         REACT_APP_DATABASE_PASSWORD: ${{ secrets.REACT_APP_DATABASE_PASSWORD }}
-      run: docker compose up -d database_service redis
+      run: docker compose up -d database-service redis
     
     # STEP 2: Ensure Redis runs before the backend service run
     - name: Wait for Redis Connection
@@ -37,7 +37,7 @@ jobs:
 
     # STEP 3: Start the Backend API Service
     - name: Start Backend API Service
-      run: docker compose up -d backend
+      run: docker compose up -d redemption-backend-service
       env:
         SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
         REACT_APP_DATABASE_PASSWORD: ${{ secrets.REACT_APP_DATABASE_PASSWORD || 'root_test_pass' }}
@@ -48,7 +48,7 @@ jobs:
         echo "Giving MySQL a moment to create its socket file..."
           sleep 15
         echo "Waiting for database container..."
-        until docker exec $(docker ps -q -f name=database_service) mysqladmin ping -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" --silent; do
+        until docker exec $(docker ps -q -f name=database-service) mysqladmin ping -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" --silent; do
           sleep 3
         done
         echo "Database is online!"
@@ -57,13 +57,13 @@ jobs:
     - name: Seed Database from Self-Contained Backup
       run: |
         echo "Injecting self-contained backup SQL script..."
-        docker exec -i $(docker ps -q -f name=database_service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db < ./init-db/sample_data.sql
+        docker exec -i $(docker ps -q -f name=database-service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db < ./init-db/sample_data.sql
         echo "Backup database schema and data deployed!"
 
         echo "----------------------------------------"
         echo "Verifying injected tables in redemption_db:"
         echo "----------------------------------------"
-        docker exec $(docker ps -q -f name=database_service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db -e "SHOW TABLES;"
+        docker exec $(docker ps -q -f name=database-service) mysql -u root -p"${{ secrets.REACT_APP_DATABASE_PASSWORD }}" redemption_db -e "SHOW TABLES;"
       
     # STEP 6: Run Playwright tests
     - name: Run Playwright tests
