@@ -16,10 +16,13 @@ spec:
       - name: mysql
         image: mysql:8.0
         ports:
-        - containerPort: 3006
+        - containerPort: 3306
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: "marco66090093" 
+          valueFrom:
+            secretKeyRef:
+              name: redemption-secrets
+              key: REACT_APP_DATABASE_PASSWORD
         - name: MYSQL_DATABASE
           value: "redemption_db"
         volumeMounts:
