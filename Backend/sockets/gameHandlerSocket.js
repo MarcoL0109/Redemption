@@ -31,7 +31,7 @@ module.exports = function(io, redisClient) {
             io.to(roomSocketId).emit("returned-player-list", player_list_names);
             targetSocket.leave(roomSocketId);
             try {
-                const updateKickStatus = await fetch(`http://backend:5500${API_PREFIX.ROOMS}/updateCompletness`, {
+                const updateKickStatus = await fetch(`http://redemption-backend-service:5500${API_PREFIX.ROOMS}/updateCompletness`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

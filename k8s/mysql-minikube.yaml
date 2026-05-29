@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database-service
+  template:
+    metadata:
+      labels:
+        app: database-service
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports:
+        - containerPort: 3006
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "marco66090093" 
+        - name: MYSQL_DATABASE
+          value: "redemption_db"
+        volumeMounts:
+          - name: init-script-volume
+            mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: init-script-volume
+          configMap:
+            name: database-init-script
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+spec:
+  selector:
+    app: database-service
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP

@@ -3,9 +3,10 @@ require('dotenv').config();
 const {redisClient, subscriber} = require("../utils/redis");
 const io = require("socket.io")(parseInt(process.env.REACT_APP_SOCKET_SERVER_PORT), {
     cors: {
-        origin: [process.env.REACT_APP_URL]
+        origin: true,
+        credentials: true
     }
-})
+});
 const {constructPlayerList, constructRankingList, constructPlayerOrder} = require("../utils/gameUtils");
 const {activeRoomProblems, problemStartTime} = require("../utils/gameStates");
 const roomHandlerSocket = require("../sockets/roomHandlerSocket")(io, redisClient);

@@ -37,7 +37,7 @@ module.exports = function(io, redisClient) {
 
     async function streamProblems(problemSetId, roomCode) {
         const roomSocketId = await redisClient.hGet(roomCode, "SocketId");
-        const fetch_problem_list_response = await fetch(`http://backend:5500${API_PREFIX.PROBLEM_SETS}/getProblems`, {
+        const fetch_problem_list_response = await fetch(`http://redemption-backend-service:5500${API_PREFIX.PROBLEM_SETS}/getProblems`, {
             method: "POST",
             headers: { 
                     "Content-Type": "application/json", 
@@ -111,7 +111,7 @@ module.exports = function(io, redisClient) {
             } else {
 
                 try {
-                    const updateScoreAnswerHistory = await fetch(`http://backend:5500${API_PREFIX.HISTORY}/insertAnswerHistoryScore`, {
+                    const updateScoreAnswerHistory = await fetch(`http://redemption-backend-service:5500${API_PREFIX.HISTORY}/insertAnswerHistoryScore`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -171,7 +171,7 @@ module.exports = function(io, redisClient) {
         const loggedInUser = await redisClient.hVals(`${roomCode}-Session-UserId`);
         if (loggedInUser.length > 0) {
              try {
-                const insertHistoryRecord = await fetch(`http://backend:5500${API_PREFIX.HISTORY}/insertJoinHistoryInfo`, {
+                const insertHistoryRecord = await fetch(`http://redemption-backend-service:5500${API_PREFIX.HISTORY}/insertJoinHistoryInfo`, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
@@ -194,7 +194,7 @@ module.exports = function(io, redisClient) {
 
     const storeProblemSnapshots = async (roomCode) => {
         try {
-            const snapShotResponse = await fetch(`http://backend:5500${API_PREFIX.HISTORY}/fetchInsertProblemSetSnapShotId`, {
+            const snapShotResponse = await fetch(`http://redemption-backend-service:5500${API_PREFIX.HISTORY}/fetchInsertProblemSetSnapShotId`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -296,7 +296,7 @@ module.exports = function(io, redisClient) {
                 io.in(roomSocketId).socketsLeave(roomSocketId);
                 try {
                     const problemSetId = await redisClient.hGet(roomCode, "ProblemSetId");
-                    const updateKickStatus = await fetch(`http://backend:5500${API_PREFIX.HISTORY}/updateCompletness`, {
+                    const updateKickStatus = await fetch(`http://redemption-backend-service:5500${API_PREFIX.HISTORY}/updateCompletness`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",

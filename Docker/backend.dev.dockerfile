@@ -11,6 +11,8 @@ RUN yarn install --production --frozen-lockfile
 
 COPY Backend/ ./Backend/
 
+COPY . .
+
 COPY ecosystem.config.js ./
 
 EXPOSE 3000

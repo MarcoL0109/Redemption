@@ -121,7 +121,10 @@ function GamePage() {
     useEffect(() => {
         if (socketRef.current) return;
         let mounted = true;
-        const socket = io(SOCKET_SERVER_URL, { autoConnect: false });
+        const socket = io({
+            transports: ["websocket"],
+            withCredentials: true
+        });
         socketRef.current = socket;
 
         (async () => {
