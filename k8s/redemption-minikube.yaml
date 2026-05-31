@@ -37,11 +37,13 @@ spec:
       protocol: TCP
       port: 5500
       targetPort: 5500
+      nodePort: 30500     # ◄── Correct! Permanently locks HTTP API
     - name: websocket
       protocol: TCP
       port: 3000
       targetPort: 3000
-  type: ClusterIP
+      nodePort: 30300     # ◄── Correct! Permanently locks WebSockets
+  type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -63,7 +65,6 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 5173
-
 ---
 apiVersion: v1
 kind: Service
@@ -76,4 +77,5 @@ spec:
     - protocol: TCP
       port: 5173
       targetPort: 5173
+      nodePort: 30173
   type: NodePort

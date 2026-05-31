@@ -1,8 +1,8 @@
 
 import API_PREFIXES from "../../utils/api_routes.json"
 
-
-const BASE_URL = "http://localhost:5500";
+// @ts-ignore
+const BASE_URL = process.env.REACT_BACKEND_API_URL;
 
 export const API_ROUTES = {
     USERS: `${BASE_URL}${API_PREFIXES.USERS}`,
