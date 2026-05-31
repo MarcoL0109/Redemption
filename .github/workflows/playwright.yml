@@ -41,6 +41,7 @@ jobs:
       env:
         SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
         REACT_APP_DATABASE_PASSWORD: ${{ secrets.REACT_APP_DATABASE_PASSWORD || 'root_test_pass' }}
+        REACT_BACKEND_API_URL: http://localhost:5500
 
     # STEP 4: Ensure the MySQL Database websocket is established before starting anything
     - name: Wait for Database Connection
