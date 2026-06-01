@@ -19,27 +19,6 @@ The project originated from a personal challenge to re-architect a real-time sys
 Redemption uses a decoupled, event-driven architecture designed to minimize main-thread execution blocks while enforcing strong operational isolation.
 
 
-+-------------------------------------------------------+
-   |                  React Client (SPA)                   |
-   +-------------------+-------------------------------+---+
-                       |                               |
-          REST APIs (JSON)                      WebSocket Tunnels
-      [State-Gated / JWT Flows]               [Sub-100ms Sync Loops]
-                       |                               |
-                       v                               v
-   +-------------------+-------------------------------+---+
-   |               Express.js Application Server           |
-   +-------------------+-------------------------------+---+
-                       |                               |
-            Persistent Storage                      In-Memory Cache
-           [Relational Schema]                   [Volatile App State]
-                       |                               |
-                       v                               v
-                 +-----------+                   +-----------+
-                 |   MySQL   |                   |   Redis   |
-                 +-----------+                   +-----------+
-
-
 ### 1. Dual-Channel Infrastructure
 The application maintains two specialized layers to handle data propagation based on performance criteria:
 * **Stateless REST Layer (Express.js / Node.js):** Manages non-real-time domain activities such as standard user authentication flows, profile settings tracking, and administrative Problem Set CRUD definitions over HTTP.
