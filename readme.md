@@ -1,6 +1,6 @@
 # Redemption 🎮
 
-Redemption is a production-ready, real-time multiplayer quiz platform built to address low-latency state orchestration challenges. The project isolates decoupling domains across an asynchronous full-stack infrastructure using a modular architecture powered by React, Node.js, Socket.io, and Redis.
+Redemption is a real-time multiplayer quiz platform built to address low-latency state orchestration challenges. The project isolates decoupling domains across an asynchronous full-stack infrastructure using a modular architecture powered by React, Node.js, Socket.io, and Redis.
 
 ## Project Vision & Context
 
@@ -26,7 +26,7 @@ The application maintains two specialized layers to handle data propagation base
 
 ### 2. Volatile State Caching (Redis)
 To bypass relational database I/O overhead during rapid multiplayer gameplay interactions, the active memory footprint is split:
-* **PostgreSQL** serves as the system's single source of truth for persistent entity definitions (User Profiles, Historical Records, structured Problem Sets).
+* **MySQL** serves as the system's single source of truth for persistent entity definitions (User Profiles, Historical Records, structured Problem Sets).
 * **Redis** functions as an in-memory database to store volatile transaction components. Active lobby state arrays, player socket assignments, and transient match score vectors are updated in-memory with target response speeds hitting **sub-100ms synchronization bounds**, protecting downstream storage instances from write-amplification failures.
 
 ---
@@ -66,17 +66,3 @@ The framework allows authenticated users and temporary guest connections to enga
 * **Historical Auditing:** Dedicated profile historical screens track completed match events.
 * **Granular Response Replay:** Allows users to inspect and audit past answer choices, tracking target outcomes against the baseline keys for fully closed match states.
 * **Bidirectional Navigation Controller:** Provides structural pagination modules allowing users to cycle forward and backward through past gameplay interactions.
-
----
-
-## Installation & Environment Initialization
-
-### Prerequisites
-* Node.js (v18.x or above)
-* PostgreSQL Instance
-* Redis Server
-
-### 1. Repository Setup
-```bash
-git clone [https://github.com/your-username/redemption.git](https://github.com/your-username/redemption.git)
-cd redemption
